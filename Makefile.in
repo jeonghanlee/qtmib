@@ -22,16 +22,16 @@ install: all
 	mkdir -p $(PREFIX)/share/pixmaps
 	mkdir -p $(PREFIX)/share/doc/qtmib
 	install -c -m 0755 build/qtmib $(PREFIX)/bin/.
-#	install -c -m 0644 src/virtenv/virtenv.desktop $(PREFIX)/share/applications/.
-#	install -c -m 0644 src/virtenv/images/virtenv-logo.png $(PREFIX)/share/pixmaps/virtenv.png
+	install -c -m 0644 src/qtmib/qtmib.desktop $(PREFIX)/share/applications/.
+	install -c -m 0644 src/art/qtmib-128.png $(PREFIX)/share/pixmaps/qtmib.png
 	install -c -m 0644 COPYING $(PREFIX)/share/doc/qtmib/.
 	install -c -m 0644 README $(PREFIX)/share/doc/qtmib/.
 	install -c -m 0644 RELNOTES $(PREFIX)/share/doc/qtmib/.
 
 uninstall:;
 	rm -f $(PREFIX)/bin/qtmib
-#	rm -f $(PREFIX)/share/pixmaps/virtenv.png
-#	rm -f $(PREFIX)/share/applications/virtenv.desktop
+	rm -f $(PREFIX)/share/pixmaps/qtmib.png
+	rm -f $(PREFIX)/share/applications/qtmib.desktop
 
 dist: distclean
 	./mkdist.sh $(NAME) $(VERSION)
