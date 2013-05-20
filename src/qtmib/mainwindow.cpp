@@ -27,6 +27,7 @@
 #include "qtmib.h"
 #include "clicked_label.h"
 #include "pref_dialog.h"
+#include "../../qtmib_config.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent) {
 	pref = 0;
@@ -230,7 +231,16 @@ void MainWindow::createMenu() {
 
 
 void MainWindow::about() {
-	QMessageBox::about(this, tr("About"), tr("I need a short qtmib description here"));
+	QString msg = "qtmib " + tr("version") + " " + PACKAGE_VERSION + "\n\n";
+	msg += tr(
+		"qtmib is an easy-to-use SNMP MIB Browser based on QT4 library. It is build as "
+		"a front-end for net-snmp tools, and it allows the user to query any SNMP "
+		"enabled device. It supports SNMPv1, SNMPv2c and SNMPv3. qtmib is released "
+		"under GPL v2 license.\n\n");
+	msg += "Copyright (C) 2013 RCP100 Team (rcpteam@yahoo.com)\n";
+	msg += QString(PACKAGE_URL) + "\n";
+	
+	QMessageBox::about(this, tr("About"), msg);
 }
 
 void MainWindow::preferences() {
