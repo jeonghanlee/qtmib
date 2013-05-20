@@ -5,5 +5,5 @@ SOURCES   = main.cpp \
             clicked_label.cpp \
             pref_dialog.cpp
 RESOURCES = qtmib.qrc
-TARGET=qtmib
+TARGET=../../build/qtmib
 
