@@ -18,42 +18,51 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-//gcc *.c `net-snmp-config --agent-libs`
+// Original copyright notice form net-snmp project
+
+/*
+ * mib.c
+ *
+ * $Id$
+ *
+ * Update: 1998-07-17 <jhy@gsu.edu>
+ * Added print_oid_report* functions.
+ *
+ */
+/* Portions of this file are subject to the following copyrights.  See
+ * the Net-SNMP's COPYING file for more details and other copyrights
+ * that may apply:
+ */
+/**********************************************************************
+	Copyright 1988, 1989, 1991, 1992 by Carnegie Mellon University
+
+                      All Rights Reserved
+
+Permission to use, copy, modify, and distribute this software and its
+documentation for any purpose and without fee is hereby granted,
+provided that the above copyright notice appear in all copies and that
+both that copyright notice and this permission notice appear in
+supporting documentation, and that the name of CMU not be
+used in advertising or publicity pertaining to distribution of the
+software without specific, written prior permission.
+
+CMU DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
+ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
+CMU BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR
+ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
+SOFTWARE.
+******************************************************************/
+/*
+ * Copyright � 2003 Sun Microsystems, Inc. All rights reserved.
+ * Use is subject to license terms specified in the COPYING file
+ * distributed with the Net-SNMP package.
+ */
+
 
 #include "net-snmp/net-snmp-config.h"
 #include "net-snmp/net-snmp-includes.h"
-
-#if 0
-int count = 0;
-void print_elem(struct tree *tp) {
-
-	int i;
-	for (i = 0; i < count; i++)
-		printf("  ");
-	printf("%s(%ld) type=%d", tp->label, tp->subid, tp->type);
-	if (tp->tc_index != -1)
-		printf(" tc=%d", tp->tc_index);
-	if (tp->hint)
-		printf(" hint=%s", tp->hint);
-	if (tp->units)
-		printf(" units=%s", tp->units);
-	printf("\n");
-}
-
-
-void  print_s(struct tree *tree) {
-	struct tree    *tp;
-	for (tp = tree->child_list; tp; tp = tp->next_peer) {
-		if (tp->child_list) {
-			print_elem(tp);
-			count++;
-			print_s(tp);
-			count--;
-		}
-	}
-
-}
-#endif
 
 static int print_subtree_oid_report_suffix = 1;
 static int print_subtree_oid_report_labeledoid = 0;
