@@ -36,9 +36,16 @@ public:
 	PrefDialog();
 	QString getVersion();
 	QString getCommunity();
+	QString getPort();
+	QString getTimeout();
+	QString getRetries();
 private:
 	QComboBox *pBox;	// protocol version
 	QComboBox *cBox;	// community
+	QComboBox *portBox;	// port number
+	QComboBox *timeoutBox;	// timeout
+	QComboBox *retriesBox;	// retries
+
 };
 
 #endif

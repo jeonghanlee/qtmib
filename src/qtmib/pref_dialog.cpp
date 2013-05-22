@@ -39,6 +39,28 @@ PrefDialog::PrefDialog(): QDialog() {
 	cBox->addItem("public");
 	cBox->setEditable(true);
 	
+	// port number
+	QLabel *portLabel = new QLabel;
+	portLabel->setText(tr("UDP Port Number"));
+	portBox = new QComboBox;
+	portBox->addItem("161");
+	portBox->setEditable(true);
+
+	// timeout
+	QLabel *timeoutLabel = new QLabel;
+	timeoutLabel->setText(tr("Timeout (seconds)"));
+	timeoutBox = new QComboBox;
+	timeoutBox->addItem("1");
+	timeoutBox->setEditable(true);
+
+	// retries
+	QLabel *retriesLabel = new QLabel;
+	retriesLabel->setText(tr("Retries"));
+	retriesBox = new QComboBox;
+	retriesBox->addItem("5");
+	retriesBox->setEditable(true);
+
+	// OK
 	QPushButton *okButton = new QPushButton(tr("OK"));
 	connect(okButton, SIGNAL(clicked()), SLOT(accept()));
 	
@@ -48,14 +70,20 @@ PrefDialog::PrefDialog(): QDialog() {
 	grid->addWidget(pBox, 1, 3, 1, 2);
 	grid->addWidget(cLabel, 2, 1);
 	grid->addWidget(cBox, 2, 3, 1, 2);
-	grid->addItem(new QSpacerItem(30, 30), 3, 1);
-	grid->addWidget(okButton, 4, 3);
-	grid->addItem(new QSpacerItem(30, 30), 5, 5);
+	grid->addWidget(portLabel, 3, 1);
+	grid->addWidget(portBox, 3, 3, 1, 2);
+	grid->addWidget(timeoutLabel, 4, 1);
+	grid->addWidget(timeoutBox, 4, 3, 1, 2);
+	grid->addWidget(retriesLabel, 5, 1);
+	grid->addWidget(retriesBox, 5, 3, 1, 2);
+
+	grid->addItem(new QSpacerItem(30, 30), 6, 1);
+	grid->addWidget(okButton, 7, 3);
 	grid->setColumnMinimumWidth(2, 50);
 	grid->setColumnMinimumWidth(4, 150);
+	grid->setColumnMinimumWidth(5, 30);
 	setLayout(grid);
 	setWindowTitle(tr("Preferences"));
-//	resize(480, 320);
 }
 
 QString PrefDialog::getVersion() {
@@ -64,4 +92,16 @@ QString PrefDialog::getVersion() {
 
 QString PrefDialog::getCommunity() {
 	return cBox->currentText();
+}
+
+QString PrefDialog::getPort() {
+	return portBox->currentText();
+}
+
+QString PrefDialog::getTimeout() {
+	return timeoutBox->currentText();
+}
+
+QString PrefDialog::getRetries() {
+	return retriesBox->currentText();
 }

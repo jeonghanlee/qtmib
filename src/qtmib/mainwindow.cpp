@@ -341,7 +341,9 @@ void MainWindow::handleAction() {
 	QString cmd = act + " -m \"\" ";
 	cmd += "-" + version + " ";
 	cmd += "-c " + community + " ";
-	cmd += actionIp->text() + " ";
+	cmd += "-t " + pref->getTimeout() + " ";
+	cmd += "-r " + pref->getRetries() + " ";
+	cmd += actionIp->text() + ":" + pref->getPort() + " ";
 	cmd += actionOid->text() + " 2>&1";
 printf("\n%s\n", cmd.toStdString().c_str());
 
