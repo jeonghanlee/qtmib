@@ -18,52 +18,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef OID_TRANSLATOR_H
+#define OID_TRANSLATOR_H
+#include <QString>
+#include <QStandardItem>
 
-#include <QMainWindow>
-#include <QModelIndex>
-#include <QTextEdit>
-
-class PrefDialog;
-
-QT_BEGIN_NAMESPACE
-class QAbstractItemModel;
-class QComboBox;
-class QLabel;
-class QLineEdit;
-class QProgressBar;
-class QCheckBox;
-class QTreeView;
-QT_END_NAMESPACE
-
-class MainWindow : public QMainWindow {
-Q_OBJECT
-
-	public:
-	MainWindow(QWidget *parent = 0);
-
-public slots:
-	void updateActions();
-
-private slots:
-	void about();
-	void preferences();
-	void handleAction();
-	void handleClear();
+class OidTranslator {
+public:
+	OidTranslator(QStandardItem *top);
+	QString translate(QString input);
 
 private:
-	void createMenu();
-	QAbstractItemModel *modelFromFile(const QString& fileName);
-
-	QTreeView *treeView_;
-	QAbstractItemModel *mymodel_;
-	QTextEdit *result_;
-	QTextEdit *oidView_;
-	QTextEdit *connectionView_;
-	QLineEdit *actionIp_;
-	QLineEdit *actionOid_;
-	QComboBox *action_;
-	PrefDialog *pref_;
+	// element print function
+	void print(QStandardItem *item);
+	// element match
+	bool match(QStandardItem *item);
+	// tree traversal
+	bool travers(QStandardItem *item);
+private:
+	QStandardItem *top_;
+	QString oid_;
+	bool last_;
+	QString retval_;	
 };
 #endif

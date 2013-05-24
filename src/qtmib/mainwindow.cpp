@@ -27,37 +27,38 @@
 #include "qtmib.h"
 #include "clicked_label.h"
 #include "pref_dialog.h"
+#include "oid_translator.h"
 #include "../../qtmib_config.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent) {
-	pref = 0;
+	pref_ = 0;
 	createMenu();
 
 	//*************************************************
 	// OID
 	//*************************************************
-	mymodel = modelFromFile(":/resources/treemodel.txt");
+	mymodel_ = modelFromFile(":/resources/treemodel.txt");
 	QLabel *mibsLabel = new QLabel;
 	mibsLabel->setText(tr("MIBs"));
-	treeView = new QTreeView;
-	treeView->setModel(mymodel);
-	treeView->header()->hide();
+	treeView_ = new QTreeView;
+	treeView_->setModel(mymodel_);
+	treeView_->header()->hide();
 	//    treeView->expandAll();
-	connect(treeView->selectionModel(),
+	connect(treeView_->selectionModel(),
 		SIGNAL(selectionChanged(const QItemSelection &,
 		const QItemSelection &)),
 		this, SLOT(updateActions()));
 
 	// oid
-	oidView = new QTextEdit;
-	oidView->setEnabled(false);
-	oidView->setPlainText("Name:\nOID:\nMIB:\n");
-	oidView->setLineWrapMode(QTextEdit::NoWrap);
+	oidView_ = new QTextEdit;
+	oidView_->setEnabled(false);
+	oidView_->setPlainText("Name:\nOID:\nMIB:\n");
+	oidView_->setLineWrapMode(QTextEdit::NoWrap);
 
 	QGridLayout *oidLayout = new QGridLayout;
 	oidLayout->addWidget(mibsLabel, 0, 0);
-	oidLayout->addWidget(treeView, 1, 0);
-	oidLayout->addWidget(oidView, 2, 0);
+	oidLayout->addWidget(treeView_, 1, 0);
+	oidLayout->addWidget(oidView_, 2, 0);
 	oidLayout->setRowStretch(1, 10);
 	oidLayout->setRowStretch(2, 2);
 	QWidget *oidWidget = new QWidget;
@@ -68,14 +69,14 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent) {
 	//*************************************************
 	QLabel *resultLabel = new QLabel;
 	resultLabel->setText(tr("Result"));
-	result = new QTextEdit;
-	result->setReadOnly(true);
+	result_ = new QTextEdit;
+	result_->setReadOnly(true);
 
 	// connection
-	connectionView = new QTextEdit;
-	connectionView->setEnabled(false);
-	connectionView->setPlainText("SNMP version: v2c\nCommunity: public\n");
-	connectionView->setLineWrapMode(QTextEdit::NoWrap);
+	connectionView_ = new QTextEdit;
+	connectionView_->setEnabled(false);
+	connectionView_->setPlainText("SNMP version: v2c\nCommunity: public\n");
+	connectionView_->setLineWrapMode(QTextEdit::NoWrap);
 	QLabel *connectionLabel = new QLabel;
 	connectionLabel->setText(tr("Protocol Preferences"));
 	
@@ -86,8 +87,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent) {
 	QGridLayout *resLayout = new QGridLayout;
 	resLayout->addWidget(resultLabel, 0, 0);
 	resLayout->addWidget(clearButton, 0, 9);
-	resLayout->addWidget(result, 1, 0, 1, 10);
-	resLayout->addWidget(connectionView, 2, 0, 1, 10);
+	resLayout->addWidget(result_, 1, 0, 1, 10);
+	resLayout->addWidget(connectionView_, 2, 0, 1, 10);
 	resLayout->setRowStretch(1, 10);
 	resLayout->setRowStretch(2, 2);
 	QWidget *resWidget = new QWidget;
@@ -108,28 +109,28 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent) {
 	//*************************************************
 	QLabel *actionIpLabel = new QLabel;
 	actionIpLabel->setText(tr("IP Address"));
-	actionIp = new QLineEdit;
-	actionIp->setText("127.0.0.1");
+	actionIp_ = new QLineEdit;
+	actionIp_->setText("127.0.0.1");
 	QLabel *actionOidLabel = new QLabel;
 	actionOidLabel->setText(tr("OID"));
-	actionOid = new QLineEdit;
-	actionOid->setText(".1.3.6.1");
-	action = new QComboBox;
-	action->addItem(tr("Get"));
-	action->addItem(tr("Get Next"));
-	action->addItem(tr("Get Bulk"));
-	action->addItem(tr("Walk"));
-	action->setCurrentIndex(0);
+	actionOid_ = new QLineEdit;
+	actionOid_->setText(".1.3.6.1");
+	action_ = new QComboBox;
+	action_->addItem(tr("Get"));
+	action_->addItem(tr("Get Next"));
+	action_->addItem(tr("Get Bulk"));
+	action_->addItem(tr("Walk"));
+	action_->setCurrentIndex(0);
 	QPushButton *actionButton = new QPushButton(tr("Go"));
 	connect(actionButton, SIGNAL(released()), this, SLOT(handleAction()));
 
 	QGroupBox *group1Box = new QGroupBox(tr("Query"));
 	QGridLayout *group1BoxLayout = new QGridLayout;
 	group1BoxLayout->addWidget(actionIpLabel, 0, 0);
-	group1BoxLayout->addWidget(actionIp, 0, 1);
+	group1BoxLayout->addWidget(actionIp_, 0, 1);
 	group1BoxLayout->addWidget(actionOidLabel, 0, 2);
-	group1BoxLayout->addWidget(actionOid, 0, 3);
-	group1BoxLayout->addWidget(action, 0, 4);
+	group1BoxLayout->addWidget(actionOid_, 0, 3);
+	group1BoxLayout->addWidget(action_, 0, 4);
 	group1BoxLayout->addWidget(actionButton, 0, 5);
 	group1Box->setLayout(group1BoxLayout);
 	group1BoxLayout->setColumnStretch(1, 7);
@@ -173,6 +174,8 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 	QVector<QStandardItem *> parents(10);
 	parents[0] = model->invisibleRootItem();
 
+QStandardItem *topitem = 0;
+
 	while (!file.atEnd()) {
 		QString line = file.readLine();
 		QString trimmedLine = line.trimmed();
@@ -200,6 +203,8 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 			parents.resize(parents.size()*2);
 
 		QStandardItem *item = new QStandardItem;
+		if (!topitem)
+			topitem = item;
 		item->setEditable(false);
 		item->setText(trimmedLine);
 		parents[level]->appendRow(item);
@@ -209,7 +214,9 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 #ifndef QT_NO_CURSOR
 	QApplication::restoreOverrideCursor();
 #endif
-
+OidTranslator oidt(topitem);
+QString rv = oidt.translate("2.1.1.92");
+printf("%s\n", rv.toStdString().c_str());
 	return model;
 }
 
@@ -245,23 +252,23 @@ void MainWindow::about() {
 }
 
 void MainWindow::preferences() {
-	if (!pref)
-		pref = new PrefDialog();
+	if (!pref_)
+		pref_ = new PrefDialog();
 		
-	pref->exec();
+	pref_->exec();
 
-	QString str = "SNMP version: " + pref->getVersion() + "\n";
-	if (pref->getCommunity() == "public")
+	QString str = "SNMP version: " + pref_->getVersion() + "\n";
+	if (pref_->getCommunity() == "public")
 		str += "Community: public\n";
 		
-	connectionView->setPlainText(str);
+	connectionView_->setPlainText(str);
 
 }
 
 void MainWindow::updateActions() {
-	bool hasCurrent = treeView->selectionModel()->currentIndex().isValid();
+	bool hasCurrent = treeView_->selectionModel()->currentIndex().isValid();
 	if (hasCurrent) {
-		QModelIndex mindex = treeView->selectionModel()->currentIndex();
+		QModelIndex mindex = treeView_->selectionModel()->currentIndex();
 		const QAbstractItemModel *mod = mindex.model();
 		bool has_children = false;
 		if (mindex.child(0, 0).isValid())
@@ -297,10 +304,10 @@ void MainWindow::updateActions() {
 		//set data in oidView
 		origname.truncate(origname.indexOf("("));
 		QString txt = "Name: " + origname + "\nOID: " + oid + "\n";
-		oidView->setPlainText(txt);
+		oidView_->setPlainText(txt);
 		if (!has_children)
 			oid += ".0";
-		actionOid->setText(oid);
+		actionOid_->setText(oid);
 
 	}
 	else
@@ -311,7 +318,7 @@ void MainWindow::handleAction() {
 #ifndef QT_NO_CURSOR
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 #endif
-	QString act = action->currentText();
+	QString act = action_->currentText();
 
 	// action
 	if (act == "Get")
@@ -329,32 +336,47 @@ void MainWindow::handleAction() {
 	
 	// version
 	QString version = "v2c";
-	if (pref)
-		version = pref->getVersion();
+	if (pref_)
+		version = pref_->getVersion();
 	
 	// community
 	QString community = "public";
-	if (pref)
-		community = pref->getCommunity();
+	if (pref_)
+		community = pref_->getCommunity();
+
+	// timeout
+	QString timeout = "1";
+	if (pref_)
+		timeout = pref_->getTimeout();
+	
+	// retries
+	QString retries = "5";
+	if (pref_)
+		retries = pref_->getRetries();
+	
+	// port
+	QString port = "161";
+	if (pref_)
+		port = pref_->getPort();
+	
+	
 	
 	// build command string	
 	QString cmd = act + " -m \"\" ";
 	cmd += "-" + version + " ";
 	cmd += "-c " + community + " ";
-	cmd += "-t " + pref->getTimeout() + " ";
-	cmd += "-r " + pref->getRetries() + " ";
-	cmd += actionIp->text() + ":" + pref->getPort() + " ";
-	cmd += actionOid->text() + " 2>&1";
-printf("\n%s\n", cmd.toStdString().c_str());
+	cmd += "-t " + timeout + " ";
+	cmd += "-r " + retries + " ";
+	cmd += actionIp_->text() + ":" + port + " ";
+	cmd += actionOid_->text() + " 2>&1";
+//printf("\n%s\n", cmd.toStdString().c_str());
 
 	// execute command
 	char *rv = exec_prog(cmd.toStdString().c_str());
 	if (rv) {
 		QString qrv = rv;
-		qrv.replace(QString("iso.3.6.1.2.1"), QString("mib-2"));
-		qrv.replace(QString("iso.3.6.1.4.1"), QString("enterprises"));
-		qrv.replace(QString("iso.3.6.1.6"), QString("snmpV2"));
-		result->append(qrv);
+		qrv.replace(QString("iso.3.6.1"), QString("internet"));
+		result_->append(qrv);
 		free(rv);
 	}
 	
@@ -364,5 +386,5 @@ printf("\n%s\n", cmd.toStdString().c_str());
 }
 
 void MainWindow::handleClear() {
-	result->setText(QString(""));
+	result_->setText(QString(""));
 }
