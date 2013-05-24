@@ -84,8 +84,13 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent) {
 	clearButton->setText("<font color=\"blue\">Clear</font>");
 	connect(clearButton, SIGNAL(clicked()), this, SLOT(handleClear()));
 
+	ClickedLabel *translateButton = new ClickedLabel("<font color=\"blue\">Translate</font>", this);
+	translateButton->setText("<font color=\"blue\">Translate |</font>");
+	connect(translateButton, SIGNAL(clicked()), this, SLOT(handleTranslate()));
+
 	QGridLayout *resLayout = new QGridLayout;
 	resLayout->addWidget(resultLabel, 0, 0);
+	resLayout->addWidget(translateButton, 0, 8);
 	resLayout->addWidget(clearButton, 0, 9);
 	resLayout->addWidget(result_, 1, 0, 1, 10);
 	resLayout->addWidget(connectionView_, 2, 0, 1, 10);
@@ -174,7 +179,7 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 	QVector<QStandardItem *> parents(10);
 	parents[0] = model->invisibleRootItem();
 
-QStandardItem *topitem = 0;
+	topitem_ = 0;
 
 	while (!file.atEnd()) {
 		QString line = file.readLine();
@@ -203,8 +208,8 @@ QStandardItem *topitem = 0;
 			parents.resize(parents.size()*2);
 
 		QStandardItem *item = new QStandardItem;
-		if (!topitem)
-			topitem = item;
+		if (!topitem_)
+			topitem_ = item;
 		item->setEditable(false);
 		item->setText(trimmedLine);
 		parents[level]->appendRow(item);
@@ -214,9 +219,7 @@ QStandardItem *topitem = 0;
 #ifndef QT_NO_CURSOR
 	QApplication::restoreOverrideCursor();
 #endif
-OidTranslator oidt(topitem);
-QString rv = oidt.translate("2.1.1.92");
-printf("%s\n", rv.toStdString().c_str());
+
 	return model;
 }
 
@@ -374,9 +377,10 @@ void MainWindow::handleAction() {
 	// execute command
 	char *rv = exec_prog(cmd.toStdString().c_str());
 	if (rv) {
-		QString qrv = rv;
-		qrv.replace(QString("iso.3.6.1"), QString("internet"));
-		result_->append(qrv);
+//		QString qrv = rv;
+//		qrv.replace(QString("iso.3.6.1"), QString("internet"));
+//		result_->append(qrv);
+		result_->append(rv);
 		free(rv);
 	}
 	
@@ -388,3 +392,34 @@ void MainWindow::handleAction() {
 void MainWindow::handleClear() {
 	result_->setText(QString(""));
 }
+
+void MainWindow::handleTranslate() {
+	OidTranslator oidt(topitem_);
+
+	QString input = result_->toPlainText();
+	QString output = "";
+	
+	QStringList lines = input.split( "\n", QString::SkipEmptyParts );
+	foreach (QString line, lines ) {
+//printf("%s\n", line.toStdString().c_str());
+		if (line.startsWith("iso.3.6.1.")) {
+			int index = line.indexOf(" = ");
+			if (index == -1) {
+				output += line + "\n";
+			}
+			else {
+				QString right = line.mid(index);
+				line.truncate(index);
+				QString left = line.mid(10);
+//printf("#%s#%s#\n", left.toStdString().c_str(), right.toStdString().c_str());
+				QString rv = oidt.translate(left);
+				output += rv + right + "\n";
+				
+			}
+		}
+		else
+			output += line + "\n";
+	}
+	result_->setText(output);	
+}
+

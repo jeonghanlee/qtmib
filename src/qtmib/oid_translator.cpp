@@ -24,6 +24,19 @@
 
 void OidTranslator::print(QStandardItem *item) {
 	QString tmp = item->text();
+	if (tmp == "mib-2(1)") {
+		retval_ = "mib-2";
+		return;
+	}
+	else if (tmp == "enterprises(1)") {
+		retval_ = "enterprises";
+		return;
+	}
+	else if (tmp == "snmpV2(6)") {
+		retval_ = "snmpV2";
+		return;
+	}
+	
 	int index = tmp.indexOf("(");
 	if (index != -1) {
 		tmp.truncate(index);
@@ -80,7 +93,7 @@ bool OidTranslator::travers(QStandardItem *item) {
 			}
 		}
 	}
-	fflush(0);
+	print(item);
 	return false;
 }
 
@@ -89,8 +102,7 @@ OidTranslator::OidTranslator(QStandardItem *top): top_(top) {}
 QString OidTranslator::translate(QString input) {
 	oid_ = input;
 	retval_ = "";
-	bool rv = travers(top_);
-	if (rv)
-		return retval_;
-	return "";
+	travers(top_);
+	retval_ += "." + oid_;
+	return retval_;
 }

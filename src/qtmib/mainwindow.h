@@ -24,6 +24,7 @@
 #include <QMainWindow>
 #include <QModelIndex>
 #include <QTextEdit>
+#include <QStandardItem>
 
 class PrefDialog;
 
@@ -51,6 +52,7 @@ private slots:
 	void preferences();
 	void handleAction();
 	void handleClear();
+	void handleTranslate();
 
 private:
 	void createMenu();
@@ -65,5 +67,6 @@ private:
 	QLineEdit *actionOid_;
 	QComboBox *action_;
 	PrefDialog *pref_;
+	QStandardItem *topitem_;
 };
 #endif
