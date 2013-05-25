@@ -4,8 +4,11 @@ PREFIX=@prefix@
 VERSION=@PACKAGE_VERSION@
 NAME=@PACKAGE_NAME@
 
+qtmib_prefix.h:
+	echo "#define QTMIB_PREFIX \"$(PREFIX)\"" > qtmib_prefix.h
+
 .PHONY: src
-src:
+src: qtmib_prefix.h
 	$(MAKE) -C $@ $(MFLAGS)
 
 clean:;rm -f build/*; make -C src/qtmib clean
