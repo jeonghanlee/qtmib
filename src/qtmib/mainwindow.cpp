@@ -29,6 +29,7 @@
 #include "pref_dialog.h"
 #include "oid_translator.h"
 #include "../../qtmib_config.h"
+#include "../../qtmib_prefix.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent) {
 	pref_ = 0;
@@ -162,6 +163,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent) {
 
 
 QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
+	//*************************
+	// load global mibs
+	//*************************
 	QFile file(fileName);
 	if (!file.open(QFile::ReadOnly)) {
 		QMessageBox msgBox;
@@ -216,6 +220,67 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 		parents[level+1] = item;
 	}
 
+
+#if 0
+	// prepare mib reference
+	QString cmd = QString("snmptranslate -M ") + QTMIB_PREFIX + "/share/qtmib -Tl";
+	char *rv = exec_prog(cmd.toStdString().c_str());
+	QString ref = "";
+	if (rv) {
+		ref += rv;
+		free(rv);
+	}
+#endif
+
+	//*************************
+	// load user mibs
+	//*************************
+	QString mibsdir = QDir::homePath();
+	mibsdir += "/.config/qtmib/mibs";
+	QDir dir(mibsdir);
+	QStringList filelist = dir.entryList(QDir::Files | QDir::NoDot | QDir::NoDotDot);
+	if (filelist.count() != 0) {
+		QString cmd = QString("snmptranslate -M ") + "~/.config/qtmib/mibs/:" + QTMIB_PREFIX + "/share/qtmib -Tl";
+		QString usr = "";
+		char *rv = exec_prog(cmd.toStdString().c_str());
+		if (rv) {
+			usr += rv;
+			free(rv);
+		}
+	
+		// update tree
+		QStringList diff = usr.split( ".", QString::SkipEmptyParts);
+		foreach (QString line, diff) {
+			
+			// split the line
+			QStringList oidlist = line.split( ".", QString::SkipEmptyParts );
+			int cnt = oidlist.count();
+			int level = 1;
+			QStandardItem *parent = 0;
+	
+			for (int i = 4; i < cnt; i++, level++) {
+				if (level+1 >= parents.size())
+					parents.resize(parents.size()*2);
+				if (!parent)
+					parent = parents[level];
+					
+//printf("level %d, parent %s\n", level, parent->text().toStdString().c_str());
+//printf("oidlist[i] %s\n", oidlist[i].toStdString().c_str());
+				QStandardItem *child = qtfind_child(parent, oidlist[i]);
+				if (child)
+					parent = child;
+				else {
+					printf("adding %s\n", line.toStdString().c_str());
+					QStandardItem *item = new QStandardItem;
+					item->setEditable(false);
+					item->setText(oidlist[i]);
+					parent->appendRow(item);
+				}
+			}	
+		}
+	}
+		
+	
 #ifndef QT_NO_CURSOR
 	QApplication::restoreOverrideCursor();
 #endif
@@ -407,7 +472,7 @@ printf("%d/%d\n", position, cursor.blockNumber()); // block number is the line n
 	QString output = "";
 	
 	QStringList lines = input.split( "\n", QString::SkipEmptyParts );
-	foreach (QString line, lines ) {
+	foreach (QString line, lines) {
 //printf("%s\n", line.toStdString().c_str());
 		if (line.startsWith("iso.3.6.1.")) {
 			int index = line.indexOf(" = ");

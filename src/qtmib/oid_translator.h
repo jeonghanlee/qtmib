@@ -27,6 +27,7 @@ class OidTranslator {
 public:
 	OidTranslator(QStandardItem *top);
 	QString translate(QString input);
+	QString add(QString input);
 
 private:
 	// element print function

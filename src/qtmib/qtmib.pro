@@ -4,7 +4,8 @@ SOURCES   = main.cpp \
             exec_prog.c \
             clicked_label.cpp \
             pref_dialog.cpp \
-            oid_translator.cpp
+            oid_translator.cpp \
+            utils.cpp
 RESOURCES = qtmib.qrc
 TARGET=../../build/qtmib
 

@@ -38,5 +38,6 @@ fi
 echo "Found $NETSNMP"
 
 cp confdefs.h qtmib_config.h
+rm -f qtmib_prefix.h
 AC_OUTPUT(Makefile)
 
