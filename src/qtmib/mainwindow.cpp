@@ -394,6 +394,13 @@ void MainWindow::handleClear() {
 }
 
 void MainWindow::handleTranslate() {
+
+#if 0
+	QTextCursor cursor = result_->textCursor();
+	int position = cursor.position();
+printf("%d/%d\n", position, cursor.blockNumber()); // block number is the line number	
+#endif	
+	
 	OidTranslator oidt(topitem_);
 
 	QString input = result_->toPlainText();

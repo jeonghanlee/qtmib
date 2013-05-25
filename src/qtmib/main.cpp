@@ -22,8 +22,13 @@
 #include "mainwindow.h"
 
 int main(int argc, char *argv[]) {
+	// initialize resources
 	Q_INIT_RESOURCE(qtmib);
 
+	// create configuration directory
+	system("mkdir -p ~/.config/qtmib/mibs");
+	
+	// start the application
 	QApplication app(argc, argv);
 	MainWindow window;
 	window.show();
