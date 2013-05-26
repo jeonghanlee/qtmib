@@ -19,9 +19,43 @@
 */
 
 #include <QApplication>
+#include <stdio.h>
 #include "mainwindow.h"
+#include "../../qtmib_config.h"
+
+static void help() {
+	printf(
+"qtmib is an easy-to-use SNMP MIB Browser based on QT4 library. It is build\n"
+"as a front-end for net-snmp tools, and it allows the user to query any SNMP\n"
+"enabled device. It supports SNMPv1, SNMPv2c. qtmib is released under GPL v2\n"
+"license. See http://qtmib.sourceforge.net for more details.\n\n");
+	printf("Usage: qtmib [options]\n");
+	printf("Options:\n");
+	printf("\t-v, --version: version information\n");
+	printf("\t-h, --help: this help screen\n");
+	printf("\n");
+}
+
 
 int main(int argc, char *argv[]) {
+	// parse arguments
+	int i;
+	for (i = 1; i < argc; i++) {
+		if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
+			printf("qtmib version %s\n", PACKAGE_VERSION);
+			return 0;
+		}
+		else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
+			help();
+			return 0;
+		}
+		else {
+			printf("Error: unknown program argument\n\n");
+			help();
+			return 1;
+		}
+	}
+
 	// initialize resources
 	Q_INIT_RESOURCE(qtmib);
 
