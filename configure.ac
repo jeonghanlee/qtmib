@@ -33,9 +33,10 @@ cd src/qtmib && qmake && cd ../..
 NETSNMP=`which snmpget`
 if test "$NETSNMP" == ""
 then
-	AC_MSG_ERROR([net-snmp is missing, please install it (http://www.net-snmp.org/).])
+	AC_MSG_WARN([net-snmp is requred for running qtmib, please install it (http://www.net-snmp.org/).])
+else
+	echo "Found $NETSNMP"
 fi
-echo "Found $NETSNMP"
 
 cp confdefs.h qtmib_config.h
 rm -f qtmib_prefix.h

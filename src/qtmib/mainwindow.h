@@ -55,6 +55,7 @@ private slots:
 	void handleTranslate();
 
 private:
+	void checkEnvironment();
 	void createMenu();
 	QAbstractItemModel *modelFromFile(const QString& fileName);
 

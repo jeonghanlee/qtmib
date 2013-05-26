@@ -32,6 +32,8 @@
 #include "../../qtmib_prefix.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent) {
+	checkEnvironment();
+
 	pref_ = 0;
 	createMenu();
 
@@ -161,6 +163,15 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent) {
 	statusBar()->showMessage("Ready");
 }
 
+void MainWindow::checkEnvironment() {
+	char *rv = exec_prog("which snmpget");
+	QString ref = "";
+	if (rv == 0 || strstr(rv, "snmpget") == 0) {
+		QMessageBox::warning(this, tr("qtmib Environment"),
+			tr("<br/><b>net-snmp</b> tools not found.<br/><br/>"
+			"Please install net-snmp package from<br/>http://www.net-snmp.org/<br/<br/>"));
+	}
+}
 
 QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 	//*************************

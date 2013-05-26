@@ -3875,9 +3875,11 @@ cd src/qtmib && qmake && cd ../..
 NETSNMP=`which snmpget`
 if test "$NETSNMP" == ""
 then
-	as_fn_error $? "net-snmp is missing, please install it (http://www.net-snmp.org/)." "$LINENO" 5
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: net-snmp is requred for running qtmib, please install it (http://www.net-snmp.org/)." >&5
+$as_echo "$as_me: WARNING: net-snmp is requred for running qtmib, please install it (http://www.net-snmp.org/)." >&2;}
+else
+	echo "Found $NETSNMP"
 fi
-echo "Found $NETSNMP"
 
 cp confdefs.h qtmib_config.h
 rm -f qtmib_prefix.h
