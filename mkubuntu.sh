@@ -22,6 +22,10 @@ cd $CODE_DIR
 ./configure --prefix=$INSTALL_DIR
 make && make install
 cd ..
+echo "*****************************************"
+SIZE=`du -s debian/usr`
+echo "install size $SIZE"
+echo "*****************************************"
 
 mv $INSTALL_DIR/share/doc/qtmib/RELNOTES $INSTALL_DIR/share/doc/qtmib/changelog.Debian
 gzip -9 $INSTALL_DIR/share/doc/qtmib/changelog.Debian
