@@ -15,7 +15,7 @@ clean:;rm -f build/*; make -C src/qtmib clean
 
 distclean: clean
 	rm -f `find src/qtmib -name Makefile`
-	rm qtmib_config.h Makefile config.status config.log qtmib_prefix.h
+	rm -f qtmib_config.h Makefile config.status config.log qtmib_prefix.h
 	rm -fr autom4te.cache
 	
 install: all
@@ -43,8 +43,8 @@ uninstall:;
 dist: distclean
 	./mkdist.sh $(NAME) $(VERSION)
 
-deb: dist
-	./mkdeb.sh $(NAME) $(VERSION)
+ubuntu: dist
+	./mkubuntu.sh $(NAME) $(VERSION)
 
 	
 	

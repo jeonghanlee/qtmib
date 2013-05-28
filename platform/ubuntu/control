@@ -1,0 +1,13 @@
+Package: qtmib
+Version: QTMIBVER-1
+Architecture: amd64
+Maintainer: RCP100 Team <rcpteam@yahoo.com>
+Installed-Size: 164
+Depends: libqtgui4, snmp, libc6
+Section: net
+Priority: extra
+Homepage: http://qtmib.sourceforge.net
+Description: Easy-to-use SNMP MIB Browser based on QT4 library. It is build as
+ a front-end for net-snmp tools, and it allows the user to query any SNMP
+ enabled device. It implements SNMPv1 and SNMPv2c, and is released under GPL v2
+ license.
