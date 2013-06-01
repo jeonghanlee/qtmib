@@ -18,44 +18,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef PREF_DIALOG_H
-#define PREF_DIALOG_H
+#ifndef EXEC_PROG_H
+#define EXEC_PROG_H
 
-#include <QWidget>
-#include <QDialog>
-#include <QComboBox>
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-class QCheckBox;
-class QLabel;
-class QErrorMessage;
+// legacy C code
+char *exec_prog(const char *prog);
 
-class PrefDialog: public QDialog {
-Q_OBJECT
-
-public:
-	PrefDialog();
-	QString getVersion();
-	QString getCommunity();
-	QString getPort();
-	QString getTimeout();
-	QString getRetries();
-
-public slots:
-	void accept();
-	int exec();
-		
-private:
-	QComboBox *pBox_;	// protocol version
-	QComboBox *cBox_;	// community
-	QComboBox *portBox_;	// port number
-	QComboBox *timeoutBox_;	// timeout
-	QComboBox *retriesBox_;	// retries
-
-	QString protocol_;
-	QString community_;
-	QString port_;
-	QString timeout_;
-	QString retries_;
-};
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -21,25 +21,11 @@
 #ifndef QTMIB_H
 #define QTMIB_H
 
-#ifdef __cplusplus
 #include <QStringList>
 #include <QStandardItem>
 
 QStringList qt_line_diff(QString str1, QString str2);
 QStandardItem *qtfind_child(QStandardItem *parent, QString name);
-#endif
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-// legacy C code
-char *exec_prog(const char *prog);
-
-#ifdef __cplusplus
-}
-#endif
 
 
 #endif

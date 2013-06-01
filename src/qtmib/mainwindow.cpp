@@ -28,6 +28,7 @@
 #include "clicked_label.h"
 #include "pref_dialog.h"
 #include "oid_translator.h"
+#include "exec_prog.h"
 #include "../../qtmib_config.h"
 #include "../../qtmib_prefix.h"
 
@@ -295,7 +296,9 @@ void MainWindow::createMenu() {
 
 	QMenu* fileMenu = menuBar()->addMenu(tr("File"));
 	fileMenu->addAction(prefAction);
+	fileMenu->addSeparator();
 	fileMenu->addAction(aboutAction);
+	fileMenu->addSeparator();
 	fileMenu->addAction(exitAction);
 }
 
@@ -318,13 +321,12 @@ void MainWindow::preferences() {
 	if (!pref_)
 		pref_ = new PrefDialog();
 		
-	pref_->exec();
-
-	QString str = "SNMP version: " + pref_->getVersion() + "\n";
-	if (pref_->getCommunity() == "public")
-		str += "Community: public\n";
-		
-	connectionView_->setPlainText(str);
+	if (QDialog::Accepted == pref_->exec()) {
+		QString str = "SNMP version: " + pref_->getVersion() + "\n";
+		if (pref_->getCommunity() == "public")
+			str += "Community: public\n";
+		connectionView_->setPlainText(str);
+	}
 
 }
 

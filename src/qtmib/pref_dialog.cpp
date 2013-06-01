@@ -22,62 +22,66 @@
 #include <QButtonGroup>
 #include "pref_dialog.h"
 
-PrefDialog::PrefDialog(): QDialog() {
+PrefDialog::PrefDialog(): QDialog(), protocol_("v2c"), community_("public"),
+	port_("161"), timeout_("1"), retries_("5") {
 	// protocol version
 	QLabel *pLabel = new QLabel;
 	pLabel->setText(tr("Protocol Version"));
-	pBox = new QComboBox;
-	pBox->addItem("v1");
-	pBox->addItem("v2c");
-	pBox->setCurrentIndex(1);
+	pBox_ = new QComboBox;
+	pBox_->addItem("v1");
+	pBox_->addItem("v2c");
+	pBox_->setCurrentIndex(1);
 
 	// community
 	QLabel *cLabel = new QLabel;
 	cLabel->setText(tr("Read Community"));
-	cBox = new QComboBox;
-	cBox->addItem("public");
-	cBox->setEditable(true);
+	cBox_ = new QComboBox;
+	cBox_->addItem("public");
+	cBox_->setEditable(true);
 	
 	// port number
 	QLabel *portLabel = new QLabel;
 	portLabel->setText(tr("UDP Port Number"));
-	portBox = new QComboBox;
-	portBox->addItem("161");
-	portBox->setEditable(true);
+	portBox_ = new QComboBox;
+	portBox_->addItem("161");
+	portBox_->setEditable(true);
 
 	// timeout
 	QLabel *timeoutLabel = new QLabel;
 	timeoutLabel->setText(tr("Timeout (seconds)"));
-	timeoutBox = new QComboBox;
-	timeoutBox->addItem("1");
-	timeoutBox->setEditable(true);
+	timeoutBox_ = new QComboBox;
+	timeoutBox_->addItem("1");
+	timeoutBox_->setEditable(true);
 
 	// retries
 	QLabel *retriesLabel = new QLabel;
 	retriesLabel->setText(tr("Retries"));
-	retriesBox = new QComboBox;
-	retriesBox->addItem("5");
-	retriesBox->setEditable(true);
+	retriesBox_ = new QComboBox;
+	retriesBox_->addItem("5");
+	retriesBox_->setEditable(true);
 
 	// OK
-	QPushButton *okButton = new QPushButton(tr("OK"));
-	connect(okButton, SIGNAL(clicked()), SLOT(accept()));
+    	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
+                                     | QDialogButtonBox::Cancel);
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 	
 	QGridLayout *grid = new QGridLayout;
 	grid->addItem(new QSpacerItem(30, 30), 0, 0);
 	grid->addWidget(pLabel, 1, 1);
-	grid->addWidget(pBox, 1, 3, 1, 2);
+	grid->addWidget(pBox_, 1, 3, 1, 2);
 	grid->addWidget(cLabel, 2, 1);
-	grid->addWidget(cBox, 2, 3, 1, 2);
+	grid->addWidget(cBox_, 2, 3, 1, 2);
 	grid->addWidget(portLabel, 3, 1);
-	grid->addWidget(portBox, 3, 3, 1, 2);
+	grid->addWidget(portBox_, 3, 3, 1, 2);
 	grid->addWidget(timeoutLabel, 4, 1);
-	grid->addWidget(timeoutBox, 4, 3, 1, 2);
+	grid->addWidget(timeoutBox_, 4, 3, 1, 2);
 	grid->addWidget(retriesLabel, 5, 1);
-	grid->addWidget(retriesBox, 5, 3, 1, 2);
+	grid->addWidget(retriesBox_, 5, 3, 1, 2);
 
 	grid->addItem(new QSpacerItem(30, 30), 6, 1);
-	grid->addWidget(okButton, 7, 3);
+	grid->addWidget(buttonBox, 7, 3);
+	grid->addItem(new QSpacerItem(30, 30), 8, 1);
 	grid->setColumnMinimumWidth(2, 50);
 	grid->setColumnMinimumWidth(4, 150);
 	grid->setColumnMinimumWidth(5, 30);
@@ -85,22 +89,43 @@ PrefDialog::PrefDialog(): QDialog() {
 	setWindowTitle(tr("Preferences"));
 }
 
+int PrefDialog::exec() {
+	// set defaults
+	pBox_->setCurrentIndex(1);
+	cBox_->setCurrentIndex(0);
+	portBox_->setCurrentIndex(0);
+	timeoutBox_->setCurrentIndex(0);
+	retriesBox_->setCurrentIndex(0);
+
+	return QDialog::exec();
+}
+
+void PrefDialog::accept() {
+	protocol_ = pBox_->currentText();
+	community_ = cBox_->currentText();
+	port_ = portBox_->currentText();
+	timeout_ = timeoutBox_->currentText();
+	retries_ = retriesBox_->currentText();
+	return QDialog::accept();
+}
+
+	
 QString PrefDialog::getVersion() {
-	return pBox->currentText();
+	return protocol_;
 }
 
 QString PrefDialog::getCommunity() {
-	return cBox->currentText();
+	return community_;
 }
 
 QString PrefDialog::getPort() {
-	return portBox->currentText();
+	return port_;
 }
 
 QString PrefDialog::getTimeout() {
-	return timeoutBox->currentText();
+	return timeout_;
 }
 
 QString PrefDialog::getRetries() {
-	return retriesBox->currentText();
+	return retries_;
 }

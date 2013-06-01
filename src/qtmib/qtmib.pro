@@ -1,4 +1,4 @@
-HEADERS   = mainwindow.h qtmib.h clicked_label.h pref_dialog.h oid_translator.h
+HEADERS   = mainwindow.h qtmib.h clicked_label.h pref_dialog.h oid_translator.h exec_prog.h
 SOURCES   = main.cpp \
             mainwindow.cpp \
             exec_prog.c \

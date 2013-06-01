@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "qtmib.h"
+#include "exec_prog.h"
 
 #define OUTPUT_CHUNK 4096	// allocate memory in 4k chunks
 
