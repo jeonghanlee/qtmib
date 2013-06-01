@@ -29,7 +29,6 @@ PrefDialog::PrefDialog(): QDialog() {
 	pBox = new QComboBox;
 	pBox->addItem("v1");
 	pBox->addItem("v2c");
-	pBox->addItem("v3");
 	pBox->setCurrentIndex(1);
 
 	// community

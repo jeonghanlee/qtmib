@@ -185,9 +185,7 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 		return new QStringListModel(this);
 	}
 
-#ifndef QT_NO_CURSOR
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-#endif
 	QStringList words;
 
 	QStandardItemModel *model = new QStandardItemModel(this);
@@ -231,17 +229,6 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 		parents[level+1] = item;
 	}
 
-
-#if 0
-	// prepare mib reference
-	QString cmd = QString("snmptranslate -M ") + QTMIB_PREFIX + "/share/qtmib -Tl";
-	char *rv = exec_prog(cmd.toStdString().c_str());
-	QString ref = "";
-	if (rv) {
-		ref += rv;
-		free(rv);
-	}
-#endif
 
 	//*************************
 	// load user mibs
@@ -291,10 +278,7 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 		}
 	}
 		
-	
-#ifndef QT_NO_CURSOR
 	QApplication::restoreOverrideCursor();
-#endif
 
 	return model;
 }
@@ -321,8 +305,8 @@ void MainWindow::about() {
 	msg += "<td>qtmib " + tr("version") + " " + PACKAGE_VERSION + "<br/><br/>";
 	msg += tr(
 		"qtmib is an easy-to-use SNMP MIB Browser based on QT4 library. It is build as "
-		"a front-end for net-snmp tools, and it allows the user to query any SNMP "
-		"enabled device. It supports SNMPv1, SNMPv2c and SNMPv3. qtmib is released "
+		"a front-end for net-snmp tools, and it allows the user to query any SNMP-enabled "
+		"device. It supports SNMPv1 and SNMPv2c. qtmib is released "
 		"under GPL v2 license.<br/><br/>");
 	msg += "Copyright (C) 2013 RCP100 Team (rcpteam@yahoo.com)<br/><br/>";
 	msg += QString(PACKAGE_URL) + "</td></tr></table><br/><br/>";
@@ -394,9 +378,7 @@ void MainWindow::updateActions() {
 }
 
 void MainWindow::handleAction() {
-#ifndef QT_NO_CURSOR
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-#endif
 	QString act = action_->currentText();
 
 	// action
@@ -460,9 +442,7 @@ void MainWindow::handleAction() {
 		free(rv);
 	}
 	
-#ifndef QT_NO_CURSOR
 	QApplication::restoreOverrideCursor();
-#endif
 }
 
 void MainWindow::handleClear() {
@@ -470,12 +450,7 @@ void MainWindow::handleClear() {
 }
 
 void MainWindow::handleTranslate() {
-
-#if 0
-	QTextCursor cursor = result_->textCursor();
-	int position = cursor.position();
-printf("%d/%d\n", position, cursor.blockNumber()); // block number is the line number	
-#endif	
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	
 	OidTranslator oidt(topitem_);
 
@@ -504,5 +479,6 @@ printf("%d/%d\n", position, cursor.blockNumber()); // block number is the line n
 			output += line + "\n";
 	}
 	result_->setText(output);	
+	QApplication::restoreOverrideCursor();
 }
 
