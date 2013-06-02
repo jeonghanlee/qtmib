@@ -286,9 +286,12 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 
 
 void MainWindow::createMenu() {
-	QAction *prefAction = new QAction(tr("Preferences"), this);
-	QAction *aboutAction = new QAction(tr("About"), this);
-	QAction *exitAction = new QAction(tr("Exit"), this);
+	QAction *prefAction = new QAction(tr("&Preferences"), this);
+	prefAction->setStatusTip(tr("SNMP protocol preferences"));
+	QAction *aboutAction = new QAction(tr("&About"), this);
+	aboutAction->setStatusTip(tr("Show application's About box"));
+	QAction *exitAction = new QAction(tr("E&xit"), this);
+	exitAction->setStatusTip(tr("Exit the application"));
 
 	connect(exitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
