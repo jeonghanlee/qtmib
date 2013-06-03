@@ -100,12 +100,42 @@ int PrefDialog::exec() {
 	return QDialog::exec();
 }
 
+void PrefDialog::store_combo_text(QComboBox *box) {
+	// if the string is not already stored, ...
+	QString str = box->currentText();
+	int cnt = box->count();
+	bool found = false;
+	for (int i = 0; i < cnt; i++) {
+		if (box->itemText(i) == str) {
+			found = true;
+			break;
+		}
+	}
+	// ... store it
+	if (!found)
+		box->addItem(box->currentText());
+}
+
 void PrefDialog::accept() {
+	// protocol
 	protocol_ = pBox_->currentText();
+	
+	// community
 	community_ = cBox_->currentText();
+	store_combo_text(cBox_);
+	
+	// port
 	port_ = portBox_->currentText();
+	store_combo_text(portBox_);
+
+	// timeout
 	timeout_ = timeoutBox_->currentText();
+	store_combo_text(timeoutBox_);
+
+	// retries
 	retries_ = retriesBox_->currentText();
+	store_combo_text(retriesBox_);
+	
 	return QDialog::accept();
 }
 

@@ -27,6 +27,7 @@
 #include <QStandardItem>
 
 class PrefDialog;
+class SearchDialog;
 
 QT_BEGIN_NAMESPACE
 class QAbstractItemModel;
@@ -51,6 +52,7 @@ private slots:
 	void about();
 	void preferences();
 	void handleAction();
+	void handleSearch();
 	void handleClear();
 	void handleTranslate();
 
@@ -68,6 +70,7 @@ private:
 	QLineEdit *actionOid_;
 	QComboBox *action_;
 	PrefDialog *pref_;
+	SearchDialog *search_;
 	QStandardItem *topitem_;
 };
 #endif

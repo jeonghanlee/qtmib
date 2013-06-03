@@ -1,5 +1,25 @@
+/*
+ * Copyright (C) 2013 RCP100 Team (rcpteam@yahoo.com)
+ *
+ * This file is part of qtmib project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+*/
 #include "qtmib.h"
 #include <stdio.h>
+#include <QTreeView>
 
 QStringList qt_line_diff(QString str1, QString str2) {
 	QStringList list1 = str1.split( "\n", QString::SkipEmptyParts );
@@ -42,3 +62,40 @@ QStandardItem *qtfind_child(QStandardItem *parent, QString name) {
 	return 0;
 }
 
+
+QString qtfind_entry(QStandardItem *item, QString entry, QTreeView *treeView) {
+
+	int rows = item->rowCount();
+	int columns = item->columnCount();
+	QString current = item->text();
+	int index1 = current.indexOf("(");
+	int index2 = current.indexOf(")");
+	QString right = current;
+	right = right.mid(index1 + 1, index2 - index1 - 1);
+	current.truncate(index1);
+		
+//printf("%s\n", current.toStdString().c_str());
+	if (current == entry) {
+		treeView->setExpanded(item->index(), true);
+		return QString(".") + right;
+	}
+
+
+	int i;
+	int j;
+	for (i = 0; i < rows; i++) {
+		for (j = 0; j < columns; j++) {
+			QStandardItem *child = item->child(i, j);
+			if (child) {
+				QString rv = qtfind_entry(child, entry, treeView);
+				if (rv != "String not found") {
+					treeView->setExpanded(item->index(), true);
+					rv = QString(".") + right + rv;
+					return rv;
+				}
+			}
+		}
+	}
+
+	return "String not found";
+}

@@ -43,7 +43,10 @@ public:
 public slots:
 	void accept();
 	int exec();
-		
+
+private:
+	void store_combo_text(QComboBox *box);	
+	
 private:
 	QComboBox *pBox_;	// protocol version
 	QComboBox *cBox_;	// community

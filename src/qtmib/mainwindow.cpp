@@ -27,6 +27,7 @@
 #include "qtmib.h"
 #include "clicked_label.h"
 #include "pref_dialog.h"
+#include "search_dialog.h"
 #include "oid_translator.h"
 #include "exec_prog.h"
 #include "../../qtmib_config.h"
@@ -59,10 +60,15 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent) {
 	oidView_->setPlainText("Name:\nOID:\nMIB:\n");
 	oidView_->setLineWrapMode(QTextEdit::NoWrap);
 
+	ClickedLabel *searchButton = new ClickedLabel("<font color=\"blue\">Search</font>", this);
+	searchButton->setText("<font color=\"blue\">Search</font>");
+	connect(searchButton, SIGNAL(clicked()), this, SLOT(handleSearch()));
+
 	QGridLayout *oidLayout = new QGridLayout;
 	oidLayout->addWidget(mibsLabel, 0, 0);
-	oidLayout->addWidget(treeView_, 1, 0);
-	oidLayout->addWidget(oidView_, 2, 0);
+	oidLayout->addWidget(searchButton, 0, 8);
+	oidLayout->addWidget(treeView_, 1, 0, 1, 10);
+	oidLayout->addWidget(oidView_, 2, 0, 1, 10);
 	oidLayout->setRowStretch(1, 10);
 	oidLayout->setRowStretch(2, 2);
 	QWidget *oidWidget = new QWidget;
@@ -448,6 +454,18 @@ void MainWindow::handleAction() {
 	}
 	
 	QApplication::restoreOverrideCursor();
+}
+
+void MainWindow::handleSearch() {
+	if (!search_)
+		search_ = new SearchDialog();
+		
+	if (QDialog::Accepted == search_->exec()) {
+		QString entry = search_->getSearch();
+		QString oid = qtfind_entry(topitem_, entry, treeView_);
+		statusBar()->showMessage(oid);
+			
+	}
 }
 
 void MainWindow::handleClear() {

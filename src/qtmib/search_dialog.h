@@ -18,17 +18,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef QTMIB_H
-#define QTMIB_H
+#ifndef SEARCH_DIALOG_H
+#define SEARCH_DIALOG_H
 
-#include <QStringList>
-#include <QStandardItem>
+#include <QWidget>
+#include <QDialog>
+#include <QComboBox>
 
-QStringList qt_line_diff(QString str1, QString str2);
-QStandardItem *qtfind_child(QStandardItem *parent, QString name);
-class QTreeView;
-QString qtfind_entry(QStandardItem *item, QString entry, QTreeView *treeView);
+class SearchDialog: public QDialog {
+Q_OBJECT
 
+public:
+	SearchDialog();
+	QString getSearch();
 
+public slots:
+	void accept();
+
+private:
+	QComboBox *sBox_;	// search box
+};
 
 #endif
