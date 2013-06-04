@@ -254,9 +254,9 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 		}
 	
 		// update tree
-		QStringList diff = usr.split( ".", QString::SkipEmptyParts);
+		QStringList diff = usr.split( "\n", QString::SkipEmptyParts);
 		foreach (QString line, diff) {
-			
+//printf("processing %s\n", line.toStdString().c_str());		
 			// split the line
 			QStringList oidlist = line.split( ".", QString::SkipEmptyParts );
 			int cnt = oidlist.count();
@@ -275,7 +275,8 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 				if (child)
 					parent = child;
 				else {
-					printf("adding %s\n", line.toStdString().c_str());
+					if (dbg)
+						printf("adding %s\n", line.toStdString().c_str());
 					QStandardItem *item = new QStandardItem;
 					item->setEditable(false);
 					item->setText(oidlist[i]);

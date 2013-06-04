@@ -23,6 +23,9 @@
 #include "mainwindow.h"
 #include "../../qtmib_config.h"
 
+// global debug flag
+bool dbg = false;
+
 static void help() {
 	printf(
 "qtmib is an easy-to-use SNMP MIB Browser based on QT4 library. It is build\n"
@@ -33,6 +36,7 @@ static void help() {
 	printf("Options:\n");
 	printf("\t-v, --version: version information\n");
 	printf("\t-h, --help: this help screen\n");
+	printf("\t--debug: enable debug messages\n");
 	printf("\n");
 }
 
@@ -49,6 +53,9 @@ int main(int argc, char *argv[]) {
 			help();
 			return 0;
 		}
+		else if (strcmp(argv[i], "--debug") == 0) {
+			dbg = true;
+		}
 		else {
 			printf("Error: unknown program argument\n\n");
 			help();
@@ -60,7 +67,8 @@ int main(int argc, char *argv[]) {
 	Q_INIT_RESOURCE(qtmib);
 
 	// create configuration directory
-	system("mkdir -p ~/.config/qtmib/mibs");
+	int rv = system("mkdir -p ~/.config/qtmib/mibs");
+	(void) rv;
 	
 	// start the application
 	QApplication app(argc, argv);

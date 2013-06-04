@@ -77,7 +77,7 @@ QString qtfind_entry(QStandardItem *item, QString entry, QTreeView *treeView) {
 //printf("%s\n", current.toStdString().c_str());
 	if (current == entry) {
 		treeView->setExpanded(item->index(), true);
-		return QString(".") + right;
+		return QString(".") + item->text();
 	}
 
 
@@ -90,7 +90,7 @@ QString qtfind_entry(QStandardItem *item, QString entry, QTreeView *treeView) {
 				QString rv = qtfind_entry(child, entry, treeView);
 				if (rv != "String not found") {
 					treeView->setExpanded(item->index(), true);
-					rv = QString(".") + right + rv;
+					rv = QString(".") + item->text() + rv;
 					return rv;
 				}
 			}
