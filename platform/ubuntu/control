@@ -8,6 +8,6 @@ Section: net
 Priority: extra
 Homepage: http://qtmib.sourceforge.net
 Description: Easy-to-use SNMP MIB Browser based on QT4 library. It is build as
- a front-end for net-snmp tools, and it allows the user to query any SNMP
- enabled device. It implements SNMPv1 and SNMPv2c, and is released under GPL v2
+ a front-end for net-snmp tools, and it allows the user to query SNMP-enabled
+ devices. It implements SNMPv1 and SNMPv2c, and is released under GPL v2
  license.
