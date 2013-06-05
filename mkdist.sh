@@ -6,7 +6,7 @@ mkdir $DIR
 cp -R src $DIR/.
 cd $DIR
 rm -fr `find . -name .svn`
-rm -fr src/art src/tools
+rm -fr src/tools src/art
 cd ..
 mkdir $DIR/build
 cp configure $DIR/.

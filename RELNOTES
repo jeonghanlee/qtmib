@@ -2,7 +2,9 @@ qtmib (0.8.2) baseline; urgency=low
 
   * MIB search
   * man page
-  * bug fixes
+  * fixed getnext command
+  * fixed private MIBs loading
+  * other bug fixes
 
  -- RCP100 Team <rcpteam@yahoo.com>  Thu, 05 Jun 2013 09:00:00 -0500
 
