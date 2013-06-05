@@ -17,7 +17,8 @@ Dependencies: QT4 development libraries, net-snmp (http://www.net-snmp.org/)
 Installation
 
 Ubuntu package: 
-	$ sudo dpkg -i qymib_X.Y.Z_1.deb
+	$ sudo dpkg -i qmib_X.Y.Z_1.deb
+
 Source code:
 	$ tar -xjvf qtmib-X.Y.Z.tar.bz2
 	$ cd qtmib-X.Y.Z
