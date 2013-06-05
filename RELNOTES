@@ -1,4 +1,12 @@
-qtmib (0.1) baseline; urgency=low
+qtmib (0.8.2) baseline; urgency=low
+
+  * MIB search
+  * man page
+  * bug fixes
+
+ -- RCP100 Team <rcpteam@yahoo.com>  Thu, 05 May 2013 09:00:00 -0500
+
+qtmib (0.8) baseline; urgency=low
 
   * development setup
 

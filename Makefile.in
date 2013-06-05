@@ -1,4 +1,4 @@
-all: src
+all: src qtmib.1
 
 PREFIX=@prefix@
 VERSION=@PACKAGE_VERSION@
@@ -11,7 +11,12 @@ qtmib_prefix.h:
 src: qtmib_prefix.h
 	$(MAKE) -C $@ $(MFLAGS)
 
-clean:;rm -f build/*; make -C src/qtmib clean
+
+qtmib.1: src/man/qtmib.txt
+	./mkman.sh $(VERSION) src/man/qtmib.txt
+
+
+clean:;rm -f build/*; rm -f qtmib.1; make -C src/qtmib clean
 
 distclean: clean
 	rm -f `find src/qtmib -name Makefile`
@@ -31,7 +36,8 @@ install: all
 	install -c -m 0644 COPYING $(PREFIX)/share/doc/qtmib/.
 	install -c -m 0644 README $(PREFIX)/share/doc/qtmib/.
 	install -c -m 0644 RELNOTES $(PREFIX)/share/doc/qtmib/.
-	install -c -m 0644 src/mibs/* $(PREFIX)/share/qtmib/.
+	install -c -m 0644 qtmib.1 $(PREFIX)/share/man/man1/.
+	gzip $(PREFIX)/share/man/man1/qtmib.1
 
 uninstall:;
 	rm -f $(PREFIX)/bin/qtmib
@@ -39,6 +45,7 @@ uninstall:;
 	rm -f $(PREFIX)/share/applications/qtmib.desktop
 	rm -fr $(PREFIX)/share/qtmib
 	rm -fr $(PREFIX)/share/doc/qtmib
+	rm -fr $(PREFIX)/share/man/man1/qtmib.1*
 
 dist: distclean
 	./mkdist.sh $(NAME) $(VERSION)

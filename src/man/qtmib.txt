@@ -1,0 +1,24 @@
+.TH man 1 "MONTH YEAR" "VERSION" "qtmib man page"
+.SH NAME
+qtmib \- SNMP MIB browser
+.SH SYNOPSIS
+qtmib [OPTIONS]
+.SH DESCRIPTION
+qtmib is an easy-to-use SNMP MIB Browser based on QT4 library.
+It is build as a front-end for net-snmp, and it allows the user to query any SNMP-enabled device.
+It implements SNMPv1 and SNMPv2c, and it is released under GPL v2 license. 
+.PP
+qtmib supports out of the box a large number of MIBs.
+Additionaly, you can install private MIBs by dropping them in ~/.config/qtmib/mibs directory.  
+.SH OPTIONS
+.TP
+\fB\--debug\fR
+Enable debug messages
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print options end exit
+.TP
+\fB\-v\fR, \fB\-\-version\fR
+Print version information end exit
+.SH AUTHOR
+RCP100 Team (rcpteam@yahoo.com)
