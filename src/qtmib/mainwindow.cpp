@@ -447,10 +447,26 @@ void MainWindow::handleAction() {
 	// execute command
 	char *rv = exec_prog(cmd.toStdString().c_str());
 	if (rv) {
-//		QString qrv = rv;
-//		qrv.replace(QString("iso.3.6.1"), QString("internet"));
-//		result_->append(qrv);
 		result_->append(rv);
+		
+		// prepare next OID for getnext
+		if (act == "snmpgetnext" || act == "snmpbulkget") {
+			QString input = rv;
+			QStringList lines = input.split( "\n", QString::SkipEmptyParts );
+			foreach (QString line, lines) {
+				if (line.startsWith("iso.3.6.1.")) {
+					QString oid = line.mid(3);
+					oid = ".1" + oid;
+					int index = oid.indexOf(" = ");
+					if (index != -1) {
+						oid.truncate(index);
+//printf("%s\n", oid.toStdString().c_str());
+						actionOid_->setText(oid);
+					}
+				}
+			}					
+		}
+		
 		free(rv);
 	}
 	

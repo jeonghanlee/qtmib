@@ -2,7 +2,7 @@ Package: qtmib
 Version: QTMIBVER-1
 Architecture: amd64
 Maintainer: RCP100 Team <rcpteam@yahoo.com>
-Installed-Size: 2204
+Installed-Size: 2257
 Depends: libqtgui4, snmp, libc6
 Section: net
 Priority: extra
