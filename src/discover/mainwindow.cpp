@@ -13,13 +13,13 @@ MainWindow::MainWindow() {
 	// network
 	QLabel *networkLabel = new QLabel;
 	networkLabel->setText(tr("Network"));
-	QLineEdit *network_ = new QLineEdit;
+	network_ = new QLineEdit;
 	network_->setText("192.168.254.0/24");
 
 	// protocol version
 	QLabel *pLabel = new QLabel;
 	pLabel->setText(tr("Protocol"));
-	QComboBox *pBox_ = new QComboBox;
+	pBox_ = new QComboBox;
 	pBox_->addItem("v1");
 	pBox_->addItem("v2c");
 	pBox_->setCurrentIndex(1);
@@ -43,26 +43,21 @@ MainWindow::MainWindow() {
 	// community
 	QLabel *cLabel = new QLabel;
 	cLabel->setText(tr("Community"));
-	QComboBox *cBox_ = new QComboBox;
-	cBox_->addItem("public");
-	cBox_->setEditable(true);
+	cBox_ = new QLineEdit;
+	cBox_->setText("public");
 	
 	// port number
 	QLabel *portLabel = new QLabel;
 	portLabel->setText(tr("Port Number"));
-	QComboBox *portBox_ = new QComboBox;
-	portBox_->addItem("161");
-	portBox_->setEditable(true);
+	portBox_ = new QLineEdit;
+	portBox_->setText("161");
 
 	QPushButton *okButton = new QPushButton("Start");
+	connect(okButton, SIGNAL(released()),this, SLOT(handleButton()));
 
-	QWidget *s2 = new QWidget;
-	s2->setFixedWidth(30);
-	
 	QHBoxLayout *a2Layout = new QHBoxLayout;
 	a2Layout->addWidget(cLabel);
 	a2Layout->addWidget(cBox_);
-	a2Layout->addWidget(s2);
 	a2Layout->addWidget(portLabel);
 	a2Layout->addWidget(portBox_);
 	a2Layout->addWidget(portLabel);
@@ -125,8 +120,6 @@ void MainWindow::about() {
 
 void MainWindow::createMenus() {
 	// File menu
-
-
 	aboutAction = new QAction(tr("&About"), this);
 	aboutAction->setStatusTip(tr("Show the application's About box"));
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
@@ -141,6 +134,16 @@ void MainWindow::createMenus() {
 	fileMenu->addSeparator();
 	fileMenu->addAction(exitAction);
 }
+
+void MainWindow::handleButton() {
+	DevStorage *dev = new DevStorage();
+	dev->ip_ = network_->text();
+	dev->version_ = pBox_->currentText();
+	dev->community_ = cBox_->text();
+	dev->port_ = portBox_->text();
+	thread.addTransaction(dev);
+}
+
 
 void MainWindow::transactionDone(const QString &msg) {
 	statusBar()->showMessage(msg, 2000);

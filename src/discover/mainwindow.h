@@ -9,6 +9,8 @@ class QAction;
 class QLabel;
 class QMenu;
 class QTableWidget;
+class QLineEdit;
+class QComboBox;
 
 class MainWindow : public QMainWindow
 {
@@ -24,6 +26,7 @@ private slots:
 	void about();
 	void transactionDone(const QString &message);
 	void displayResult(const QString &message);
+	void handleButton();
 
 private:
 	void createMenus();
@@ -33,7 +36,11 @@ private:
 
 	QMenu *fileMenu;
 	QTableWidget *result_;
-
+	QLineEdit *network_;
+	QComboBox *pBox_;
+	QLineEdit *cBox_;
+	QLineEdit *portBox_;
+	
 	QAction *exitAction;
 	QAction *aboutAction;
 };
