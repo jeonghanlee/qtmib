@@ -31,6 +31,7 @@ PrefDialog::PrefDialog(): QDialog(), protocol_("v2c"), community_("public"),
 	pBox_->addItem("v1");
 	pBox_->addItem("v2c");
 	pBox_->setCurrentIndex(1);
+	pBox_->setEditable(false);
 
 	// community
 	QLabel *cLabel = new QLabel;
