@@ -36,7 +36,7 @@
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), pref_(0), search_(0) {
 	checkEnvironment();
 	createMenu();
-
+	
 	//*************************************************
 	// OID
 	//*************************************************

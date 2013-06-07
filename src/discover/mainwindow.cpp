@@ -1,5 +1,10 @@
 #include <QtGui>
+#include <sys/types.h>
+#include <ifaddrs.h>
+#include <net/if.h>
+#include <netinet/in.h>
 
+#include "qtmib_ip.h"
 #include "mainwindow.h"
 #include "dev_storage.h"
 #include "../../qtmib_config.h"
@@ -13,8 +18,9 @@ MainWindow::MainWindow() {
 	// network
 	QLabel *networkLabel = new QLabel;
 	networkLabel->setText(tr("Network"));
-	network_ = new QLineEdit;
-	network_->setText("192.168.254.0/24");
+	network_ = new QComboBox;
+	addInterfaces(network_);
+	network_->setEditable(true);
 
 	// protocol version
 	QLabel *pLabel = new QLabel;
@@ -99,6 +105,49 @@ MainWindow::MainWindow() {
 }
 
 
+void MainWindow::addInterfaces(QComboBox *net) {
+	bool added = false;
+	struct ifaddrs *ifaddr;
+
+	if (getifaddrs(&ifaddr) == -1) {
+		net->addItem("192.168.1.0/24");
+		return;
+	}
+		
+	struct ifaddrs *ifa = ifaddr;
+	for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+		if (ifa->ifa_addr != NULL && ifa->ifa_netmask != NULL && ifa->ifa_name != NULL) {
+			if (strcmp(ifa->ifa_name, "lo") == 0)
+				continue;
+				
+			int family = ifa->ifa_addr->sa_family;
+			if (family == AF_PACKET) {
+				// no L3 tunnels
+				if (ifa->ifa_flags & IFF_NOARP) {
+					continue;
+				}
+			}
+			else if (family != AF_INET /* || family == AF_INET6 */) {
+				continue;
+			}
+
+			struct sockaddr_in *si = (struct sockaddr_in *) ifa->ifa_netmask;
+			uint32_t mask = ntohl(si->sin_addr.s_addr);
+			si = (struct sockaddr_in *) ifa->ifa_addr;
+			uint32_t ip = ntohl(si->sin_addr.s_addr);
+			char cidr[30];
+			sprintf(cidr, "%d.%d.%d.%d/%d", RCP_PRINT_IP(ip), mask2bits(mask));
+			net->addItem(QString(cidr));
+			added = true;
+//printf("name %s, %d.%d.%d.%d/%d\n", ifa->ifa_name, RCP_PRINT_IP(ip), mask2bits(mask));
+		}
+	}
+	freeifaddrs(ifaddr);
+
+	if (!added)
+		net->addItem("192.168.1.0/24");
+}
+
 void MainWindow::closeEvent(QCloseEvent *event) {
 	event->accept();
 }
@@ -136,8 +185,51 @@ void MainWindow::createMenus() {
 }
 
 void MainWindow::handleButton() {
+	// check network address
+	QString qs = "A CIDR network address is expected.<br/><br/>";
+	qs += "For example an address of 192.168.1.0/24 will include<br/>";
+	qs += "all IP addresses from 192.168.1.1 to 192.168.1.254.<br/><br/>";
+	uint32_t ip = 0;
+	uint32_t mask = 0;
+	if (atocidr(network_->currentText().toStdString().c_str(), &ip, &mask) ||
+		ip == 0 || mask == 0) {
+		
+		QMessageBox::warning(this, tr("Network Address"), qs);
+		return;
+		
+	}
+	
+	char cidr[30];
+	sprintf(cidr, "%d.%d.%d.%d/%d", RCP_PRINT_IP(ip), mask2bits(mask));
+	if (network_->currentText().toStdString().c_str() != QString(cidr)) {
+		QMessageBox::warning(this, tr("Network Address"), qs);
+		return;
+	}
+
+	// check port number
+	int port = atoi(portBox_->text().toStdString().c_str());
+	qs = "A port number between 1 and 65535 is expected.<br/><br/>";
+	if (port <= 0 || port > 65535) {
+		QMessageBox::warning(this, tr("Port Number"), qs);
+		return;
+	}
+	sprintf(cidr, "%d", port);
+	if (portBox_->text().toStdString().c_str() != QString(cidr)) {
+		QMessageBox::warning(this, tr("Port Number"), qs);
+		return;
+	}
+	
 	DevStorage *dev = new DevStorage();
-	dev->ip_ = network_->text();
+	
+	if (mask == 0xffffffff) {
+		dev->range_start_ = ip;
+		dev->range_end_ = ip;
+	}
+	else {
+		dev->range_start_ = (ip & mask) + 1;
+		dev->range_end_ = (ip | ~mask) - 1;
+	}
+
 	dev->version_ = pBox_->currentText();
 	dev->community_ = cBox_->text();
 	dev->port_ = portBox_->text();

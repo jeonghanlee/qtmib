@@ -4,6 +4,7 @@
 struct DevStorage;
 class TransactionThread;
 #include <QStringList>
+#include <stdint.h>
 
 class DevDb {
 	DevDb();
@@ -11,6 +12,7 @@ class DevDb {
 public:
 	static DevStorage *add(DevStorage *dev);
 	static DevStorage *find(QString ip);
+	static DevStorage *find(uint32_t ip);
 	static void remove(QString ip);
 	static void walk(void (*f)(DevStorage *dev, TransactionThread *th), TransactionThread *th);
 	static void print();

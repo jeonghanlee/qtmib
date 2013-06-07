@@ -32,6 +32,7 @@ private:
 	QMutex mutex;
 
 	int ending_; // exit flag
+	int sock_;
 
 	// input queues
 	QList<DevStorage *> queue_add_;

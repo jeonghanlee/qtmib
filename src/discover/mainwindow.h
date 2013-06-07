@@ -31,12 +31,13 @@ private slots:
 private:
 	void createMenus();
 	void addTransaction(QString type);
+	void addInterfaces(QComboBox *net);
 
 	TransactionThread thread;
 
 	QMenu *fileMenu;
 	QTableWidget *result_;
-	QLineEdit *network_;
+	QComboBox *network_;
 	QComboBox *pBox_;
 	QLineEdit *cBox_;
 	QLineEdit *portBox_;

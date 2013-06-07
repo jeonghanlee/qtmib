@@ -40,6 +40,18 @@ DevStorage *DevDb::find(QString ip) {
 	return 0;	
 }
 
+DevStorage *DevDb::find(uint32_t ip) {
+	QList<DevStorage *> &mylist = DevDb::get().list_;
+	int cnt = mylist.count();
+	for (int i  = 0; i < cnt; i++) {
+		DevStorage *dev = mylist.at(i);
+		if (ip == dev->range_start_)
+			return dev;
+	}
+	
+	return 0;	
+}
+
 void DevDb::remove(QString ip) {
 	QList<DevStorage *> &mylist = DevDb::get().list_;
 	int cnt = mylist.count();
@@ -67,7 +79,14 @@ void DevDb::walk(void (*f)(DevStorage *dev, TransactionThread *th), TransactionT
 	int cnt = mylist.count();
 	for (int i  = 0; i < cnt; i++) {
 		DevStorage *dev = mylist.at(i);
-		f(dev, th);
+		if (dev) {
+			f(dev, th);
+			if (dev->remove_) {
+				cnt--;
+				mylist.removeAt(i);
+				delete dev;
+			}
+		}
 	}
 }
 
