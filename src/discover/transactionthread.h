@@ -20,7 +20,6 @@ public:
 	~TransactionThread();
 
 	void addTransaction(DevStorage *dev);
-	void delTransaction(DevStorage *dev);
 	static void checkDevice(DevStorage *dev, TransactionThread *th);
 signals:
 	void transactionDone(const QString &message);
@@ -36,6 +35,5 @@ private:
 
 	// input queues
 	QList<DevStorage *> queue_add_;
-	QList<DevStorage *> queue_del_;
 };
 #endif

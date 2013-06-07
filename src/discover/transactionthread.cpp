@@ -21,11 +21,6 @@ void TransactionThread::addTransaction(DevStorage *dev) {
 	queue_add_.append(dev);
 }
 
-void TransactionThread::delTransaction(DevStorage *dev) {
-	QMutexLocker locker(&mutex);
-	queue_del_.append(dev);
-}
-
 static QString extract_string(QString line) {
 printf("extract from %s\n", line.toStdString().c_str());
 	int index = line.indexOf(" = STRING: \"");
@@ -89,8 +84,7 @@ void TransactionThread::run() {
 
 		mutex.lock();
 		int addcnt = queue_add_.count();
-		int delcnt = queue_del_.count();
-		if (addcnt == 0 && delcnt == 0)
+		if (addcnt == 0)
 			printf("sleep\n");
 		else {
 			for (int i = 0; i < addcnt; i++) {
@@ -105,20 +99,6 @@ void TransactionThread::run() {
 				QString result = "add\t" + dev->ip_;
 				emit displayResult(result);
 				
-			}
-			for (int i = 0; i < delcnt; i++) {
-				DevStorage *dev = queue_del_.at(0);
-				printf("sleep; del ip %s\n", dev->ip_.toStdString().c_str());
-				emit transactionDone(dev->ip_ + " removed");
-				QString ip = dev->ip_;
-				delete dev;
-				// remove dev from input queue
-				queue_del_.removeFirst();
-				// remove device from database
-				DevDb::remove(ip);
-				// display result
-				QString result = "del\t" + ip;
-				emit displayResult(result);
 			}
 		}
 		mutex.unlock();
