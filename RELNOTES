@@ -1,3 +1,9 @@
+qtmib (0.8.4) baseline; urgency=low
+
+  * fixed Search button crash
+
+ -- RCP100 Team <rcpteam@yahoo.com>  Thu, 07 Jun 2013 18:00:00 -0500
+
 qtmib (0.8.2) baseline; urgency=low
 
   * MIB search
