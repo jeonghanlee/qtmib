@@ -51,6 +51,7 @@ public slots:
 private slots:
 	void about();
 	void preferences();
+	void discovery();
 	void handleAction();
 	void handleSearch();
 	void handleClear();

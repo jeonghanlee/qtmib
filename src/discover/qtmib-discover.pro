@@ -5,7 +5,8 @@ HEADERS       = mainwindow.h \
                 dev_db.h \
                 exec_prog.h \
                 qtmib_ip.h \
-                qtmib_socket.h
+                qtmib_socket.h \
+                qtmib_discover.h
 SOURCES       = mainwindow.cpp \
                 main.cpp \
                 transactionthread.cpp \
@@ -13,3 +14,4 @@ SOURCES       = mainwindow.cpp \
                 exec_prog.c \
                 qtmib_socket.c
 RESOURCES = qtmib-discover.qrc
+TARGET=../../build/qtmib-discover

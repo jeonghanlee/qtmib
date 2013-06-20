@@ -1,5 +1,5 @@
 AC_PREREQ([2.68])
-AC_INIT(qtmib, 0.8.4, rcpteam@yahoo.com, , http://qtmib.sourceforge.net)
+AC_INIT(qtmib, 0.8.6testing, rcpteam@yahoo.com, , http://qtmib.sourceforge.net)
 AC_CONFIG_SRCDIR([src/qtmib/main.cpp])
 #AC_CONFIG_HEADERS([config.h])
 
@@ -28,6 +28,7 @@ echo "Found $QMAKE"
 qmake -v
 
 cd src/qtmib && qmake && cd ../..
+cd src/discover && qmake && cd ../..
 
 # testing net-snmp
 NETSNMP=`which snmpget`

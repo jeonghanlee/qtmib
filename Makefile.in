@@ -1,4 +1,4 @@
-all: src qtmib.1
+all: src qtmib.1 qtmib-discover.1
 
 PREFIX=@prefix@
 VERSION=@PACKAGE_VERSION@
@@ -13,13 +13,18 @@ src: qtmib_prefix.h
 
 
 qtmib.1: src/man/qtmib.txt
-	./mkman.sh $(VERSION) src/man/qtmib.txt
+	./mkman.sh $(VERSION) src/man/qtmib.txt qtmib.1
+
+qtmib-discover.1: src/man/qtmib.txt
+	./mkman.sh $(VERSION) src/man/qtmib-discover.txt qtmib-discover.1
 
 
-clean:;rm -f build/*; rm -f qtmib.1; make -C src/qtmib clean
+
+clean:;rm -f build/*; rm -f qtmib.1 qtmib.1.gz qtmib-discover.1 qtmib-discover.1.gz; make -C src clean
 
 distclean: clean
 	rm -f `find src/qtmib -name Makefile`
+	rm -f `find src/discover -name Makefile`
 	rm -f qtmib_config.h Makefile config.status config.log qtmib_prefix.h
 	rm -fr autom4te.cache
 	
@@ -32,21 +37,28 @@ install: all
 	mkdir -p $(PREFIX)/share/doc/qtmib
 	mkdir -p $(PREFIX)/share/man/man1
 	install -c -m 0755 build/qtmib $(PREFIX)/bin/.
+	install -c -m 0755 build/qtmib-discover $(PREFIX)/bin/.
 	install -c -m 0644 src/qtmib/qtmib.desktop $(PREFIX)/share/applications/.
 	install -c -m 0644 src/qtmib/resources/qtmib-128.png $(PREFIX)/share/pixmaps/qtmib.png
 	install -c -m 0644 COPYING $(PREFIX)/share/doc/qtmib/.
 	install -c -m 0644 README $(PREFIX)/share/doc/qtmib/.
 	install -c -m 0644 RELNOTES $(PREFIX)/share/doc/qtmib/.
-	install -c -m 0644 qtmib.1 $(PREFIX)/share/man/man1/.
-	gzip -9 $(PREFIX)/share/man/man1/qtmib.1
+	rm -f qtmib.1.gz
+	gzip -9 qtmib.1
+	install -c -m 0644 qtmib.1.gz $(PREFIX)/share/man/man1/.
+	rm -f qtmib-discover.1.gz
+	gzip -9 qtmib-discover.1
+	install -c -m 0644 qtmib-discover.1.gz $(PREFIX)/share/man/man1/.
 
 uninstall:;
 	rm -f $(PREFIX)/bin/qtmib
+	rm -f $(PREFIX)/bin/qtmib-discover
 	rm -f $(PREFIX)/share/pixmaps/qtmib.png
 	rm -f $(PREFIX)/share/applications/qtmib.desktop
 	rm -fr $(PREFIX)/share/qtmib
 	rm -fr $(PREFIX)/share/doc/qtmib
 	rm -fr $(PREFIX)/share/man/man1/qtmib.1*
+	rm -fr $(PREFIX)/share/man/man1/qtmib-discover.1*
 
 dist: distclean
 	./mkdist.sh $(NAME) $(VERSION)

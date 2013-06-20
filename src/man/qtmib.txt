@@ -20,5 +20,7 @@ Print options end exit
 .TP
 \fB\-v\fR, \fB\-\-version\fR
 Print version information end exit
+.SH SEE ALSO
+qtmib-discover(1)
 .SH AUTHOR
 RCP100 Team (rcpteam@yahoo.com)

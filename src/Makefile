@@ -1,4 +1,4 @@
-APPS = qtmib
+APPS = qtmib discover
 .PHONY: apps $(APPS)
 apps: $(APPS)
 $(APPS):

@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
 	int i;
 	for (i = 1; i < argc; i++) {
 		if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
-			printf("qtmib version %s\n", PACKAGE_VERSION);
+			printf("%s version %s\n", argv[0], PACKAGE_VERSION);
 			return 0;
 		}
 		else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {

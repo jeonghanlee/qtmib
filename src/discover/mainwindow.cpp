@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2013 RCP100 Team (rcpteam@yahoo.com)
+ *
+ * This file is part of qtmib project
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+*/
 #include <QtGui>
 #include <sys/types.h>
 #include <ifaddrs.h>
@@ -8,12 +27,13 @@
 #include "mainwindow.h"
 #include "dev_storage.h"
 #include "../../qtmib_config.h"
+#include "qtmib_discover.h"
 
 MainWindow::MainWindow() {
 	createMenus();
 
 	//*************************************************
-	// action1 layout
+	// preferences
 	//*************************************************
 	// network
 	QLabel *networkLabel = new QLabel;
@@ -31,21 +51,6 @@ MainWindow::MainWindow() {
 	pBox_->setCurrentIndex(1);
 	pBox_->setEditable(false);
 
-	QWidget *s1 = new QWidget;
-	s1->setFixedWidth(30);
-	
-	QHBoxLayout *a1Layout = new QHBoxLayout;
-	a1Layout->addWidget(networkLabel);
-	a1Layout->addWidget(network_);
-	a1Layout->addWidget(s1);
-	a1Layout->addWidget(pLabel);
-	a1Layout->addWidget(pBox_);
-	QWidget *a1Widget = new QWidget;
-	a1Widget->setLayout(a1Layout);
-
-	//*************************************************
-	// action2 layout
-	//*************************************************
 	// community
 	QLabel *cLabel = new QLabel;
 	cLabel->setText(tr("Community"));
@@ -61,15 +66,21 @@ MainWindow::MainWindow() {
 	QPushButton *okButton = new QPushButton("Start");
 	connect(okButton, SIGNAL(released()),this, SLOT(handleButton()));
 
-	QHBoxLayout *a2Layout = new QHBoxLayout;
-	a2Layout->addWidget(cLabel);
-	a2Layout->addWidget(cBox_);
-	a2Layout->addWidget(portLabel);
-	a2Layout->addWidget(portBox_);
-	a2Layout->addWidget(portLabel);
-	a2Layout->addWidget(okButton);
-	QWidget *a2Widget = new QWidget;
-	a2Widget->setLayout(a2Layout);
+	QGridLayout *grid = new QGridLayout;
+	grid->addWidget(networkLabel, 0, 0);
+	grid->addWidget(network_, 0, 1);
+	grid->addWidget(pLabel, 1, 0);
+	grid->addWidget(pBox_, 1, 1);
+	grid->addWidget(cLabel, 2, 0);
+	grid->addWidget(cBox_, 2, 1);
+	grid->addWidget(portLabel, 3, 0);
+	grid->addWidget(portBox_, 3, 1);
+	grid->addWidget(okButton, 4, 0);
+
+	QWidget *prefWidget = new QWidget;
+	prefWidget->setLayout(grid);
+
+
 	
 	//*************************************************
 	// result
@@ -88,8 +99,7 @@ MainWindow::MainWindow() {
 	// main layout
 	//*************************************************
 	QVBoxLayout *mLayout = new QVBoxLayout;
-	mLayout->addWidget(a1Widget);
-	mLayout->addWidget(a2Widget);
+	mLayout->addWidget(prefWidget);
 	mLayout->addWidget(result_);
 	QWidget *mWidget = new QWidget;
 	mWidget->setLayout(mLayout);
@@ -238,11 +248,12 @@ void MainWindow::handleButton() {
 
 
 void MainWindow::transactionDone(const QString &msg) {
-	statusBar()->showMessage(msg, 2000);
+	statusBar()->showMessage(msg, 4000);
 }
 
 void MainWindow::displayResult(const QString &msg) {
-printf("message %s\n", msg.toStdString().c_str());
+	if (dbg)
+		printf("message %s\n", msg.toStdString().c_str());
 	QStringList lst = msg.split( "\t", QString::SkipEmptyParts);
 	
 	QString op;

@@ -1,0 +1,22 @@
+.TH man 1 "MONTH YEAR" "VERSION" "qtmib-discover man page"
+.SH NAME
+qtmib-discover \- SNMP network discovery utility program
+.SH SYNOPSIS
+qtmib-discover [OPTIONS]
+.SH DESCRIPTION
+qtmib-discover is a network discovery utility program. It is part of qtmib SNMP MIB Browser
+package. The program is released under GPL v2 license. 
+.SH OPTIONS
+.TP
+\fB\--debug\fR
+Enable debug messages
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print options end exit
+.TP
+\fB\-v\fR, \fB\-\-version\fR
+Print version information end exit
+.SH SEE ALSO
+qtmib(1)
+.SH AUTHOR
+RCP100 Team (rcpteam@yahoo.com)

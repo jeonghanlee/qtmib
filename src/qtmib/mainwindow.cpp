@@ -291,6 +291,8 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 
 
 void MainWindow::createMenu() {
+	QAction *discAction = new QAction(tr("&Network Discovery"), this);
+	discAction->setStatusTip(tr("Run network discovery"));
 	QAction *prefAction = new QAction(tr("&Preferences"), this);
 	prefAction->setStatusTip(tr("SNMP protocol preferences"));
 	QAction *aboutAction = new QAction(tr("&About"), this);
@@ -298,11 +300,13 @@ void MainWindow::createMenu() {
 	QAction *exitAction = new QAction(tr("E&xit"), this);
 	exitAction->setStatusTip(tr("Exit the application"));
 
+	connect(discAction, SIGNAL(triggered()), this, SLOT(discovery()));
 	connect(exitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 	connect(prefAction, SIGNAL(triggered()), this, SLOT(preferences()));
 
 	QMenu* fileMenu = menuBar()->addMenu(tr("File"));
+	fileMenu->addAction(discAction);
 	fileMenu->addAction(prefAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(aboutAction);
@@ -323,6 +327,13 @@ void MainWindow::about() {
 	msg += QString(PACKAGE_URL) + "</td></tr></table><br/><br/>";
 	
 	QMessageBox::about(this, tr("About"), msg);
+}
+
+void MainWindow::discovery() {
+	int rv = system("qtmib-discover &");
+	if (rv == -1)
+		QMessageBox::warning(this, tr("qtmib Environment"),
+			tr("<br/><b>qtmib-discover</b> module not found.<br/><br/>"));
 }
 
 void MainWindow::preferences() {
