@@ -22,6 +22,7 @@
 #include "mainwindow.h"
 #include "../../qtmib_config.h"
 #include "qtmib_report.h"
+#include "bundle.h"
 
 // global debug flag
 bool dbg = false;
@@ -64,8 +65,9 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	Bundle *bundle = new ProcessBundle("v2c", "public", "161", "127.0.0.1");
 	QApplication app(argc, argv);
-	MainWindow mainWin;
+	MainWindow mainWin(bundle);
 	mainWin.resize(600, 400);
 	mainWin.show();
 	return app.exec();

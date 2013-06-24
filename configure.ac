@@ -29,6 +29,7 @@ qmake -v
 
 cd src/qtmib && qmake && cd ../..
 cd src/discover && qmake && cd ../..
+cd src/report && qmake && cd ../..
 
 # testing net-snmp
 NETSNMP=`which snmpget`

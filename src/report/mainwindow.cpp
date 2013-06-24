@@ -27,16 +27,15 @@
 #include "../../qtmib_config.h"
 #include "qtmib_report.h"
 #include "exec_prog.h"
-#include "report.h"
+#include "bundle.h"
 
-MainWindow::MainWindow() {
+MainWindow::MainWindow(Bundle *bundle): bundle_(bundle) {
 	createMenus();
 
-
-	// resutl
+	// result view
 	resultView_ = new QTextEdit;
 	resultView_->setReadOnly(true);
-
+	
 	QVBoxLayout *mLayout = new QVBoxLayout;
 	mLayout->addWidget(resultView_);
 	QWidget *mWidget = new QWidget;
@@ -87,20 +86,5 @@ void MainWindow::createMenus() {
 }
 
 void MainWindow::runReport() {
-	SystemReport sysrep("v2c", "public", "161", "127.0.0.1");
-	HrDeviceReport hrdevrep("v2c", "public", "161", "127.0.0.1");
-	HrStorageReport hrstoragerep("v2c", "public", "161", "127.0.0.1");
-
-	QString rv = "<br/><center><h1>System Report</h1></center><br/><br/>\n";
-	
-	rv += sysrep.get();
-	if (rv.isEmpty()) {
-printf("Error: cannot connect to host\n");		
-		return;
-	}
-	
-	rv += hrdevrep.get();
-	rv += hrstoragerep.get();
-	resultView_->setText(rv);
-
+	bundle_->run(resultView_);
 }

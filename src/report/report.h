@@ -44,6 +44,20 @@ public:
 	QString get();
 };
 
+class HrSoftwareReport: public Report {
+public:
+	HrSoftwareReport(QString version, QString community, QString port, QString ip):
+		Report(version, community, port, ip) {}
+	QString get();
+};
+
+class HrProcessReport: public Report {
+public:
+	HrProcessReport(QString version, QString community, QString port, QString ip):
+		Report(version, community, port, ip) {}
+	QString get();
+};
+
 #endif
 
 

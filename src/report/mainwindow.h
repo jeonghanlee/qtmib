@@ -21,7 +21,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+class Bundle;
 class QAction;
 class QLabel;
 class QMenu;
@@ -35,7 +35,7 @@ class MainWindow : public QMainWindow
 Q_OBJECT
 
 	public:
-	MainWindow();
+	MainWindow(Bundle *bundle);
 
 protected:
 	void closeEvent(QCloseEvent *event);
@@ -52,5 +52,6 @@ private:
 	QAction *aboutAction;
 	
 	QTextEdit *resultView_;
+	Bundle *bundle_;
 };
 #endif
