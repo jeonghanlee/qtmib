@@ -291,6 +291,16 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 
 
 void MainWindow::createMenu() {
+	QAction *sysrAction = new QAction(tr("&System Report"), this);
+	sysrAction->setStatusTip(tr("Extract system information"));
+	QAction *procrAction = new QAction(tr("Pro&cess Report"), this);
+	procrAction->setStatusTip(tr("Extract running process information"));
+	QAction *softrAction = new QAction(tr("Soft&ware Report"), this);
+	softrAction->setStatusTip(tr("Extract installed software information"));
+	connect(sysrAction, SIGNAL(triggered()), this, SLOT(sysr()));
+	connect(procrAction, SIGNAL(triggered()), this, SLOT(procr()));
+	connect(softrAction, SIGNAL(triggered()), this, SLOT(softr()));
+
 	QAction *discAction = new QAction(tr("&Network Discovery"), this);
 	discAction->setStatusTip(tr("Run network discovery"));
 	QAction *prefAction = new QAction(tr("&Preferences"), this);
@@ -305,7 +315,11 @@ void MainWindow::createMenu() {
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 	connect(prefAction, SIGNAL(triggered()), this, SLOT(preferences()));
 
-	QMenu* fileMenu = menuBar()->addMenu(tr("File"));
+	QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
+	QMenu* reportMenu = fileMenu->addMenu(tr("&Reports"));
+	reportMenu->addAction(sysrAction);
+	reportMenu->addAction(procrAction);
+	reportMenu->addAction(softrAction);
 	fileMenu->addAction(discAction);
 	fileMenu->addAction(prefAction);
 	fileMenu->addSeparator();
@@ -314,6 +328,20 @@ void MainWindow::createMenu() {
 	fileMenu->addAction(exitAction);
 }
 
+void MainWindow::sysr() {
+	int rv = system("qtmib-report --system&");
+	(void) rv;
+}
+
+void MainWindow::procr() {
+	int rv = system("qtmib-report --process&");
+	(void) rv;
+}
+
+void MainWindow::softr() {
+	int rv = system("qtmib-report --software&");
+	(void) rv;
+}
 
 void MainWindow::about() {
 	QString msg = "<table cellpadding=\"10\"><tr><td><img src=\":/resources/qtmib-128.png\"></td>";

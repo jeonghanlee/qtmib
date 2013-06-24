@@ -72,7 +72,7 @@ QString HrProcessReport::get() {
 	}	
 	
 	// build table	
-	out += "<tr><td>PID</td><td width=\"200\">Process Name</td><td>CPU Time</td><td>Memeory (byte)</td></tr>";
+	out += "<tr><td>PID</td><td width=\"200\">Process Name</td><td>CPU Time</td><td>Memory</td></tr>";
 	for (int i = 0; i < cnt; i++) {
 		out += "<tr><td>" + pid[i] + "</td><td>" + name[i] + "</td><td>" +
 			cpu[i] + "</td><td>" + mem[i] + "</td></tr>\n";

@@ -40,10 +40,15 @@ static void help() {
 	printf("\t-v, --version: version information\n");
 	printf("\t-h, --help: this help screen\n");
 	printf("\t--debug: enable debug messages\n");
+	printf("\t--system: prepare a system report (default)\n");
+	printf("\t--process: prepare a process report\n");
+	printf("\t--software: prepare an installed software report\n");
 	printf("\n");
 }
 
 int main(int argc, char *argv[]) {
+	Bundle *bundle = 0;
+	
 	// parse arguments
 	int i;
 	for (i = 1; i < argc; i++) {
@@ -58,6 +63,15 @@ int main(int argc, char *argv[]) {
 		else if (strcmp(argv[i], "--debug") == 0) {
 			dbg = true;
 		}
+		else if (strcmp(argv[i], "--system") == 0) {
+			bundle = new SystemBundle("v2c", "public", "161", "127.0.0.1");
+		}
+		else if (strcmp(argv[i], "--process") == 0) {
+			bundle = new ProcessBundle("v2c", "public", "161", "127.0.0.1");
+		}
+		else if (strcmp(argv[i], "--software") == 0) {
+			bundle = new SoftwareBundle("v2c", "public", "161", "127.0.0.1");
+		}
 		else {
 			printf("Error: unknown program argument\n\n");
 			help();
@@ -65,7 +79,9 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	Bundle *bundle = new ProcessBundle("v2c", "public", "161", "127.0.0.1");
+	if (!bundle)
+		bundle = new SystemBundle("v2c", "public", "161", "127.0.0.1");
+		
 	QApplication app(argc, argv);
 	MainWindow mainWin(bundle);
 	mainWin.resize(600, 400);

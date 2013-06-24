@@ -56,6 +56,9 @@ private slots:
 	void handleSearch();
 	void handleClear();
 	void handleTranslate();
+	void sysr();
+	void procr();
+	void softr();
 
 private:
 	void checkEnvironment();
