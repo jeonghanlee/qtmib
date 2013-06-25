@@ -38,4 +38,18 @@ public:
 	void run(QTextEdit *view);
 };
 
+class TcpipBundle: public Bundle {
+public:
+	TcpipBundle(QString version, QString community, QString port, QString ip):
+		Bundle(version, community, port, ip) {}
+	void run(QTextEdit *view);
+};
+
+class InterfaceBundle: public Bundle {
+public:
+	InterfaceBundle(QString version, QString community, QString port, QString ip):
+		Bundle(version, community, port, ip) {}
+	void run(QTextEdit *view);
+};
+
 #endif

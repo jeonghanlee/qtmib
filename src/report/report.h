@@ -16,6 +16,9 @@ protected:
 	static QString extract_timeticks(QString line);
 	static QString extract_integer(QString line);
 	static QString extract_oid(QString line);
+	static QString extract_gauge32(QString line);
+	static QString extract_hexstring(QString line);
+	static QString extract_counter32(QString line);
 	
 	QString version_;
 	QString community_;
@@ -54,6 +57,13 @@ public:
 class HrProcessReport: public Report {
 public:
 	HrProcessReport(QString version, QString community, QString port, QString ip):
+		Report(version, community, port, ip) {}
+	QString get();
+};
+
+class InterfaceReport: public Report {
+public:
+	InterfaceReport(QString version, QString community, QString port, QString ip):
 		Report(version, community, port, ip) {}
 	QString get();
 };

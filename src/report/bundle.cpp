@@ -54,3 +54,37 @@ void ProcessBundle::run(QTextEdit *view) {
 	rv += hrprocrep.get();
 	view->setText(rv);
 }
+
+void InterfaceBundle::run(QTextEdit *view) {
+	SystemReport sysrep(version_, community_, port_, ip_);
+	InterfaceReport ifrep(version_, community_, port_, ip_);
+
+	QString rv = "<br/><center><h1>Interace Report</h1></center><br/><br/>\n";
+	
+	QString rv1 = sysrep.get();
+	if (rv1.isEmpty()) {
+		view->setText("Error: cannot connect to host\n");		
+		return;
+	}
+	
+	rv += rv1;
+	rv += ifrep.get();
+	view->setText(rv);
+}
+
+void TcpipBundle::run(QTextEdit *view) {
+	SystemReport sysrep(version_, community_, port_, ip_);
+	InterfaceReport ifrep(version_, community_, port_, ip_);
+
+	QString rv = "<br/><center><h1>TCP/IP Report</h1></center><br/><br/>\n";
+	
+	QString rv1 = sysrep.get();
+	if (rv1.isEmpty()) {
+		view->setText("Error: cannot connect to host\n");		
+		return;
+	}
+	
+	rv += rv1;
+	rv += ifrep.get();
+	view->setText(rv);
+}

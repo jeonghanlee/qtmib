@@ -41,6 +41,8 @@ static void help() {
 	printf("\t-h, --help: this help screen\n");
 	printf("\t--debug: enable debug messages\n");
 	printf("\t--system: prepare a system report (default)\n");
+	printf("\t--interface: prepare an interface report\n");
+	printf("\t--tcpip: prepare a networking report\n");
 	printf("\t--process: prepare a process report\n");
 	printf("\t--software: prepare an installed software report\n");
 	printf("\n");
@@ -65,6 +67,12 @@ int main(int argc, char *argv[]) {
 		}
 		else if (strcmp(argv[i], "--system") == 0) {
 			bundle = new SystemBundle("v2c", "public", "161", "127.0.0.1");
+		}
+		else if (strcmp(argv[i], "--interface") == 0) {
+			bundle = new InterfaceBundle("v2c", "public", "161", "127.0.0.1");
+		}
+		else if (strcmp(argv[i], "--tcpip") == 0) {
+			bundle = new TcpipBundle("v2c", "public", "161", "127.0.0.1");
 		}
 		else if (strcmp(argv[i], "--process") == 0) {
 			bundle = new ProcessBundle("v2c", "public", "161", "127.0.0.1");

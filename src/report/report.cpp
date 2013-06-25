@@ -67,4 +67,46 @@ QString Report::extract_oid(QString line) {
 	return QString(" ");
 }
 
+QString Report::extract_gauge32(QString line) {
+	int index = line.indexOf(" = Gauge32: ");
+	if (index != -1) {
+		index += 12;
+		QString left = line.mid(index);
+		index = left.indexOf("\"");
+		if (index != -1)
+			left.truncate(index); 
+		return left;
+	}
+	
+	return QString(" ");
+}
+
+QString Report::extract_hexstring(QString line) {
+	int index = line.indexOf(" = Hex-STRING: ");
+	if (index != -1) {
+		index += 15;
+		QString left = line.mid(index);
+		index = left.indexOf("\"");
+		if (index != -1)
+			left.truncate(index); 
+		return left;
+	}
+	
+	return QString(" ");
+}
+
+QString Report::extract_counter32(QString line) {
+	int index = line.indexOf(" = Counter32: ");
+	if (index != -1) {
+		index += 14;
+		QString left = line.mid(index);
+		index = left.indexOf("\"");
+		if (index != -1)
+			left.truncate(index); 
+		return left;
+	}
+	
+	return QString(" ");
+}
+
 		
