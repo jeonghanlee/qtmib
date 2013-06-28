@@ -32,6 +32,8 @@ QString HrProcessReport::get() {
 			}
 		}
 	}
+	if (cnt == 0)
+		return "Error: .1.3.6.1.2.1.25.4.2 MIB not found.<br/>\n";
 	
 	// cpu
 	QStringList cpu;

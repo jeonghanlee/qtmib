@@ -20,6 +20,8 @@ QString HrSoftwareReport::get() {
 			cnt++;
 		}
 	}
+	if (cnt == 0)
+		return "Error: .1.3.6.1.2.1.25.6.3 MIB not found.<br/>\n";
 	
 	out += "</table>\n";
 

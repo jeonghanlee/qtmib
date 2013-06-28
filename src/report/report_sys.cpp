@@ -56,7 +56,10 @@ QString HrDeviceReport::get() {
 			}
 		}
 	}
-	
+	if (devlist.count() == 0) {
+		return "Error: .1.3.6.1.2.1.25.3.2 MIB not found<br/>\n";	
+	}
+
 	int i;
 	for (i = 0; i < devlist.count(); i++) {
 		devlist[i] = "iso.3.6.1.2.1.25.3.2.1.3." + devlist[i];
@@ -85,18 +88,23 @@ QString HrDeviceReport::get() {
 		bool second_raw = false;
 		input = rv;
 		lines = input.split( "\n", QString::SkipEmptyParts );
+		bool found = false;
 		foreach (QString line, lines) {
 			if (line.startsWith("iso.3.6.1.4.1.2021.10.1.2.")) {
 				out += "<td>" + extract_string(line) + "</td>";
+				found = true;
 			}
 			else if (line.startsWith("iso.3.6.1.4.1.2021.10.1.3.")) {
 				if (!second_raw) {
 					out += "</tr><tr>";
 					second_raw = true;
 				}
+				found = true;
 				out += "<td>" + extract_string(line) + "</td>";
 			}
 		}
+		if (!found)
+			return "Error: .1.3.6.1.4.1.2021.10 MIB not found.<br/>\n";
 		out += "</tr>";
 		out += "</table>";
 	}
@@ -159,6 +167,8 @@ QString HrStorageReport::get() {
 	
 		//extract device size
 		int cnt = devid.size();
+		if (cnt == 0)
+			return "Error: .1.3.6.1.2.1.25.2.3 MIB not found<br/>\n";
 		for (i = 0; i < cnt; i++) {
 			QString oid = "iso.3.6.1.2.1.25.2.3.1.5." + devid[i];
 			char *ptr = strstr(rv, oid.toStdString().c_str());

@@ -34,9 +34,11 @@ QString IfipReport::get() {
 			}
 		}
 	}
-	
+	if (cnt == 0)
+		return "Error: .1.3.6.1.2.1.2.2 MIB not found<br/>\n";
+		
 	if (cnt != kindex.count() || cnt != name.count())
-		return "";
+		return "Error: cannot parse .1.3.6.1.2.1.2.2 MIB<br/>\n";
 
 
 	// addresses
@@ -59,7 +61,7 @@ QString IfipReport::get() {
 		}
 	}
 	if (addr_cnt != addr_index.count() || addr_cnt != addr_addr.count())
-		return "";
+		return "Error: cannot parse .1.3.6.1.2.1.2.2 MIB<br/>\n";
 
 	// extract kindex
 	QStringList addr_kindex;
@@ -82,7 +84,7 @@ QString IfipReport::get() {
 		}
 	}
 	if (addr_cnt != addr_kindex.count())
-		return "";
+		return "Error: cannot parse .1.3.6.1.2.1.2.2 MIB<br/>\n";
 
 	// extract mask
 	QStringList addr_mask;
@@ -103,7 +105,7 @@ QString IfipReport::get() {
 		}
 	}
 	if (addr_cnt != addr_mask.count())
-		return "";
+		return "Error: cannot parse .1.3.6.1.2.1.2.2 MIB<br/>\n";
 
 
 	// print table
@@ -162,9 +164,11 @@ QString InterfaceReport::get() {
 			}
 		}
 	}
+	if (cnt == 0)
+		return "Error: .1.3.6.1.2.1.2.2 MIB not found<br/>\n";
 	
 	if (cnt != kindex.count() || cnt != name.count())
-		return "";
+		return "Error: cannot parse .1.3.6.1.2.1.2.2 MIB<br/>\n";
 	
 	// extract MTU
 	QStringList mtu;
@@ -185,7 +189,7 @@ QString InterfaceReport::get() {
 		}
 	}
 	if (cnt != mtu.count())
-		return "";
+		return "Error: cannot parse .1.3.6.1.2.1.2.2 MIB<br/>\n";
 	
 	// extract speed
 	QStringList speed;
@@ -206,7 +210,7 @@ QString InterfaceReport::get() {
 		}
 	}
 	if (cnt != speed.count())
-		return "";
+		return "Error: cannot parse .1.3.6.1.2.1.2.2 MIB<br/>\n";
 		
 	// extract MAC address
 	QStringList mac;
@@ -227,7 +231,7 @@ QString InterfaceReport::get() {
 		}
 	}
 	if (cnt != mac.count())
-		return "";
+		return "Error: cannot parse .1.3.6.1.2.1.2.2 MIB<br/>\n";
 		
 	// extract admin status
 	QStringList admin;
@@ -252,7 +256,7 @@ QString InterfaceReport::get() {
 		}
 	}
 	if (cnt != admin.count())
-		return "";
+		return "Error: cannot parse .1.3.6.1.2.1.2.2 MIB<br/>\n";
 		
 	// extract oper status
 	QStringList oper;
@@ -277,7 +281,7 @@ QString InterfaceReport::get() {
 		}
 	}
 	if (cnt != oper.count())
-		return "";
+		return "Error: cannot parse .1.3.6.1.2.1.2.2 MIB<br/>\n";
 		
 	out += "<table border=\"1\" cellpadding=\"10\"><tr><td>Interface</td><td>MTU</td><td>Speed</td><td>MAC Address</td>";
 	out += "<td>Admin/Oper<br/>Status</td></tr>\n";
