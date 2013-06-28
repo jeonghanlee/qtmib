@@ -297,9 +297,16 @@ void MainWindow::createMenu() {
 	procrAction->setStatusTip(tr("Extract running process information"));
 	QAction *softrAction = new QAction(tr("Soft&ware Report"), this);
 	softrAction->setStatusTip(tr("Extract installed software information"));
+
+	QAction *intfrAction = new QAction(tr("&Interface Report"), this);
+	intfrAction->setStatusTip(tr("Extract interface information"));
+	QAction *tcpiprAction = new QAction(tr("&TCP/IP Report"), this);
+	tcpiprAction->setStatusTip(tr("Extract TCP/IP information"));
 	connect(sysrAction, SIGNAL(triggered()), this, SLOT(sysr()));
 	connect(procrAction, SIGNAL(triggered()), this, SLOT(procr()));
 	connect(softrAction, SIGNAL(triggered()), this, SLOT(softr()));
+	connect(intfrAction, SIGNAL(triggered()), this, SLOT(intfr()));
+	connect(tcpiprAction, SIGNAL(triggered()), this, SLOT(tcpipr()));
 
 	QAction *discAction = new QAction(tr("&Network Discovery"), this);
 	discAction->setStatusTip(tr("Run network discovery"));
@@ -318,6 +325,8 @@ void MainWindow::createMenu() {
 	QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
 	QMenu* reportMenu = fileMenu->addMenu(tr("&Reports"));
 	reportMenu->addAction(sysrAction);
+	reportMenu->addAction(intfrAction);
+	reportMenu->addAction(tcpiprAction);
 	reportMenu->addAction(procrAction);
 	reportMenu->addAction(softrAction);
 	fileMenu->addAction(discAction);
@@ -340,6 +349,16 @@ void MainWindow::procr() {
 
 void MainWindow::softr() {
 	int rv = system("qtmib-report --software&");
+	(void) rv;
+}
+
+void MainWindow::intfr() {
+	int rv = system("qtmib-report --interface&");
+	(void) rv;
+}
+
+void MainWindow::tcpipr() {
+	int rv = system("qtmib-report --tcpip&");
 	(void) rv;
 }
 

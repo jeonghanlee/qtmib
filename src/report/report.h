@@ -19,6 +19,7 @@ protected:
 	static QString extract_gauge32(QString line);
 	static QString extract_hexstring(QString line);
 	static QString extract_counter32(QString line);
+	static QString extract_ipaddress(QString line);
 	
 	QString version_;
 	QString community_;
@@ -64,6 +65,13 @@ public:
 class InterfaceReport: public Report {
 public:
 	InterfaceReport(QString version, QString community, QString port, QString ip):
+		Report(version, community, port, ip) {}
+	QString get();
+};
+
+class IfipReport: public Report {
+public:
+	IfipReport(QString version, QString community, QString port, QString ip):
 		Report(version, community, port, ip) {}
 	QString get();
 };

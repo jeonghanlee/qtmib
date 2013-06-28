@@ -58,8 +58,9 @@ void ProcessBundle::run(QTextEdit *view) {
 void InterfaceBundle::run(QTextEdit *view) {
 	SystemReport sysrep(version_, community_, port_, ip_);
 	InterfaceReport ifrep(version_, community_, port_, ip_);
+	IfipReport ifip(version_, community_, port_, ip_);
 
-	QString rv = "<br/><center><h1>Interace Report</h1></center><br/><br/>\n";
+	QString rv = "<br/><center><h1>Interface Report</h1></center><br/><br/>\n";
 	
 	QString rv1 = sysrep.get();
 	if (rv1.isEmpty()) {
@@ -67,7 +68,13 @@ void InterfaceBundle::run(QTextEdit *view) {
 		return;
 	}
 	
-	rv += rv1;
+	QString rv2 = ifip.get();
+	if (rv2.isEmpty()) {
+		view->setText("Error: cannot connect to host\n");		
+		return;
+	}
+	
+	rv += rv1 + rv2;
 	rv += ifrep.get();
 	view->setText(rv);
 }

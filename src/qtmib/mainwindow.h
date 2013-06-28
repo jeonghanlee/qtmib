@@ -59,6 +59,8 @@ private slots:
 	void sysr();
 	void procr();
 	void softr();
+	void intfr();
+	void tcpipr();
 
 private:
 	void checkEnvironment();

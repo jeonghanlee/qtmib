@@ -2,9 +2,143 @@
 #include <stdio.h>
 #include "report.h"
 
+static char *ifmib_storage = 0;
+
+QString IfipReport::get() {
+	char *rv1 = snmpwalk(".1.3.6.1.2.1.2.2");
+	if (!rv1)
+		return "";
+	ifmib_storage = rv1;
+
+	char *rv2 = snmpwalk(".1.3.6.1.2.1.4.20");
+	if (!rv2)
+		return "";
+
+	// kindex and name
+	QString out = "";
+	QStringList kindex;
+	QStringList name;
+	int cnt = 0;
+	QString input = rv1;
+	QStringList lines = input.split( "\n", QString::SkipEmptyParts );
+	foreach (QString line, lines) {
+		if (line.startsWith("iso.3.6.1.2.1.2.2.1.2.")) {
+			QString ifname = extract_string(line);
+//printf("#%s#\n", oid.toStdString().c_str());
+			int index = line.indexOf(" = ");
+			if (index != -1) {
+				line.truncate(index);
+				kindex += line.mid(22);
+				cnt++;
+				name += ifname;
+			}
+		}
+	}
+	
+	if (cnt != kindex.count() || cnt != name.count())
+		return "";
+
+
+	// addresses
+	int addr_cnt = 0;
+	QStringList addr_index;
+	QStringList addr_addr;
+	input = rv2;
+	lines = input.split( "\n", QString::SkipEmptyParts );
+	foreach (QString line, lines) {
+		if (line.startsWith("iso.3.6.1.2.1.4.20.1.1.")) {
+			QString addr = extract_ipaddress(line);
+//printf("#%s#\n", oid.toStdString().c_str());
+			int index = line.indexOf(" = ");
+			if (index != -1) {
+				line.truncate(index);
+				addr_index += line.mid(23);
+				addr_addr += addr;
+				addr_cnt++;
+			}
+		}
+	}
+	if (addr_cnt != addr_index.count() || addr_cnt != addr_addr.count())
+		return "";
+
+	// extract kindex
+	QStringList addr_kindex;
+	for (int i = 0; i < addr_cnt; i++) {
+		QString oid = "iso.3.6.1.2.1.4.20.1.2." + addr_index[i];
+//printf("#%s#\n", oid.toStdString().c_str());
+		char *ptr = strstr(rv2, oid.toStdString().c_str());
+		if (ptr == NULL)
+			addr_kindex += " ";
+		else {
+			QString line = ptr;
+			int index = line.indexOf("\n");
+			if (index != -1) {
+				line.truncate(index);
+				addr_kindex += extract_integer(line);
+			}
+			else {
+				addr_kindex += " ";
+			}
+		}
+	}
+	if (addr_cnt != addr_kindex.count())
+		return "";
+
+	// extract mask
+	QStringList addr_mask;
+	for (int i = 0; i < addr_cnt; i++) {
+		QString oid = "iso.3.6.1.2.1.4.20.1.3." + addr_index[i];
+		char *ptr = strstr(rv2, oid.toStdString().c_str());
+		if (ptr == NULL)
+			addr_mask += " ";
+		else {
+			QString line = ptr;
+			int index = line.indexOf("\n");
+			if (index != -1) {
+				line.truncate(index);
+				addr_mask += extract_ipaddress(line);
+			}
+			else
+				addr_mask += " ";
+		}
+	}
+	if (addr_cnt != addr_mask.count())
+		return "";
+
+
+	// print table
+	out += "<b>Interface Address:</b><br/><br/>";
+	out += "<table border=\"1\" cellpadding=\"10\"><tr><td>Interface</td><td>Address</td><td>Mask</td></tr>\n";
+	
+	for (int i = 0; i < addr_cnt; i++) {
+		// find interface name
+		QString ifname = "";
+		for (int j = 0; j < cnt; j++) {
+			if (addr_kindex[i] == kindex[j]) {
+				ifname = name[j];
+				break;
+			}
+		}
+		if (!ifname.isEmpty()) {
+			out += QString("<tr><td>") + ifname.toStdString().c_str() + "</td>";
+			out += QString("<td>") + addr_addr[i].toStdString().c_str() + "</td>";
+			out += QString("<td>") + addr_mask[i].toStdString().c_str() + "</td></tr>\n";
+			
+		}
+		
+	}
+	out += "</table><br/><br/><br/>\n";
+	return out;
+}
+
+
 
 QString InterfaceReport::get() {
-	char *rv = snmpwalk(".1.3.6.1.2.1.2.2");
+	char *rv = 0;
+	if (ifmib_storage)
+		rv = ifmib_storage;
+	else
+		rv = snmpwalk(".1.3.6.1.2.1.2.2");
 	if (!rv)
 		return "";
 		
@@ -145,7 +279,7 @@ QString InterfaceReport::get() {
 	if (cnt != oper.count())
 		return "";
 		
-	out += "<table border=\"1\" cellpadding=\"10\"><tr><td>Name</td><td>MTU</td><td>Speed</td><td>MAC Address</td>";
+	out += "<table border=\"1\" cellpadding=\"10\"><tr><td>Interface</td><td>MTU</td><td>Speed</td><td>MAC Address</td>";
 	out += "<td>Admin/Oper<br/>Status</td></tr>\n";
 	for (int i = 0; i < cnt; i++) {
 		out += "<tr><td>" + name[i] + "</td>";
@@ -242,7 +376,7 @@ QString InterfaceReport::get() {
 		return out;
 	
 	out += "<br/><br/><br/><b>Input Packet Counts:</b><br/><br/>";
-	out += "<table border=\"1\" cellpadding=\"10\"><tr><td>Name</td><td>Unicast</td><td>Multicast</td><td>Discards</td><td>Errors</td></td>";
+	out += "<table border=\"1\" cellpadding=\"10\"><tr><td>Interface</td><td>Unicast</td><td>Multicast</td><td>Discards</td><td>Errors</td></td>";
 	for (int i = 0; i < cnt; i++) {
 		out += "<tr><td>" + name[i] + "</td><td>" + ucast[i] + "</td>";
 		out += "<td>" + nucast[i] + "</td>";
@@ -338,7 +472,7 @@ QString InterfaceReport::get() {
 		return out;
 	
 	out += "<br/><br/><br/><b>Output Packet Counts:</b><br/><br/>";
-	out += "<table border=\"1\" cellpadding=\"10\"><tr><td>Name</td><td>Unicast</td><td>Multicast</td><td>Discards</td><td>Errors</td></td>";
+	out += "<table border=\"1\" cellpadding=\"10\"><tr><td>Interface</td><td>Unicast</td><td>Multicast</td><td>Discards</td><td>Errors</td></td>";
 	for (int i = 0; i < cnt; i++) {
 		out += "<tr><td>" + name[i] + "</td><td>" + ucast[i] + "</td>";
 		out += "<td>" + nucast[i] + "</td>";

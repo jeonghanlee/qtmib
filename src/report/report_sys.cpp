@@ -81,7 +81,7 @@ QString HrDeviceReport::get() {
 
 	rv = snmpwalk(".1.3.6.1.4.1.2021.10");
 	if (rv) {
-		out += "CPU load:<br/><table border=\"1\" cellpadding=\"10\"><tr>";
+		out += "CPU load averages (1/5/15 minutes):<br/><table border=\"1\" cellpadding=\"10\"><tr>";
 		bool second_raw = false;
 		input = rv;
 		lines = input.split( "\n", QString::SkipEmptyParts );
@@ -139,6 +139,8 @@ QString HrStorageReport::get() {
 		QStringList desclist;
 		QStringList sizelist;
 		QStringList usedlist;
+		QStringList availlist;
+		QStringList usedpercentlist;
 		
 		// extract device id and descriptions
 		QString input = rv;
@@ -175,12 +177,11 @@ QString HrStorageReport::get() {
 		}
 		
 		//extract used size
-		cnt = devid.size();
 		for (i = 0; i < cnt; i++) {
 			QString oid = "iso.3.6.1.2.1.25.2.3.1.6." + devid[i];
 			char *ptr = strstr(rv, oid.toStdString().c_str());
 			if (ptr == NULL)
-				usedlist += " ";
+				usedlist += "0";
 			else {
 				QString line = ptr;
 				int index = line.indexOf("\n");
@@ -189,18 +190,35 @@ QString HrStorageReport::get() {
 					usedlist += extract_integer(line);
 				}
 				else
-					usedlist += " ";
+					usedlist += "0";
 			}
 		}
 		
-					
+		// build available and used percentage
+		for (i = 0; i < cnt; i++) {
+			bool ok;
+			quint64 size = sizelist[i].toULongLong(&ok, 10);
+			if (!ok)
+				size = 0;					
+			quint64 used = usedlist[i].toULongLong(&ok, 10);
+			if (!ok)
+				used = 0;
+			quint64 avail = size - used;
+			quint64 usedpercent = 0;
+			if (size)
+				usedpercent = 100 - ((avail * 100) / size);
+			availlist += QString("%1").arg(avail);
+			usedpercentlist += QString("%1").arg(usedpercent) + "%";
+		}
 		
 		out += "<table border=\"1\" cellpadding=\"10\">";
-		out += "<tr><td>Description</td><td>Size</td><td>Used</td></tr>";
+		out += "<tr><td>Description</td><td>Size (kB)</td><td>Used (kB)</td><td>Available (kB)</td><td>Used (%)</td></tr>";
 		for (i = 0; i < cnt; i++) {
 			out += "<tr><td>" + desclist[i] + "</td>";
 			out += "<td>" + sizelist[i] + "</td>";
-			out += "<td>" + usedlist[i] + "</td></td>";
+			out += "<td>" + usedlist[i] + "</td>";
+			out += "<td>" + availlist[i] + "</td>";
+			out += "<td>" + usedpercentlist[i] + "</td></tr>";
 		}
 		out += "</table>";
 	}

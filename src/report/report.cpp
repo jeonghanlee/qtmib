@@ -109,4 +109,14 @@ QString Report::extract_counter32(QString line) {
 	return QString(" ");
 }
 
+QString Report::extract_ipaddress(QString line) {
+	int index = line.indexOf(" = IpAddress: ");
+	if (index != -1) {
+		index += 14;
+		QString rv = line.mid(index);
+		return rv;
+	}
+	
+	return QString(" ");
+}
 		
