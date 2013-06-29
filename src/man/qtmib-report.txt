@@ -1,0 +1,38 @@
+.TH man 1 "MONTH YEAR" "VERSION" "qtmib-report man page"
+.SH NAME
+qtmib-report \- SNMP reporting utility program
+.SH SYNOPSIS
+qtmib-report [OPTIONS]
+.SH DESCRIPTION
+qtmib-report generates reports based on SNMP information extracted from 
+an SNMP agent. It is part of qtmib SNMP MIB Browser
+package. The program is released under GPL v2 license. 
+.SH OPTIONS
+.TP
+\fB\--debug\fR
+Enable debug messages.
+.TP
+\fB\--system\fR
+Generate a system report (default).
+.TP
+\fB\--interface\fR
+Generate an interface report.
+.TP
+\fB\--tcpip\fR
+Generate a TCP/IP stack report.
+.TP
+\fB\--process\fR
+List all running processes.
+.TP
+\fB\--process\fR
+List all installed software packages.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print options end exit.
+.TP
+\fB\-v\fR, \fB\-\-version\fR
+Print version information end exit.
+.SH SEE ALSO
+qtmib(1) qtmib-discover(1)
+.SH AUTHOR
+RCP100 Team (rcpteam@yahoo.com)

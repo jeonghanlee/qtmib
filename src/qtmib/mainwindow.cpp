@@ -292,16 +292,16 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 
 void MainWindow::createMenu() {
 	QAction *sysrAction = new QAction(tr("&System Report"), this);
-	sysrAction->setStatusTip(tr("Extract system information"));
+	sysrAction->setStatusTip(tr("Generate a system report"));
 	QAction *procrAction = new QAction(tr("Pro&cess Report"), this);
-	procrAction->setStatusTip(tr("Extract running process information"));
+	procrAction->setStatusTip(tr("List all running processes"));
 	QAction *softrAction = new QAction(tr("Soft&ware Report"), this);
-	softrAction->setStatusTip(tr("Extract installed software information"));
+	softrAction->setStatusTip(tr("List all installed software packages"));
 
 	QAction *intfrAction = new QAction(tr("&Interface Report"), this);
-	intfrAction->setStatusTip(tr("Extract interface information"));
+	intfrAction->setStatusTip(tr("Generate an interface report"));
 	QAction *tcpiprAction = new QAction(tr("&TCP/IP Report"), this);
-	tcpiprAction->setStatusTip(tr("Extract TCP/IP information"));
+	tcpiprAction->setStatusTip(tr("Generate a TCP/IP stack report"));
 	connect(sysrAction, SIGNAL(triggered()), this, SLOT(sysr()));
 	connect(procrAction, SIGNAL(triggered()), this, SLOT(procr()));
 	connect(softrAction, SIGNAL(triggered()), this, SLOT(softr()));

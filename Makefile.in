@@ -1,4 +1,4 @@
-all: src qtmib.1 qtmib-discover.1
+all: src qtmib.1 qtmib-discover.1 qtmib-report.1
 
 PREFIX=@prefix@
 VERSION=@PACKAGE_VERSION@
@@ -15,12 +15,15 @@ src: qtmib_prefix.h
 qtmib.1: src/man/qtmib.txt
 	./mkman.sh $(VERSION) src/man/qtmib.txt qtmib.1
 
-qtmib-discover.1: src/man/qtmib.txt
+qtmib-discover.1: src/man/qtmib-discover.txt
 	./mkman.sh $(VERSION) src/man/qtmib-discover.txt qtmib-discover.1
 
+qtmib-report.1: src/man/qtmib-report.txt
+	./mkman.sh $(VERSION) src/man/qtmib-report.txt qtmib-report.1
 
 
-clean:;rm -f build/*; rm -f qtmib.1 qtmib.1.gz qtmib-discover.1 qtmib-discover.1.gz; make -C src clean
+
+clean:;rm -f build/*; rm -f qtmib.1 qtmib.1.gz qtmib-report.1 qtmib-report.1.gz qtmib-discover.1 qtmib-discover.1.gz; make -C src clean
 
 distclean: clean
 	rm -f `find src/qtmib -name Makefile`
@@ -51,6 +54,9 @@ install: all
 	rm -f qtmib-discover.1.gz
 	gzip -9 qtmib-discover.1
 	install -c -m 0644 qtmib-discover.1.gz $(PREFIX)/share/man/man1/.
+	rm -f qtmib-report.1.gz
+	gzip -9 qtmib-report.1
+	install -c -m 0644 qtmib-report.1.gz $(PREFIX)/share/man/man1/.
 
 uninstall:;
 	rm -f $(PREFIX)/bin/qtmib
@@ -62,6 +68,7 @@ uninstall:;
 	rm -fr $(PREFIX)/share/doc/qtmib
 	rm -fr $(PREFIX)/share/man/man1/qtmib.1*
 	rm -fr $(PREFIX)/share/man/man1/qtmib-discover.1*
+	rm -fr $(PREFIX)/share/man/man1/qtmib-report.1*
 
 dist: distclean
 	./mkdist.sh $(NAME) $(VERSION)

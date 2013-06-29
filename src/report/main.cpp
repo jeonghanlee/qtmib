@@ -29,22 +29,21 @@ bool dbg = false;
 
 static void help() {
 	printf(
-"qtmib is an easy-to-use SNMP MIB Browser based on QT4 library. It is build\n"
-"as a front-end for net-snmp tools, and it allows the user to query any SNMP\n"
-"enabled device. It supports SNMPv1, SNMPv2c. qtmib is released under GPL v2\n"
-"license. See http://qtmib.sourceforge.net for more details.\n\n");
-	printf("qtmib-discover is the network discovery component of qtmib\n\n");
-	printf("Usage: qtmib-discover [options]\n");
+"qtmib-report generates reports based on SNMP information extracted from an\n"
+"SNMP agent. It is part of qtmib SNMP MIB Browser package. The program is\n"
+"released under GPL v2 license. See http://qtmib.sourceforge.net for more\n"
+"details.\n\n");
+	printf("Usage: qtmib-report [options]\n");
 	
 	printf("Options:\n");
 	printf("\t-v, --version: version information\n");
 	printf("\t-h, --help: this help screen\n");
 	printf("\t--debug: enable debug messages\n");
-	printf("\t--system: prepare a system report (default)\n");
-	printf("\t--interface: prepare an interface report\n");
-	printf("\t--tcpip: prepare a networking report\n");
-	printf("\t--process: prepare a process report\n");
-	printf("\t--software: prepare an installed software report\n");
+	printf("\t--system: generate a system report (default)\n");
+	printf("\t--interface: generate an interface report\n");
+	printf("\t--tcpip: generate a TCP/IP stack report\n");
+	printf("\t--process: list all running processes\n");
+	printf("\t--software: list all installed software packages\n");
 	printf("\n");
 }
 
