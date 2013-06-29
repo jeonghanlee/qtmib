@@ -1,6 +1,7 @@
 #include <QStringList>
 #include <stdio.h>
 #include "report.h"
+#include "qtmib_report.h"
 
 QString SystemReport::get() {
 	char *rv = snmpwalk(".1.3.6.1.2.1.1");
@@ -29,6 +30,8 @@ QString SystemReport::get() {
 		}
 			
 	}
+	if (dbg)
+		printf("#%s#\n", out.toStdString().c_str());
 	
 	return out + "<br/><br/>";
 }
@@ -109,7 +112,8 @@ QString HrDeviceReport::get() {
 		out += "</table>";
 	}
 
-//printf("#%s#\n", out.toStdString().c_str());
+	if (dbg)
+		printf("#%s#\n", out.toStdString().c_str());
 
 	return "<b>CPU:</b><br/>" + out + "<br/><br/><br/>";
 }
@@ -232,7 +236,8 @@ QString HrStorageReport::get() {
 		}
 		out += "</table>";
 	}
-printf("#%s#\n", out.toStdString().c_str());
+	if (dbg)
+		printf("#%s#\n", out.toStdString().c_str());
 	
 	return out + "<br/><br/>";
 }

@@ -1,6 +1,7 @@
 #include "report.h"
 #include <QStringList>
 #include <stdio.h>
+#include "qtmib_report.h"
 
 QString HrSoftwareReport::get() {
 	char *rv = snmpwalk(".1.3.6.1.2.1.25.6.3");
@@ -25,7 +26,8 @@ QString HrSoftwareReport::get() {
 	
 	out += "</table>\n";
 
-//printf("#%s#\n", out.toStdString().c_str());
+	if (dbg)
+		printf("#%s#\n", out.toStdString().c_str());
 
 	char buf[20];
 	sprintf(buf, "%d", cnt);

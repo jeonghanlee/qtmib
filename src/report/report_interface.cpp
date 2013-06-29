@@ -1,6 +1,7 @@
 #include <QStringList>
 #include <stdio.h>
 #include "report.h"
+#include "qtmib_report.h"
 
 static char *ifmib_storage = 0;
 
@@ -130,6 +131,9 @@ QString IfipReport::get() {
 		
 	}
 	out += "</table><br/><br/><br/>\n";
+
+	if (dbg)
+		printf("#%s#\n", out.toStdString().c_str());
 	return out;
 }
 
@@ -487,7 +491,8 @@ QString InterfaceReport::get() {
 	out += "</table>\n";
 	
 	
-//printf("#%s#\n", out.toStdString().c_str());
+	if (dbg)
+		printf("#%s#\n", out.toStdString().c_str());
 
 	return "<b>Interfaces:</b><br/>" + out + "<br/><br/><br/>";
 }

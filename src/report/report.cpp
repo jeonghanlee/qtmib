@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "report.h"
 #include "exec_prog.h"
+#include "qtmib_report.h"
 
 char *Report::snmpwalk(QString oid) {
 	QString cmd = QString("snmpwalk") + " -m \"\" ";
@@ -10,7 +11,8 @@ char *Report::snmpwalk(QString oid) {
 	cmd += "-t 1 -r 1 ";
 	cmd += ip_ + ":" + port_ + " ";
 	cmd += oid + " 2>&1";
-	printf("\n%s\n", cmd.toStdString().c_str());
+	if (dbg)
+		printf("\n%s\n", cmd.toStdString().c_str());
 	
 	// execute command
 	char *rv = exec_prog(cmd.toStdString().c_str());

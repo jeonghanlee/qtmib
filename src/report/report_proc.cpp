@@ -1,6 +1,7 @@
 #include "report.h"
 #include <QStringList>
 #include <stdio.h>
+#include "qtmib_report.h"
 
 QString HrProcessReport::get() {
 	char *rv = snmpwalk(".1.3.6.1.2.1.25.4.2");
@@ -89,7 +90,8 @@ QString HrProcessReport::get() {
        	out += "<li>Memory - The total amount of real system memory allocated " +
         	QString("to this process.</li></ul></i>");
         	
-printf("#%s#\n", out.toStdString().c_str());
+	if (dbg)
+		printf("#%s#\n", out.toStdString().c_str());
 
 	char buf[20];
 	sprintf(buf, "%d", cnt);
