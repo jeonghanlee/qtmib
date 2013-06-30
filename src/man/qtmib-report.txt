@@ -18,9 +18,6 @@ Generate a system report (default).
 \fB\--interface\fR
 Generate an interface report.
 .TP
-\fB\--tcpip\fR
-Generate a TCP/IP stack report.
-.TP
 \fB\--process\fR
 List all running processes.
 .TP

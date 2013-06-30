@@ -41,6 +41,8 @@ TransactionThread::~TransactionThread() {
 void TransactionThread::addTransaction(DevStorage *dev) {
 	QMutexLocker locker(&mutex);
 	queue_add_.append(dev);
+	if (dbg)
+		printf("transaction started\n");
 }
 
 static QString extract_string(QString line) {
@@ -58,7 +60,7 @@ static QString extract_string(QString line) {
 }
 
 void TransactionThread::checkDevice(DevStorage *dev, TransactionThread *th) {
-	// test exit falg	
+	// test exit flag	
 	if (th->ending_)
 		return;
 		
@@ -86,6 +88,9 @@ void TransactionThread::checkDevice(DevStorage *dev, TransactionThread *th) {
 		else
 			cmd += ".1.3.6.1.2.1.1 2>&1";
 	
+		if (dbg)
+			printf("\n%s\n", cmd.toStdString().c_str());
+			
 		// execute command
 		char *rv = exec_prog(cmd.toStdString().c_str());
 		bool found = false;
@@ -166,6 +171,8 @@ void TransactionThread::run() {
 					// remove dev from input queue
 					queue_add_.removeFirst();
 					sprintf(msg, "Finishing...");
+					if (dbg)
+						printf("range removed\n");
 				}
 				
 				else 

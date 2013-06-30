@@ -11,7 +11,6 @@ SOURCES       = mainwindow.cpp \
                 report_sys.cpp \
                 report_soft.cpp \
                 report_proc.cpp \
-                report_tcpip.cpp \
                 report_interface.cpp \
                 bundle.cpp
 RESOURCES = qtmib-report.qrc

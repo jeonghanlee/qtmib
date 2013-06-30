@@ -297,16 +297,13 @@ void MainWindow::createMenu() {
 	procrAction->setStatusTip(tr("List all running processes"));
 	QAction *softrAction = new QAction(tr("Soft&ware Report"), this);
 	softrAction->setStatusTip(tr("List all installed software packages"));
-
 	QAction *intfrAction = new QAction(tr("&Interface Report"), this);
 	intfrAction->setStatusTip(tr("Generate an interface report"));
-	QAction *tcpiprAction = new QAction(tr("&TCP/IP Report"), this);
-	tcpiprAction->setStatusTip(tr("Generate a TCP/IP stack report"));
+
 	connect(sysrAction, SIGNAL(triggered()), this, SLOT(sysr()));
 	connect(procrAction, SIGNAL(triggered()), this, SLOT(procr()));
 	connect(softrAction, SIGNAL(triggered()), this, SLOT(softr()));
 	connect(intfrAction, SIGNAL(triggered()), this, SLOT(intfr()));
-	connect(tcpiprAction, SIGNAL(triggered()), this, SLOT(tcpipr()));
 
 	QAction *discAction = new QAction(tr("&Network Discovery"), this);
 	discAction->setStatusTip(tr("Run network discovery"));
@@ -326,7 +323,6 @@ void MainWindow::createMenu() {
 	QMenu* reportMenu = fileMenu->addMenu(tr("&Reports"));
 	reportMenu->addAction(sysrAction);
 	reportMenu->addAction(intfrAction);
-	reportMenu->addAction(tcpiprAction);
 	reportMenu->addAction(procrAction);
 	reportMenu->addAction(softrAction);
 	fileMenu->addAction(discAction);
@@ -338,27 +334,38 @@ void MainWindow::createMenu() {
 }
 
 void MainWindow::sysr() {
-	int rv = system("qtmib-report --system&");
+	int rv;
+	if (dbg)
+		rv = system("qtmib-report --debug --system&");
+	else
+		rv = system("qtmib-report --system&");
 	(void) rv;
 }
 
 void MainWindow::procr() {
-	int rv = system("qtmib-report --process&");
+	int rv;
+	if (dbg)
+		rv = system("qtmib-report --debug --process&");
+	else
+		rv = system("qtmib-report --process&");
 	(void) rv;
 }
 
 void MainWindow::softr() {
-	int rv = system("qtmib-report --software&");
+	int rv;
+	if (dbg)
+		rv = system("qtmib-report --debug --software&");
+	else
+		rv = system("qtmib-report --software&");
 	(void) rv;
 }
 
 void MainWindow::intfr() {
-	int rv = system("qtmib-report --interface&");
-	(void) rv;
-}
-
-void MainWindow::tcpipr() {
-	int rv = system("qtmib-report --tcpip&");
+	int rv;
+	if (dbg)
+		rv = system("qtmib-report --debug --interface&");
+	else
+		rv = system("qtmib-report --interface&");
 	(void) rv;
 }
 
@@ -377,7 +384,12 @@ void MainWindow::about() {
 }
 
 void MainWindow::discovery() {
-	int rv = system("qtmib-discover &");
+	int rv;
+	if (dbg)
+		rv = system("qtmib-discover --debug &");
+	else
+		rv = system("qtmib-discover &");
+
 	if (rv == -1)
 		QMessageBox::warning(this, tr("qtmib Environment"),
 			tr("<br/><b>qtmib-discover</b> module not found.<br/><br/>"));
@@ -498,7 +510,9 @@ void MainWindow::handleAction() {
 	cmd += "-r " + retries + " ";
 	cmd += actionIp_->text() + ":" + port + " ";
 	cmd += actionOid_->text() + " 2>&1";
-//printf("\n%s\n", cmd.toStdString().c_str());
+	
+	if (dbg)
+		printf("\n%s\n", cmd.toStdString().c_str());
 
 	// execute command
 	char *rv = exec_prog(cmd.toStdString().c_str());

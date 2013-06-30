@@ -60,7 +60,6 @@ private slots:
 	void procr();
 	void softr();
 	void intfr();
-	void tcpipr();
 
 private:
 	void checkEnvironment();
