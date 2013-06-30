@@ -333,39 +333,59 @@ void MainWindow::createMenu() {
 	fileMenu->addAction(exitAction);
 }
 
+QString MainWindow::getHost() {
+	QString host = "";
+	if (dbg)
+		host += "--debug ";
+	if (pref_) {
+		host = "--community " + pref_->getCommunity() + " ";
+		host += "--port " + pref_->getPort() + " ";
+	}
+	host += "--ip " + actionIp_->text();
+	return host;
+}
+
 void MainWindow::sysr() {
 	int rv;
+	QString cmd = "qtmib-report --system ";
+	cmd += getHost() + "&";
 	if (dbg)
-		rv = system("qtmib-report --debug --system&");
-	else
-		rv = system("qtmib-report --system&");
+		printf("\n%s\n", cmd.toStdString().c_str());
+	
+	rv = system(cmd.toStdString().c_str());
 	(void) rv;
 }
 
 void MainWindow::procr() {
 	int rv;
+	QString cmd = "qtmib-report --process ";
+	cmd += getHost() + "&";
 	if (dbg)
-		rv = system("qtmib-report --debug --process&");
-	else
-		rv = system("qtmib-report --process&");
+		printf("\n%s\n", cmd.toStdString().c_str());
+	
+	rv = system(cmd.toStdString().c_str());
 	(void) rv;
 }
 
 void MainWindow::softr() {
 	int rv;
+	QString cmd = "qtmib-report --software ";
+	cmd += getHost() + "&";
 	if (dbg)
-		rv = system("qtmib-report --debug --software&");
-	else
-		rv = system("qtmib-report --software&");
+		printf("\n%s\n", cmd.toStdString().c_str());
+	
+	rv = system(cmd.toStdString().c_str());
 	(void) rv;
 }
 
 void MainWindow::intfr() {
 	int rv;
+	QString cmd = "qtmib-report --interface ";
+	cmd += getHost() + "&";
 	if (dbg)
-		rv = system("qtmib-report --debug --interface&");
-	else
-		rv = system("qtmib-report --interface&");
+		printf("\n%s\n", cmd.toStdString().c_str());
+	
+	rv = system(cmd.toStdString().c_str());
 	(void) rv;
 }
 

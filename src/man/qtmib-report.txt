@@ -9,23 +9,32 @@ an SNMP agent. It is part of qtmib SNMP MIB Browser
 package. The program is released under GPL v2 license. 
 .SH OPTIONS
 .TP
+\fB\--community name\fR
+Host read community (default public).
+.TP
 \fB\--debug\fR
 Enable debug messages.
 .TP
-\fB\--system\fR
-Generate a system report (default).
+\fB\-h\fR, \fB\-\-help\fR
+Print options end exit.
 .TP
 \fB\--interface\fR
 Generate an interface report.
 .TP
+\fB\--ip address\fR
+Host ip address (default 127.0.0.1).
+.TP
+\fB\--port port\fR
+Host port number (default 161).
+.TP
 \fB\--process\fR
 List all running processes.
 .TP
-\fB\--process\fR
+\fB\--software\fR
 List all installed software packages.
 .TP
-\fB\-h\fR, \fB\-\-help\fR
-Print options end exit.
+\fB\--system\fR
+Generate a system report (default).
 .TP
 \fB\-v\fR, \fB\-\-version\fR
 Print version information end exit.

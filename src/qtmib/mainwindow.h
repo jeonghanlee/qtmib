@@ -62,6 +62,7 @@ private slots:
 	void intfr();
 
 private:
+	QString getHost();
 	void checkEnvironment();
 	void createMenu();
 	QAbstractItemModel *modelFromFile(const QString& fileName);

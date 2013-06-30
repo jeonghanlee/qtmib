@@ -30,6 +30,12 @@ public:
 	Bundle(QString version, QString community, QString port, QString ip):
 		version_(version), community_(community), port_(port), ip_(ip) {}
 	virtual void run(QTextEdit *view) = 0;
+	void setHost(QString version, QString community, QString port, QString ip) {
+		version_ = version;
+		community_ = community;
+		port_ = port;
+		ip_ = ip;
+	}
 protected:	
 	QString version_;
 	QString community_;

@@ -36,9 +36,9 @@ static void help() {
 	printf("Usage: qtmib-discover [options]\n");
 	
 	printf("Options:\n");
-	printf("\t-v, --version: version information\n");
-	printf("\t-h, --help: this help screen\n");
 	printf("\t--debug: enable debug messages\n");
+	printf("\t-h, --help: this help screen\n");
+	printf("\t-v, --version: version information\n");
 	printf("\n");
 }
 
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
 			dbg = true;
 		}
 		else {
-			printf("Error: unknown program argument\n\n");
+			fprintf(stderr, "Error: unknown program argument\n\n");
 			help();
 			return 1;
 		}

@@ -3,7 +3,8 @@ HEADERS       = mainwindow.h \
                 exec_prog.h \
                 qtmib_report.h \
                 report.h \
-                bundle.h
+                bundle.h \
+                qtmib_ip.h
 SOURCES       = mainwindow.cpp \
                 exec_prog.c \
                 main.cpp \
