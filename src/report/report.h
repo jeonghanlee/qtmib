@@ -96,6 +96,13 @@ public:
 	QString get();
 };
 
+class RouteReport: public Report {
+public:
+	RouteReport(QString version, QString community, QString port, QString ip):
+		Report(version, community, port, ip) {}
+	QString get();
+};
+
 #endif
 
 

@@ -71,4 +71,11 @@ public:
 	void run(QTextEdit *view);
 };
 
+class RouteBundle: public Bundle {
+public:
+	RouteBundle(QString version, QString community, QString port, QString ip):
+		Bundle(version, community, port, ip) {}
+	void run(QTextEdit *view);
+};
+
 #endif

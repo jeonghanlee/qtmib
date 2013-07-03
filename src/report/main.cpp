@@ -44,6 +44,7 @@ static void help() {
 	printf("\t--ip address: host ip address (default 127.0.0.1)\n");
 	printf("\t--port port: host port number (default 161)\n");
 	printf("\t--process: list all running processes\n");
+	printf("\t--route: print routing table\n");
 	printf("\t--software: list all installed software packages\n");
 	printf("\t--system: generate a system report (default)\n");
 	printf("\t-v, --version: version information\n");
@@ -81,6 +82,9 @@ int main(int argc, char *argv[]) {
 		}
 		else if (strcmp(argv[i], "--software") == 0) {
 			bundle = new SoftwareBundle("v2c", "public", "161", "127.0.0.1");
+		}
+		else if (strcmp(argv[i], "--route") == 0) {
+			bundle = new RouteBundle("v2c", "public", "161", "127.0.0.1");
 		}
 		else if (strcmp(argv[i], "--ip") == 0) {
 			i++;

@@ -99,3 +99,25 @@ void InterfaceBundle::run(QTextEdit *view) {
 	view->setText(rv);
 }
 
+void RouteBundle::run(QTextEdit *view) {
+	SystemReport sysrep(version_, community_, port_, ip_);
+	RouteReport routerep(version_, community_, port_, ip_);
+
+	QString rv = "<br/><center><h1>Route Report</h1></center><br/><br/>\n";
+	
+	QString rv1 = sysrep.get();
+	if (rv1.isEmpty()) {
+		view->setText("Error: cannot connect to host\n");		
+		return;
+	}
+	
+	QString rv2 = routerep.get();
+	if (rv2.isEmpty()) {
+		view->setText("Error: cannot connect to host\n");		
+		return;
+	}
+	
+	rv += rv1 + rv2;
+	view->setText(rv);
+}
+

@@ -299,11 +299,14 @@ void MainWindow::createMenu() {
 	softrAction->setStatusTip(tr("List all installed software packages"));
 	QAction *intfrAction = new QAction(tr("&Interface Report"), this);
 	intfrAction->setStatusTip(tr("Generate an interface report"));
+	QAction *routerAction = new QAction(tr("&Routing Table Report"), this);
+	routerAction->setStatusTip(tr("Generate a routing table report"));
 
 	connect(sysrAction, SIGNAL(triggered()), this, SLOT(sysr()));
 	connect(procrAction, SIGNAL(triggered()), this, SLOT(procr()));
 	connect(softrAction, SIGNAL(triggered()), this, SLOT(softr()));
 	connect(intfrAction, SIGNAL(triggered()), this, SLOT(intfr()));
+	connect(routerAction, SIGNAL(triggered()), this, SLOT(router()));
 
 	QAction *discAction = new QAction(tr("&Network Discovery"), this);
 	discAction->setStatusTip(tr("Run network discovery"));
@@ -323,6 +326,7 @@ void MainWindow::createMenu() {
 	QMenu* reportMenu = fileMenu->addMenu(tr("&Reports"));
 	reportMenu->addAction(sysrAction);
 	reportMenu->addAction(intfrAction);
+	reportMenu->addAction(routerAction);
 	reportMenu->addAction(procrAction);
 	reportMenu->addAction(softrAction);
 	fileMenu->addAction(discAction);
@@ -381,6 +385,17 @@ void MainWindow::softr() {
 void MainWindow::intfr() {
 	int rv;
 	QString cmd = "qtmib-report --interface ";
+	cmd += getHost() + "&";
+	if (dbg)
+		printf("\n%s\n", cmd.toStdString().c_str());
+	
+	rv = system(cmd.toStdString().c_str());
+	(void) rv;
+}
+
+void MainWindow::router() {
+	int rv;
+	QString cmd = "qtmib-report --route ";
 	cmd += getHost() + "&";
 	if (dbg)
 		printf("\n%s\n", cmd.toStdString().c_str());

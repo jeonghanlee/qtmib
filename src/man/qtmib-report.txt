@@ -30,6 +30,9 @@ Host port number (default 161).
 \fB\--process\fR
 List all running processes.
 .TP
+\fB\--route\fR
+Print routing table.
+.TP
 \fB\--software\fR
 List all installed software packages.
 .TP

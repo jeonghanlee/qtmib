@@ -82,7 +82,7 @@ QString IfipReport::get() {
 		}
 	}
 	if (addr_cnt != addr_index.count() || addr_cnt != addr_addr.count())
-		return "Error: cannot parse .1.3.6.1.2.1.2.2 MIB<br/>\n";
+		return "Error: cannot parse .1.3.6.1.2.1.4.20 MIB<br/>\n";
 
 	// extract kindex
 	QStringList addr_kindex;
@@ -105,7 +105,7 @@ QString IfipReport::get() {
 		}
 	}
 	if (addr_cnt != addr_kindex.count())
-		return "Error: cannot parse .1.3.6.1.2.1.2.2 MIB<br/>\n";
+		return "Error: cannot parse .1.3.6.1.2.1.4.20 MIB<br/>\n";
 
 	// extract mask
 	QStringList addr_mask;
@@ -126,7 +126,7 @@ QString IfipReport::get() {
 		}
 	}
 	if (addr_cnt != addr_mask.count())
-		return "Error: cannot parse .1.3.6.1.2.1.2.2 MIB<br/>\n";
+		return "Error: cannot parse .1.3.6.1.2.1.4.20 MIB<br/>\n";
 
 
 	// print table
@@ -404,7 +404,7 @@ QString InterfaceReport::get() {
 		return out;
 	
 	out += "<br/><br/><br/><b>Input Packet Counts:</b><br/><br/>";
-	out += "<table border=\"1\" cellpadding=\"10\"><tr><td>Interface</td><td>Unicast</td><td>Multicast</td><td>Discards</td><td>Errors</td></td>";
+	out += "<table border=\"1\" cellpadding=\"10\"><tr><td>Interface</td><td>Unicast</td><td>Multicast &<br/>Broadcast</td><td>Discards</td><td>Errors</td></td>";
 	for (int i = 0; i < cnt; i++) {
 		out += "<tr><td>" + name[i] + "</td><td>" + ucast[i] + "</td>";
 		out += "<td>" + nucast[i] + "</td>";
@@ -500,7 +500,7 @@ QString InterfaceReport::get() {
 		return out;
 	
 	out += "<br/><br/><br/><b>Output Packet Counts:</b><br/><br/>";
-	out += "<table border=\"1\" cellpadding=\"10\"><tr><td>Interface</td><td>Unicast</td><td>Multicast</td><td>Discards</td><td>Errors</td></td>";
+	out += "<table border=\"1\" cellpadding=\"10\"><tr><td>Interface</td><td>Unicast</td><td>Multicast &<br/>Broadcast</td><td>Discards</td><td>Errors</td></td>";
 	for (int i = 0; i < cnt; i++) {
 		out += "<tr><td>" + name[i] + "</td><td>" + ucast[i] + "</td>";
 		out += "<td>" + nucast[i] + "</td>";
