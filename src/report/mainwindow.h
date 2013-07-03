@@ -39,10 +39,10 @@ Q_OBJECT
 
 protected:
 	void closeEvent(QCloseEvent *event);
-	void runReport();
 
 private slots:
 	void about();
+	void runReport();
 
 private:
 	void createMenus();

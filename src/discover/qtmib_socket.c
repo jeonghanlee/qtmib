@@ -46,7 +46,7 @@ int rx_open(uint16_t port) {
 	s.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	if (bind(sock, (struct sockaddr *)&s, sizeof(s)) < 0) {
-		perror("binding DNS socket"); // it could fail if the port is in use by somebody else
+		perror("binding socket"); // it could fail if the port is in use by somebody else
 		close(sock);
 		return 0;
 	}

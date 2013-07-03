@@ -4,8 +4,16 @@ SNMP-enabled device. It implements SNMPv1 and SNMPv2c, and it is released
 under GPL v2 license.
 
 qtmib supports out of the box a large number of MIBs. We are currently tracking
-netdisco (http://www.netdisco.org/) MIB archive. Additionaly, you can install
+netdisco (http://www.netdisco.org/) MIB archive. You can also install
 private MIBs by dropping them in ~/.config/qtmib/mibs directory. 
+
+Features:
+- SNMP v1 and v2c
+- OID/MIB translation
+- large number of built-in MIBs
+- user MIBs
+- network discovery
+- reports: system, interface, routing table, process, software
 
 Download:
 

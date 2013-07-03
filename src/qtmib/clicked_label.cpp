@@ -22,15 +22,15 @@
 
 ClickedLabel::ClickedLabel( const QString & text, QWidget * parent )
 :QLabel(parent) {
-//	connect( this, SIGNAL( clicked() ), this, SLOT( slotClicked() ) );
+	(void) text;
 }
 
 
 void ClickedLabel::slotClicked() {
-//	qDebug()<<"Clicked";
 }
 
 
 void ClickedLabel::mousePressEvent ( QMouseEvent * event ) {
+	(void) event;
 	emit clicked();
 }

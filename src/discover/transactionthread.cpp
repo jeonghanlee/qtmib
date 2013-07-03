@@ -18,7 +18,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 #include <QtGui>
-
+#include <unistd.h>
 #include "transactionthread.h"
 #include "dev_storage.h"
 #include "dev_db.h"
@@ -140,7 +140,7 @@ void TransactionThread::run() {
 	forever {
 		msleep(200);
 
-		// test exit falg	
+		// test exit flag	
 		if (ending_)
 			break;
 
@@ -196,7 +196,7 @@ void TransactionThread::run() {
 		// retrieve data
 		DevDb::walk(TransactionThread::checkDevice, this);
 		
-		// test exit falg	
+		// test exit flag	
 		if (ending_)
 			break;
 	}

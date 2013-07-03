@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/
+ */
 #include <QtGui>
 #include <sys/types.h>
 #include <ifaddrs.h>
@@ -35,23 +35,24 @@ MainWindow::MainWindow(Bundle *bundle): bundle_(bundle) {
 	// result view
 	resultView_ = new QTextEdit;
 	resultView_->setReadOnly(true);
-	
+
 	QVBoxLayout *mLayout = new QVBoxLayout;
 	mLayout->addWidget(resultView_);
 	QWidget *mWidget = new QWidget;
 	mWidget->setLayout(mLayout);
 	setCentralWidget(mWidget);
-	
-	runReport();
-	
-	statusBar()->showMessage(tr("Ready"), 2000);
-}
 
+	statusBar()->showMessage(tr("Processing..."), 5000);
+
+	QTimer::singleShot(200, this, SLOT(runReport()));
+
+}
 
 
 void MainWindow::closeEvent(QCloseEvent *event) {
 	event->accept();
 }
+
 
 void MainWindow::about() {
 	QString msg = "<table cellpadding=\"10\"><tr><td><img src=\":/resources/qtmib-128.png\"></td>";
@@ -63,7 +64,7 @@ void MainWindow::about() {
 		"under GPL v2 license.<br/><br/>");
 	msg += "Copyright (C) 2013 RCP100 Team (rcpteam@yahoo.com)<br/><br/>";
 	msg += QString(PACKAGE_URL) + "</td></tr></table><br/><br/>";
-	
+
 	QMessageBox::about(this, tr("About"), msg);
 }
 
@@ -85,6 +86,10 @@ void MainWindow::createMenus() {
 	fileMenu->addAction(exitAction);
 }
 
+
 void MainWindow::runReport() {
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	bundle_->run(resultView_);
+	statusBar()->showMessage(tr("Ready"), 5000);
+	QApplication::restoreOverrideCursor();
 }
