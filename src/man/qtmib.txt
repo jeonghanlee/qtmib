@@ -9,7 +9,7 @@ It is build as a front-end for net-snmp, and it allows the user to query any SNM
 It implements SNMPv1 and SNMPv2c, and it is released under GPL v2 license. 
 .PP
 qtmib supports out of the box a large number of MIBs.
-Additionaly, you can install private MIBs by dropping them in ~/.config/qtmib/mibs directory.  
+You can also install private MIBs by dropping them in ~/.config/qtmib/mibs directory.  
 .SH OPTIONS
 .TP
 \fB\--debug\fR
