@@ -32,6 +32,7 @@ distclean: clean
 	rm -f qtmib_config.h Makefile config.status config.log qtmib_prefix.h
 	rm -f  src/qtmib/config.log src/qtmib/config.status #fedora fix
 	rm -fr autom4te.cache
+	rm -f chgcflags.sh
 	
 install: all
 	cd build; strip *; cd ..

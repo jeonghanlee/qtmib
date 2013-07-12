@@ -1,3 +1,6 @@
+QMAKE_CXXFLAGS += $$(CXXFLAGS)
+QMAKE_CFLAGS += $$(CFLAGS)
+QMAKE_LIBS += $$(LDFLAGS)
 HEADERS   = mainwindow.h qtmib.h clicked_label.h pref_dialog.h oid_translator.h \
 	    exec_prog.h search_dialog.h
 SOURCES   = main.cpp \

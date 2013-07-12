@@ -39,6 +39,13 @@ cd src/qtmib && $QMAKE && cd ../..
 cd src/discover && $QMAKE && cd ../..
 cd src/report && $QMAKE && cd ../..
 
+# build chgcfags.sh file
+echo "#!/bin/bash" > chgcflags.sh
+echo "cd src/qtmib && $QMAKE && cd ../.." > chgcflags.sh
+echo "cd src/discover && $QMAKE && cd ../.." >> chgcflags.sh
+echo "cd src/report && $QMAKE && cd ../.." >> chgcflags.sh
+chmod +x chgcflags.sh
+
 # testing net-snmp
 NETSNMP=`which snmpget`
 if test "$NETSNMP" == ""

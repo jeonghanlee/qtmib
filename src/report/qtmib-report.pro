@@ -1,3 +1,6 @@
+QMAKE_CXXFLAGS += $$(CXXFLAGS)
+QMAKE_CFLAGS += $$(CFLAGS)
+QMAKE_LIBS += $$(LDFLAGS)
 TEMPLATE      = app
 HEADERS       = mainwindow.h \
                 exec_prog.h \
