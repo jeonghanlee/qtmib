@@ -22,14 +22,22 @@ AC_CHECK_LIB([QtGui], [main], [], AC_MSG_ERROR([*** QtCore library not installed
 QMAKE=`which qmake`
 if test "$QMAKE" == ""
 then
-	AC_MSG_ERROR([qmake is missing, please install QT4 development packages.])
+	# fix for Fedora
+	if test -f /usr/lib64/qt4/bin/qmake; then
+		QMAKE=/usr/lib64/qt4/bin/qmake
+	fi
+	
+	if test "$QMAKE" == ""
+	then
+		AC_MSG_ERROR([qmake is missing, please install QT4 development packages.])
+	fi
 fi
 echo "Found $QMAKE"
-qmake -v
+$QMAKE -v
 
-cd src/qtmib && qmake && cd ../..
-cd src/discover && qmake && cd ../..
-cd src/report && qmake && cd ../..
+cd src/qtmib && $QMAKE && cd ../..
+cd src/discover && $QMAKE && cd ../..
+cd src/report && $QMAKE && cd ../..
 
 # testing net-snmp
 NETSNMP=`which snmpget`

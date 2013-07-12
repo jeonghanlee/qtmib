@@ -30,6 +30,7 @@ distclean: clean
 	rm -f `find src/discover -name Makefile`
 	rm -f `find src/report -name Makefile`
 	rm -f qtmib_config.h Makefile config.status config.log qtmib_prefix.h
+	rm -f  src/qtmib/config.log src/qtmib/config.status #fedora fix
 	rm -fr autom4te.cache
 	
 install: all
