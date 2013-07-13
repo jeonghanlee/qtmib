@@ -50,6 +50,7 @@ install: all
 	install -c -m 0644 COPYING $(PREFIX)/share/doc/qtmib/.
 	install -c -m 0644 README $(PREFIX)/share/doc/qtmib/.
 	install -c -m 0644 RELNOTES $(PREFIX)/share/doc/qtmib/.
+	install -c -m 0644 src/mibs/* $(PREFIX)/share/qtmib/.
 	rm -f qtmib.1.gz
 	gzip -9 qtmib.1
 	install -c -m 0644 qtmib.1.gz $(PREFIX)/share/man/man1/.

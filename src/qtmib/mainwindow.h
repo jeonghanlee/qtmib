@@ -47,6 +47,7 @@ Q_OBJECT
 
 public slots:
 	void updateActions();
+	void loadUserMibs();
 
 private slots:
 	void about();

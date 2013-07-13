@@ -165,7 +165,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), pref_(0), search_(
 
 	// add the status bar
 	statusBar();
-	statusBar()->showMessage("Ready");
+	QTimer::singleShot(200, this, SLOT(loadUserMibs()));
+	statusBar()->showMessage("Loading user MIBs");
 }
 
 void MainWindow::checkEnvironment() {
@@ -178,6 +179,7 @@ void MainWindow::checkEnvironment() {
 	}
 }
 
+static QVector<QStandardItem *> parents(10);
 QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 	//*************************
 	// load global mibs
@@ -194,7 +196,7 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 	QStringList words;
 
 	QStandardItemModel *model = new QStandardItemModel(this);
-	QVector<QStandardItem *> parents(10);
+//	QVector<QStandardItem *> parents(10);
 	parents[0] = model->invisibleRootItem();
 
 	topitem_ = 0;
@@ -233,8 +235,11 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 		parents[level]->appendRow(item);
 		parents[level+1] = item;
 	}
+	QApplication::restoreOverrideCursor();
+	return model;
+}
 
-
+void MainWindow::loadUserMibs() {
 	//*************************
 	// load user mibs
 	//*************************
@@ -243,6 +248,7 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 	QDir dir(mibsdir);
 	QStringList filelist = dir.entryList(QDir::Files | QDir::NoDot | QDir::NoDotDot);
 	if (filelist.count() != 0) {
+		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 		QString cmd = QString("snmptranslate -M ") + "~/.config/qtmib/mibs/:" + QTMIB_PREFIX + "/share/qtmib -Tl";
 		QString usr = "";
 		char *rv = exec_prog(cmd.toStdString().c_str());
@@ -282,11 +288,10 @@ QAbstractItemModel *MainWindow::modelFromFile(const QString& fileName) {
 				}
 			}	
 		}
+		QApplication::restoreOverrideCursor();
 	}
-		
-	QApplication::restoreOverrideCursor();
-
-	return model;
+	
+	statusBar()->showMessage("Ready");
 }
 
 
