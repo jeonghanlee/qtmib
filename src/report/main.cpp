@@ -137,9 +137,11 @@ int main(int argc, char *argv[]) {
 	if (!bundle)
 		bundle = new SystemBundle("v2c", "public", "161", "127.0.0.1");
 	bundle->setHost("v2c", community, port, ip);
-		
+	
+	QString title = QString(ip) + " Report";
 	QApplication app(argc, argv);
 	MainWindow mainWin(bundle);
+	mainWin.setWindowTitle(title);
 	mainWin.resize(600, 400);
 	mainWin.show();
 	return app.exec();

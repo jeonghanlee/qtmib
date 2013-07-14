@@ -70,6 +70,24 @@ void MainWindow::about() {
 
 
 void MainWindow::createMenus() {
+	QAction *sysrAction = new QAction(tr("&System Report"), this);
+	sysrAction->setStatusTip(tr("Generate a system report"));
+	QAction *procrAction = new QAction(tr("Pro&cess Report"), this);
+	procrAction->setStatusTip(tr("List all running processes"));
+	QAction *softrAction = new QAction(tr("Soft&ware Report"), this);
+	softrAction->setStatusTip(tr("List all installed software packages"));
+	QAction *intfrAction = new QAction(tr("&Interface Report"), this);
+	intfrAction->setStatusTip(tr("Generate an interface report"));
+	QAction *routerAction = new QAction(tr("&Routing Table Report"), this);
+	routerAction->setStatusTip(tr("Generate a routing table report"));
+
+	connect(sysrAction, SIGNAL(triggered()), this, SLOT(sysr()));
+	connect(procrAction, SIGNAL(triggered()), this, SLOT(procr()));
+	connect(softrAction, SIGNAL(triggered()), this, SLOT(softr()));
+	connect(intfrAction, SIGNAL(triggered()), this, SLOT(intfr()));
+	connect(routerAction, SIGNAL(triggered()), this, SLOT(router()));
+
+
 	// File menu
 	aboutAction = new QAction(tr("&About"), this);
 	aboutAction->setStatusTip(tr("Show the application's About box"));
@@ -81,11 +99,76 @@ void MainWindow::createMenus() {
 	connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
 
 	fileMenu = menuBar()->addMenu(tr("&File"));
+	QMenu* reportMenu = fileMenu->addMenu(tr("&Reports"));
+	reportMenu->addAction(sysrAction);
+	reportMenu->addAction(intfrAction);
+	reportMenu->addAction(routerAction);
+	reportMenu->addAction(procrAction);
+	reportMenu->addAction(softrAction);
 	fileMenu->addAction(aboutAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(exitAction);
 }
 
+void MainWindow::sysr() {
+	Bundle *bundle = new SystemBundle(
+					bundle_->getVersion(),
+					bundle_->getCommunity(),
+					bundle_->getPort(),
+					bundle_->getIp());
+		
+	delete bundle_;
+	bundle_ = bundle;
+	runReport();
+}
+
+void MainWindow::procr() {
+	Bundle *bundle = new ProcessBundle(
+					bundle_->getVersion(),
+					bundle_->getCommunity(),
+					bundle_->getPort(),
+					bundle_->getIp());
+		
+	delete bundle_;
+	bundle_ = bundle;
+	runReport();
+}
+
+void MainWindow::softr() {
+	Bundle *bundle = new SoftwareBundle(
+					bundle_->getVersion(),
+					bundle_->getCommunity(),
+					bundle_->getPort(),
+					bundle_->getIp());
+		
+	delete bundle_;
+	bundle_ = bundle;
+	runReport();
+}
+
+void MainWindow::intfr() {
+	Bundle *bundle = new InterfaceBundle(
+					bundle_->getVersion(),
+					bundle_->getCommunity(),
+					bundle_->getPort(),
+					bundle_->getIp());
+		
+	delete bundle_;
+	bundle_ = bundle;
+	runReport();
+}
+
+void MainWindow::router() {
+	Bundle *bundle = new RouteBundle(
+					bundle_->getVersion(),
+					bundle_->getCommunity(),
+					bundle_->getPort(),
+					bundle_->getIp());
+		
+	delete bundle_;
+	bundle_ = bundle;
+	runReport();
+}
 
 void MainWindow::runReport() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));

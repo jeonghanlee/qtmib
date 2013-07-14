@@ -36,6 +36,18 @@ public:
 		port_ = port;
 		ip_ = ip;
 	}
+	QString getVersion() {
+		return version_;
+	}
+	QString getCommunity() {
+		return community_;
+	}
+	QString getPort() {
+		return port_;
+	}
+	QString getIp() {
+		return ip_;
+	}
 protected:	
 	QString version_;
 	QString community_;

@@ -43,6 +43,11 @@ protected:
 private slots:
 	void about();
 	void runReport();
+	void sysr();
+	void procr();
+	void softr();
+	void intfr();
+	void router();
 
 private:
 	void createMenus();
