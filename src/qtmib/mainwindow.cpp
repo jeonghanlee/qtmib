@@ -47,10 +47,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), pref_(0), search_(
 	treeView_->setModel(mymodel_);
 	treeView_->header()->hide();
 	//    treeView->expandAll();
-	connect(treeView_->selectionModel(),
-		SIGNAL(selectionChanged(const QItemSelection &,
-		const QItemSelection &)),
-		this, SLOT(updateActions()));
+	QObject::connect(treeView_,
+		SIGNAL(clicked(const QModelIndex&)),
+		this, SLOT(updateActions2(const QModelIndex&)));
 
 	// oid
 	oidView_ = new QTextEdit;
@@ -446,6 +445,10 @@ void MainWindow::preferences() {
 		connectionView_->setPlainText(str);
 	}
 
+}
+void MainWindow::updateActions2(const QModelIndex& index) {
+	(void) index;
+	updateActions();
 }
 
 void MainWindow::updateActions() {

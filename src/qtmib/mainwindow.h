@@ -47,6 +47,7 @@ Q_OBJECT
 
 public slots:
 	void updateActions();
+	void updateActions2(const QModelIndex&);
 	void loadUserMibs();
 
 private slots:
