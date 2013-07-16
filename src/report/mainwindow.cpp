@@ -36,7 +36,33 @@ MainWindow::MainWindow(Bundle *bundle): bundle_(bundle) {
 	resultView_ = new QTextEdit;
 	resultView_->setReadOnly(true);
 
+	// querry
+	QLabel *reportLabel = new QLabel;
+	reportLabel->setText(tr("Report"));
+	report_ = new QComboBox;
+	report_->addItem(tr("System"));
+	report_->addItem(tr("Interface"));
+	report_->addItem(tr("Route"));
+	report_->addItem(tr("Process"));
+	report_->addItem(tr("Software"));
+	report_->setEditable(false);
+	report_->setCurrentIndex(0);
+	QPushButton *actionButton = new QPushButton(tr("Go"));
+	connect(actionButton, SIGNAL(released()), this, SLOT(handleAction()));
+
+	QGroupBox *group1Box = new QGroupBox(tr("Query"));
+	QGridLayout *group1BoxLayout = new QGridLayout;
+	group1BoxLayout->addWidget(reportLabel, 0, 0);
+	group1BoxLayout->addWidget(report_, 0, 2);
+	group1BoxLayout->addWidget(actionButton, 0, 4);
+	group1BoxLayout->setColumnMinimumWidth(1, 10);
+	group1BoxLayout->setColumnMinimumWidth(3, 10);
+	group1BoxLayout->setColumnStretch(2, 2);
+	group1Box->setLayout(group1BoxLayout);
+
+
 	QVBoxLayout *mLayout = new QVBoxLayout;
+	mLayout->addWidget(group1Box);
 	mLayout->addWidget(resultView_);
 	QWidget *mWidget = new QWidget;
 	mWidget->setLayout(mLayout);
@@ -108,6 +134,21 @@ void MainWindow::createMenus() {
 	fileMenu->addAction(aboutAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(exitAction);
+}
+
+void MainWindow::handleAction() {
+	QString report = report_->currentText();
+//printf("%s\n", report.toStdString().c_str());
+	if (report == "System")
+		sysr();
+	else if (report == "Process")
+		procr();
+	else if (report == "Software")
+		softr();
+	else if (report == "Interface")
+		intfr();
+	else if (report == "Route")
+		router();
 }
 
 void MainWindow::sysr() {

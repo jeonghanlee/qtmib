@@ -63,25 +63,27 @@ MainWindow::MainWindow() {
 	portBox_ = new QLineEdit;
 	portBox_->setText("161");
 
-	QPushButton *okButton = new QPushButton("Start");
+	QPushButton *okButton = new QPushButton("Go");
 	connect(okButton, SIGNAL(released()),this, SLOT(handleButton()));
 
-	QGridLayout *grid = new QGridLayout;
-	grid->addWidget(networkLabel, 0, 0);
-	grid->addWidget(network_, 0, 1);
-	grid->addWidget(pLabel, 1, 0);
-	grid->addWidget(pBox_, 1, 1);
-	grid->addWidget(cLabel, 2, 0);
-	grid->addWidget(cBox_, 2, 1);
-	grid->addWidget(portLabel, 3, 0);
-	grid->addWidget(portBox_, 3, 1);
-	grid->addWidget(okButton, 4, 0);
+	QGroupBox *group1Box = new QGroupBox(tr("Query"));
+	QGridLayout *group1BoxLayout = new QGridLayout;
+	group1BoxLayout->addWidget(networkLabel, 0, 0);
+	group1BoxLayout->addWidget(network_, 0, 2);
+	group1BoxLayout->addWidget(pLabel, 1, 0);
+	group1BoxLayout->addWidget(pBox_, 1, 2);
+	group1BoxLayout->addWidget(cLabel, 2, 0);
+	group1BoxLayout->addWidget(cBox_, 2, 2);
+	group1BoxLayout->addWidget(portLabel, 3, 0);
+	group1BoxLayout->addWidget(portBox_, 3, 2);
+	group1BoxLayout->addWidget(okButton, 0, 4);
+	group1BoxLayout->setColumnMinimumWidth(1, 10);
+	group1BoxLayout->setColumnMinimumWidth(3, 10);
+	group1Box->setLayout(group1BoxLayout);
 
-	QWidget *prefWidget = new QWidget;
-	prefWidget->setLayout(grid);
+//	QGridLayout *layout = new QGridLayout;
+//	layout->addWidget(group1Box, 0, 0);
 
-
-	
 	//*************************************************
 	// result
 	//*************************************************
@@ -99,7 +101,7 @@ MainWindow::MainWindow() {
 	// main layout
 	//*************************************************
 	QVBoxLayout *mLayout = new QVBoxLayout;
-	mLayout->addWidget(prefWidget);
+	mLayout->addWidget(group1Box);
 	mLayout->addWidget(result_);
 	QWidget *mWidget = new QWidget;
 	mWidget->setLayout(mLayout);

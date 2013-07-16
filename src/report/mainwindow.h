@@ -48,6 +48,7 @@ private slots:
 	void softr();
 	void intfr();
 	void router();
+	void handleAction();
 
 private:
 	void createMenus();
@@ -55,6 +56,7 @@ private:
 	QMenu *fileMenu;
 	QAction *exitAction;
 	QAction *aboutAction;
+	QComboBox *report_;
 	
 	QTextEdit *resultView_;
 	Bundle *bundle_;
