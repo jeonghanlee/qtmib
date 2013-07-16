@@ -48,6 +48,7 @@ private slots:
 	void softr();
 	void intfr();
 	void router();
+	void connection();
 	void handleAction();
 
 private:

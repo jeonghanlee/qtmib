@@ -18,6 +18,9 @@ Enable debug messages.
 \fB\-h\fR, \fB\-\-help\fR
 Print options end exit.
 .TP
+\fB\--connection\fR
+Generate a connection report.
+.TP
 \fB\--interface\fR
 Generate an interface report.
 .TP

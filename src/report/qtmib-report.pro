@@ -17,6 +17,8 @@ SOURCES       = mainwindow.cpp \
                 report_proc.cpp \
                 report_interface.cpp \
                 report_route.cpp \
+                report_tcpconnection.cpp \
+                report_udpconnection.cpp \
                 bundle.cpp
 RESOURCES = qtmib-report.qrc
 TARGET=../../build/qtmib-report

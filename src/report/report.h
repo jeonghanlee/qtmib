@@ -103,6 +103,20 @@ public:
 	QString get();
 };
 
+class UdpConnectionReport: public Report {
+public:
+	UdpConnectionReport(QString version, QString community, QString port, QString ip):
+		Report(version, community, port, ip) {}
+	QString get();
+};
+
+class TcpConnectionReport: public Report {
+public:
+	TcpConnectionReport(QString version, QString community, QString port, QString ip):
+		Report(version, community, port, ip) {}
+	QString get();
+};
+
 #endif
 
 

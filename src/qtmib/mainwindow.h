@@ -63,6 +63,7 @@ private slots:
 	void softr();
 	void intfr();
 	void router();
+	void connection();
 
 private:
 	QString getHost();

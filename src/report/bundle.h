@@ -90,4 +90,11 @@ public:
 	void run(QTextEdit *view);
 };
 
+class ConnectionBundle: public Bundle {
+public:
+	ConnectionBundle(QString version, QString community, QString port, QString ip):
+		Bundle(version, community, port, ip) {}
+	void run(QTextEdit *view);
+};
+
 #endif

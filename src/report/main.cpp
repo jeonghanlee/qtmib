@@ -40,6 +40,7 @@ static void help() {
 	printf("\t--community name: host read community (default public)\n");
 	printf("\t--debug: enable debug messages\n");
 	printf("\t-h, --help: this help screen\n");
+	printf("\t--connection: generate a connection report\n");
 	printf("\t--interface: generate an interface report\n");
 	printf("\t--ip address: host ip address (default 127.0.0.1)\n");
 	printf("\t--port port: host port number (default 161)\n");
@@ -73,6 +74,9 @@ int main(int argc, char *argv[]) {
 		}
 		else if (strcmp(argv[i], "--system") == 0) {
 			bundle = new SystemBundle("v2c", "public", "161", "127.0.0.1");
+		}
+		else if (strcmp(argv[i], "--connection") == 0) {
+			bundle = new ConnectionBundle("v2c", "public", "161", "127.0.0.1");
 		}
 		else if (strcmp(argv[i], "--interface") == 0) {
 			bundle = new InterfaceBundle("v2c", "public", "161", "127.0.0.1");
@@ -138,10 +142,9 @@ int main(int argc, char *argv[]) {
 		bundle = new SystemBundle("v2c", "public", "161", "127.0.0.1");
 	bundle->setHost("v2c", community, port, ip);
 	
-	QString title = QString(ip) + " Report";
 	QApplication app(argc, argv);
 	MainWindow mainWin(bundle);
-	mainWin.setWindowTitle(title);
+	mainWin.setWindowTitle(QString(ip));
 	mainWin.resize(600, 400);
 	mainWin.show();
 	return app.exec();

@@ -43,6 +43,7 @@ MainWindow::MainWindow(Bundle *bundle): bundle_(bundle) {
 	report_->addItem(tr("System"));
 	report_->addItem(tr("Interface"));
 	report_->addItem(tr("Route"));
+	report_->addItem(tr("Connection"));
 	report_->addItem(tr("Process"));
 	report_->addItem(tr("Software"));
 	report_->setEditable(false);
@@ -106,12 +107,15 @@ void MainWindow::createMenus() {
 	intfrAction->setStatusTip(tr("Generate an interface report"));
 	QAction *routerAction = new QAction(tr("&Routing Table Report"), this);
 	routerAction->setStatusTip(tr("Generate a routing table report"));
+	QAction *connectionAction = new QAction(tr("&Connection Report"), this);
+	connectionAction->setStatusTip(tr("Generate a connection report"));
 
 	connect(sysrAction, SIGNAL(triggered()), this, SLOT(sysr()));
 	connect(procrAction, SIGNAL(triggered()), this, SLOT(procr()));
 	connect(softrAction, SIGNAL(triggered()), this, SLOT(softr()));
 	connect(intfrAction, SIGNAL(triggered()), this, SLOT(intfr()));
 	connect(routerAction, SIGNAL(triggered()), this, SLOT(router()));
+	connect(connectionAction, SIGNAL(triggered()), this, SLOT(connection()));
 
 
 	// File menu
@@ -129,6 +133,7 @@ void MainWindow::createMenus() {
 	reportMenu->addAction(sysrAction);
 	reportMenu->addAction(intfrAction);
 	reportMenu->addAction(routerAction);
+	reportMenu->addAction(connectionAction);
 	reportMenu->addAction(procrAction);
 	reportMenu->addAction(softrAction);
 	fileMenu->addAction(aboutAction);
@@ -149,6 +154,8 @@ void MainWindow::handleAction() {
 		intfr();
 	else if (report == "Route")
 		router();
+	else if (report == "Connection")
+		connection();
 }
 
 void MainWindow::sysr() {
@@ -201,6 +208,18 @@ void MainWindow::intfr() {
 
 void MainWindow::router() {
 	Bundle *bundle = new RouteBundle(
+					bundle_->getVersion(),
+					bundle_->getCommunity(),
+					bundle_->getPort(),
+					bundle_->getIp());
+		
+	delete bundle_;
+	bundle_ = bundle;
+	runReport();
+}
+
+void MainWindow::connection() {
+	Bundle *bundle = new ConnectionBundle(
 					bundle_->getVersion(),
 					bundle_->getCommunity(),
 					bundle_->getPort(),

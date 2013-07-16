@@ -121,3 +121,23 @@ void RouteBundle::run(QTextEdit *view) {
 	view->setText(rv);
 }
 
+void ConnectionBundle::run(QTextEdit *view) {
+	SystemReport sysrep(version_, community_, port_, ip_);
+	TcpConnectionReport tcprep(version_, community_, port_, ip_);
+	UdpConnectionReport udprep(version_, community_, port_, ip_);
+
+	QString rv = "<br/><center><h1>Connection Report</h1></center><br/><br/>\n";
+	
+	QString rv1 = sysrep.get();
+	if (rv1.isEmpty()) {
+		view->setText("Error: cannot connect to host\n");		
+		return;
+	}
+	
+	QString rv2 = tcprep.get();
+	QString rv3 = udprep.get();
+	
+	rv += rv1 + rv2 + rv3;
+	view->setText(rv);
+}
+
