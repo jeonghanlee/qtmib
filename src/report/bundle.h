@@ -29,7 +29,8 @@ class Bundle {
 public:
 	Bundle(QString version, QString community, QString port, QString ip):
 		version_(version), community_(community), port_(port), ip_(ip) {}
-	virtual void run(QTextEdit *view) = 0;
+	virtual ~Bundle() {}
+	
 	void setHost(QString version, QString community, QString port, QString ip) {
 		version_ = version;
 		community_ = community;
@@ -48,7 +49,14 @@ public:
 	QString getIp() {
 		return ip_;
 	}
-protected:	
+	
+	// template pattern
+	void build(QTextEdit *view);
+	
+private:
+	virtual QString run() = 0;
+
+protected:
 	QString version_;
 	QString community_;
 	QString port_;
@@ -59,42 +67,53 @@ class SystemBundle: public Bundle {
 public:
 	SystemBundle(QString version, QString community, QString port, QString ip):
 		Bundle(version, community, port, ip) {}
-	void run(QTextEdit *view);
+	~SystemBundle() {}
+private:
+	QString run();
 };
 
 class SoftwareBundle: public Bundle {
 public:
 	SoftwareBundle(QString version, QString community, QString port, QString ip):
 		Bundle(version, community, port, ip) {}
-	void run(QTextEdit *view);
+	~SoftwareBundle() {}
+private:
+	QString run();
 };
 
 class ProcessBundle: public Bundle {
 public:
 	ProcessBundle(QString version, QString community, QString port, QString ip):
 		Bundle(version, community, port, ip) {}
-	void run(QTextEdit *view);
+	~ProcessBundle() {}
+private:
+	QString run();
 };
 
 class InterfaceBundle: public Bundle {
 public:
 	InterfaceBundle(QString version, QString community, QString port, QString ip):
 		Bundle(version, community, port, ip) {}
-	void run(QTextEdit *view);
+	~InterfaceBundle() {}
+	QString run();
 };
 
 class RouteBundle: public Bundle {
 public:
 	RouteBundle(QString version, QString community, QString port, QString ip):
 		Bundle(version, community, port, ip) {}
-	void run(QTextEdit *view);
+	~RouteBundle() {}
+private:
+	QString run();
 };
 
 class ConnectionBundle: public Bundle {
 public:
 	ConnectionBundle(QString version, QString community, QString port, QString ip):
 		Bundle(version, community, port, ip) {}
-	void run(QTextEdit *view);
+	~ConnectionBundle() {}
+private:
+	QString run();
 };
 
 #endif
