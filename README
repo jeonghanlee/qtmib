@@ -13,7 +13,7 @@ Features:
 - large number of built-in MIBs
 - user MIBs
 - network discovery
-- reports: system, interface, routing table, process, software
+- reports: system, interface, routing table, connections, process, software
 
 Download:
 
