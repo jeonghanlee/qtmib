@@ -1,4 +1,4 @@
-all: parser
+all: ../../bin/qtmib-translate
 H_FILE_LIST       = $(wildcard *.[h])
 CPP_FILE_LIST       = $(wildcard *.cpp)
 OBJS = $(CPP_FILE_LIST:.cpp=.o)
@@ -8,7 +8,7 @@ CPPFLAGS += -ggdb
 %.o : %.cpp $(H_FILE_LIST)
 	g++ $(CPPFLAGS) $(INCLUDE) -c $< -o $@
 
-parser: $(OBJS)
+../../bin/parser: $(OBJS)
 	g++  $(LDFLAGS) -o $@ $(OBJS)
 
-clean:; rm -f *.o parser
+clean:; rm -f *.o ../../bin/qtmib-translate

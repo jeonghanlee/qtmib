@@ -45,6 +45,7 @@ install: all
 	install -c -m 0755 build/qtmib $(PREFIX)/bin/.
 	install -c -m 0755 build/qtmib-discover $(PREFIX)/bin/.
 	install -c -m 0755 build/qtmib-report $(PREFIX)/bin/.
+	install -c -m 0755 build/qtmib-translate $(PREFIX)/bin/.
 	install -c -m 0644 src/qtmib/qtmib.desktop $(PREFIX)/share/applications/.
 	install -c -m 0644 src/qtmib/resources/qtmib-128.png $(PREFIX)/share/pixmaps/qtmib.png
 	install -c -m 0644 COPYING $(PREFIX)/share/doc/qtmib/.
@@ -65,6 +66,7 @@ uninstall:;
 	rm -f $(PREFIX)/bin/qtmib
 	rm -f $(PREFIX)/bin/qtmib-discover
 	rm -f $(PREFIX)/bin/qtmib-report
+	rm -f $(PREFIX)/bin/qtmib-translate
 	rm -f $(PREFIX)/share/pixmaps/qtmib.png
 	rm -f $(PREFIX)/share/applications/qtmib.desktop
 	rm -fr $(PREFIX)/share/qtmib
