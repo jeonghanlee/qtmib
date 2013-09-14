@@ -250,6 +250,7 @@ void MainWindow::loadUserMibs() {
 		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 		QString cmd = QString("snmptranslate -M ") + "~/.config/qtmib/mibs/:" + QTMIB_PREFIX + "/share/qtmib -Tl";
 		QString usr = "";
+printf("loading local mibs: %s\n", cmd.toStdString().c_str());
 		char *rv = exec_prog(cmd.toStdString().c_str());
 		if (rv) {
 			usr += rv;
@@ -259,7 +260,7 @@ void MainWindow::loadUserMibs() {
 		// update tree
 		QStringList diff = usr.split( "\n", QString::SkipEmptyParts);
 		foreach (QString line, diff) {
-//printf("processing %s\n", line.toStdString().c_str());		
+printf("processing %s\n", line.toStdString().c_str());		
 			// split the line
 			QStringList oidlist = line.split( ".", QString::SkipEmptyParts );
 			int cnt = oidlist.count();
@@ -272,8 +273,8 @@ void MainWindow::loadUserMibs() {
 				if (!parent)
 					parent = parents[level];
 					
-//printf("level %d, parent %s\n", level, parent->text().toStdString().c_str());
-//printf("oidlist[i] %s\n", oidlist[i].toStdString().c_str());
+printf("level %d, parent %s\n", level, parent->text().toStdString().c_str());
+printf("oidlist[i] %s\n", oidlist[i].toStdString().c_str());
 				QStandardItem *child = qtfind_child(parent, oidlist[i]);
 				if (child)
 					parent = child;
