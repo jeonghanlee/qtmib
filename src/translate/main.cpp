@@ -21,6 +21,7 @@
 #include "qtmib_parse.h"
 #include "tokens.h"
 #include "db.h"
+#include "../../qtmib_config.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -29,10 +30,15 @@ bool debug = false;
 
 
 static void usage(const char *prog) {
+	printf(
+"qtmib-translate translates SNMP MIBs from ASN.1 format into qtmib format.\n"
+"It is part of qtmib SNMP MIB Browser package. The program is released under\n"
+"under GPL v2 license. See http://qtmib.sourceforge.net for more details.\n\n");
 	printf("Usage: %s [options] files\n", prog);
-	printf("where options is:\n");
-	printf("\t--help - this help screen\n");
-	printf("\t--debug - debug mode\n");
+	printf("Options:\n");
+	printf("\t--debug: enable debug messages\n");
+	printf("\t-h, --help: this help screen\n");
+	printf("\t-v, --version: version information\n");
 	printf("\n");
 }
 
@@ -91,12 +97,16 @@ int main(int argc, char **argv) {
 	
 	int i;
 	for (i = 1; i < argc; i++) {
-		if (strcmp(argv[i], "--help") == 0) {
+		if (strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-h") == 0) {
 			usage(argv[0]);
 			return 0;
 		}
 		else if (strcmp(argv[i], "--debug") == 0) {
 			debug = true;
+		}
+		else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
+			printf("%s version %s\n", argv[0], PACKAGE_VERSION);
+			return 0;
 		}
 		else
 			break;

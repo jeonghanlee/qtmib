@@ -21,6 +21,6 @@ Print options end exit.
 \fB\-v\fR, \fB\-\-version\fR
 Print version information end exit.
 .SH SEE ALSO
-qtmib-discover(1) qtmib-report(1)
+qtmib-discover(1) qtmib-report(1) qtmib-translate(1)
 .SH AUTHOR
 RCP100 Team (rcpteam@yahoo.com)

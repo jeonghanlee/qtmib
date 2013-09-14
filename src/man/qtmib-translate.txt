@@ -1,0 +1,23 @@
+.TH man 1 "MONTH YEAR" "VERSION" "qtmib-translate man page"
+.SH NAME
+qtmib-translate \- SNMP MIB translation utility
+.SH SYNOPSIS
+qtmib-translate [OPTIONS] mib-files
+.SH DESCRIPTION
+qtmib-translate translates SNMP MIBs from ASN.1 format into qtmib format.
+It is part of qtmib SNMP MIB Browser package. The program is released under
+under GPL v2 license. See http://qtmib.sourceforge.net for more details.
+.SH OPTIONS
+.TP
+\fB\--debug\fR
+Enable debug messages.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Print options end exit.
+.TP
+\fB\-v\fR, \fB\-\-version\fR
+Print version information end exit.
+.SH SEE ALSO
+qtmib(1) qtmib-discover(1) qtmib-report(1)
+.SH AUTHOR
+RCP100 Team (rcpteam@yahoo.com)
