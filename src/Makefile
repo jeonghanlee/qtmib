@@ -1,4 +1,4 @@
-APPS = qtmib discover report
+APPS = qtmib discover report translate
 .PHONY: apps $(APPS)
 apps: $(APPS)
 $(APPS):
