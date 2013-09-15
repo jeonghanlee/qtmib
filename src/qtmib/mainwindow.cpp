@@ -170,7 +170,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), pref_(0), search_(
 
 void MainWindow::checkEnvironment() {
 	char *rv = exec_prog("which snmpget");
-	QString ref = "";
+//	QString ref = "";
 	if (rv == 0 || strstr(rv, "snmpget") == 0) {
 		QMessageBox::warning(this, tr("qtmib Environment"),
 			tr("<br/><b>net-snmp</b> tools not found.<br/><br/>"
@@ -248,19 +248,33 @@ void MainWindow::loadUserMibs() {
 	QStringList filelist = dir.entryList(QDir::Files | QDir::NoDot | QDir::NoDotDot);
 	if (filelist.count() != 0) {
 		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-		QString cmd = QString("snmptranslate -M ") + "~/.config/qtmib/mibs/:" + QTMIB_PREFIX + "/share/qtmib -Tl";
+		QString cmd;
+		if (dbg)
+			cmd = QString("qtmib-translate --debug ~/.config/qtmib/mibs/* | sort -u");
+		else
+			cmd = QString("qtmib-translate ~/.config/qtmib/mibs/* | sort -u");
+
+		if (dbg)
+			printf("loading local mibs: %s\n", cmd.toStdString().c_str());
+
 		QString usr = "";
-printf("loading local mibs: %s\n", cmd.toStdString().c_str());
 		char *rv = exec_prog(cmd.toStdString().c_str());
 		if (rv) {
 			usr += rv;
 			free(rv);
 		}
+
+		if (dbg)
+			printf("translate result: %s\n", usr.toStdString().c_str());
 	
 		// update tree
 		QStringList diff = usr.split( "\n", QString::SkipEmptyParts);
 		foreach (QString line, diff) {
-printf("processing %s\n", line.toStdString().c_str());		
+			// skip lines not starting with iso(1)
+			if (!line.startsWith("iso(1)"))
+				continue;
+			
+//printf("processing %s\n", line.toStdString().c_str());		
 			// split the line
 			QStringList oidlist = line.split( ".", QString::SkipEmptyParts );
 			int cnt = oidlist.count();
@@ -273,8 +287,8 @@ printf("processing %s\n", line.toStdString().c_str());
 				if (!parent)
 					parent = parents[level];
 					
-printf("level %d, parent %s\n", level, parent->text().toStdString().c_str());
-printf("oidlist[i] %s\n", oidlist[i].toStdString().c_str());
+//printf("level %d, parent %s\n", level, parent->text().toStdString().c_str());
+//printf("oidlist[i] %s\n", oidlist[i].toStdString().c_str());
 				QStandardItem *child = qtfind_child(parent, oidlist[i]);
 				if (child)
 					parent = child;
