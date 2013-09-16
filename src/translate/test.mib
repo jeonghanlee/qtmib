@@ -1,0 +1,31 @@
+AGILENT-ENTERPRISE DEFINITIONS ::= BEGIN
+IMPORTS
+    MODULE-IDENTITY, OBJECT-IDENTITY, OBJECT-TYPE, NOTIFICATION-TYPE
+        FROM SNMPv2-SMI
+    TEXTUAL-CONVENTION
+        FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP
+        FROM SNMPv2-CONF
+        ;
+
+agilent  MODULE-IDENTITY
+::= { enterprises  5053 }
+
+agilent2  MODULE-IDENTITY
+::= { enterprises(4)  5054 }
+
+agilent3  MODULE-IDENTITY
+::= { enterprises  5055 1}
+
+agilent4  MODULE-IDENTITY
+::= { enterprises(4)  5055 2}
+
+agilent6  MODULE-IDENTITY
+::= { iso(1) org(3) dod(6) internet(1) private(4) enterprises(1) 5057 }
+
+agilent8  MODULE-IDENTITY
+::= { iso org(3) dod(6) internet(1) private(4) enterprises(1) 5058 }
+
+
+
+END

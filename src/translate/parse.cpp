@@ -48,10 +48,94 @@ static Token *parse_macro(Token *t) {
 	return t->next;
 }
 
-static void clear_sequence(Token *start, Token *end) {
-	Token *prev = start->next->next;
-	Token *current = start->next->next->next; // this should be a number
 
+static Token *remove_token(Token *prev, int cnt) {
+	Token *current = prev->next;
+	
+	for (int i = 0; i < cnt; i++) {
+		// remove current
+		Token *next = current->next;
+		current->next = 0;
+		delete current;
+		prev->next = next;
+		current = next;
+	}
+	
+	return prev;
+}
+
+// return false if invalid sequence
+static bool clear_sequence(Token *start, Token *end) {
+	// the sequence starts with equal & rightcb
+	
+	// check for name(number) sequences
+	Token *seq = start->next->next;
+	int state = 0;
+	bool firstword = false;
+	while (seq != end) {
+		if (state == 0) {
+			if (seq->type == Token::NUMBER) {
+				seq = seq->next;
+				continue;
+			}
+			else if (seq->type == Token::WORD) {
+				state = 1;
+				seq = seq->next;
+				continue;
+			}
+		}
+		else if (state == 1) {
+			if (seq->type == Token::LEFTB) {
+				state = 2;
+				seq = seq->next;
+				continue;
+			}
+			else if (seq->type == Token::RIGHTB)
+				return false;
+			else {
+				state = 0;
+				continue;
+			}
+		}
+		else if (state == 2) {
+			if (seq->type == Token::NUMBER) {
+				state = 3;
+				seq = seq->next;
+				continue;
+			}
+			else
+				return false;
+		}
+		else if (state == 3) {
+			if (seq->type == Token::RIGHTB) {
+				state = 0;
+				seq = seq->next;
+				continue;
+			}
+			else
+				return false;
+		}
+	}
+	if (state != 0)
+		return false;
+
+	Token *prev = start->next; // this is LEFTCB
+	Token *current = start->next->next; // this is the first entry
+
+	// clean the first word(number) sequence
+	if (current->type == Token::WORD && current->next->type == Token::LEFTB) {
+		prev = prev->next;
+
+		// remove 3 tokens
+		prev = remove_token(prev, 3);
+		current = current->next;
+	}
+	else {
+		current = current->next;
+		prev = prev->next;
+	}
+	
+	// remove names
 	while (current != end) {
 		if (current->type != Token::NUMBER) {
 			if (debug) {
@@ -59,17 +143,47 @@ static void clear_sequence(Token *start, Token *end) {
 				current->print();			
 			}
 			// remove the token
-			Token *next = current->next;
-			current->next = 0;
-			delete current;
-			prev->next = next;
-			current = next;
+			prev = remove_token(prev, 1);
+			current = prev->next;
 		}
 		else {
 			current = current->next;
 			prev = prev->next;	
 		}
 	}
+
+	// recognize and replace iso(1) org(3) dod(6) internet(1) private(4) enterprises(1) 1000 sequence
+	// the sequence in this moment looks like this: iso 3 6 1 4 1
+	prev = start->next; // this is LEFTCB
+	current = start->next->next; // this is the first entry
+	bool found = false;
+	if (current->type == Token::WORD && strcmp(current->name, "iso") == 0)  {
+		current = current->next;
+		if (current->type == Token::NUMBER && strcmp(current->name, "3") == 0) {
+			current = current->next;
+			if (current->type == Token::NUMBER && strcmp(current->name, "6") == 0) {
+				current = current->next;
+				if (current->type == Token::NUMBER && strcmp(current->name, "1") == 0) {
+					current = current->next;
+					if (current->type == Token::NUMBER && strcmp(current->name, "4") == 0) {
+						current = current->next;
+						if (current->type == Token::NUMBER && strcmp(current->name, "1") == 0) {
+							found = true;
+						}
+					}
+				}
+			}
+		}
+	}
+	if (found) {
+		current = start->next->next;
+		delete [] current->name;
+		current->name = new char[11 + 1];
+		strcpy(current->name, "enterprises");
+		remove_token(current, 5);
+	}
+
+	return true;
 }
 
 static Token *parse_equal(Token *name, Token *t) {
@@ -109,7 +223,11 @@ static Token *parse_equal(Token *name, Token *t) {
 	
 	// go trough the sequence and remove "words before numbers"
 	// for example airentry(7) becomes simply 7
-	clear_sequence(t, tkn);
+	if (!clear_sequence(t, tkn)) {
+		fprintf(stderr, "Error: invalid OID sequence %s in MIB file %s (%d)\n",
+			name->name, current_fname, __LINE__);
+		return tkn;	
+	}
 	if (debug)
 		printf("Debug: (sequence) token list after cleanup:\n");
 	Token *tkn2 = t;
