@@ -77,7 +77,7 @@ uint32_t rx_packet(int sock) {
 	return src_ip;
 }
 
-static uint8_t header[4] = {0x30, 0x29, 0x02, 0x01};
+static uint8_t header[4] = {0x30, 0x29, 0x02, 0x01}; // 0x29 is the length of the packet assuming "public" community
 static uint8_t request[30] = {
 	0xa0, 0x1c, 0x02, 0x04, 0x4a, 0xd8, 0xff, 0x7c,
 	0x02, 0x01, 0x00, 0x02, 0x01, 0x00, 0x30, 0x0e,
@@ -87,7 +87,11 @@ static uint8_t request[30] = {
 void tx_packet(int sock, uint32_t ip, int port, int type, const char *community) {
 	uint8_t pkt[1500];
 	uint8_t *ptr = &pkt[0];
+	
 	memcpy(ptr, header, 4);
+	// adjust length
+#define LENPUBLIC 6 // this is the length of "public"
+	ptr[1] = 0x29 - 6 + strlen(community);
 	ptr += 4;
 	*ptr++ = (uint8_t) type;
 	*ptr++ = 4;
