@@ -1,3 +1,9 @@
+qtmib (0.8.12) baseline; urgency=low
+
+  * bug fixes
+
+ -- RCP100 Team <rcpteam@yahoo.com>  Thu, 17 Sep 2013 09:00:00 -0500
+
 qtmib (0.8.10) baseline; urgency=low
 
   * connection report
@@ -12,19 +18,19 @@ qtmib (0.8.8) baseline; urgency=low
   * Report support
   * bug fixes
 
- -- RCP100 Team <rcpteam@yahoo.com>  Thu, 06 Jul 2013 08:00:00 -0500
+ -- RCP100 Team <rcpteam@yahoo.com>  Sat, 06 Jul 2013 08:00:00 -0500
 
 qtmib (0.8.6) baseline; urgency=low
 
   * network discovery support
 
- -- RCP100 Team <rcpteam@yahoo.com>  Thu, 21 Jun 2013 07:15:00 -0500
+ -- RCP100 Team <rcpteam@yahoo.com>  Fri, 21 Jun 2013 07:15:00 -0500
 
 qtmib (0.8.4) baseline; urgency=low
 
   * fixed Search button crash
 
- -- RCP100 Team <rcpteam@yahoo.com>  Thu, 07 Jun 2013 18:00:00 -0500
+ -- RCP100 Team <rcpteam@yahoo.com>  Fri, 07 Jun 2013 18:00:00 -0500
 
 qtmib (0.8.2) baseline; urgency=low
 
@@ -34,10 +40,10 @@ qtmib (0.8.2) baseline; urgency=low
   * fixed private MIBs loading
   * other bug fixes
 
- -- RCP100 Team <rcpteam@yahoo.com>  Thu, 05 Jun 2013 09:00:00 -0500
+ -- RCP100 Team <rcpteam@yahoo.com>  Wed, 05 Jun 2013 09:00:00 -0500
 
 qtmib (0.8) baseline; urgency=low
 
   * development setup
 
- -- RCP100 Team <rcpteam@yahoo.com>  Thu, 20 May 2013 09:00:00 -0500
+ -- RCP100 Team <rcpteam@yahoo.com>  Mon, 20 May 2013 09:00:00 -0500
