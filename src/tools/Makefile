@@ -12,4 +12,4 @@ LIBS=`net-snmp-config --agent-libs`
 qtmibdb: $(OBJS)
 	g++  $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
 
-clean:; rm -f *.o dhcng
+clean:; rm -f *.o qtmibdb
