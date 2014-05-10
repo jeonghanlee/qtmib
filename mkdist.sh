@@ -21,7 +21,7 @@ rm -fr `find . -name .svn`
 rm -fr src/tools src/art
 cd ..
 
-
+tar -cjvf $DIR.tar.bz2 $DIR
 rm -fr $DIR
 
 
