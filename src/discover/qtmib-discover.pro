@@ -1,6 +1,6 @@
-QMAKE_CXXFLAGS += $$(CXXFLAGS)
-QMAKE_CFLAGS += $$(CFLAGS)
-QMAKE_LIBS += $$(LDFLAGS)
+QMAKE_CXXFLAGS += $$(CXXFLAGS) -fstack-protector-all -D_FORTIFY_SOURCE=2 -fPIE -pie -Wformat -Wformat-security
+QMAKE_CFLAGS += $$(CFLAGS) -fstack-protector-all -D_FORTIFY_SOURCE=2 -fPIE -pie -Wformat -Wformat-security
+QMAKE_LIBS += $$(LDFLAGS) -Wl,-z,relro -Wl,-z,now
 TEMPLATE      = app
 HEADERS       = mainwindow.h \
                 transactionthread.h \
