@@ -83,7 +83,7 @@ dist: distclean
 	./mkdist.sh $(NAME) $(VERSION)
 
 deb: dist
-	./mkubuntu.sh $(NAME) $(VERSION)
+	./mkdeb.sh $(NAME) $(VERSION)
 
 	
 	
