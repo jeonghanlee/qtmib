@@ -82,8 +82,6 @@ uninstall:;
 dist: distclean
 	./mkdist.sh $(NAME) $(VERSION)
 
-ubuntu: dist
-	./mkubuntu.sh $(NAME) $(VERSION)
 deb: dist
 	./mkubuntu.sh $(NAME) $(VERSION)
 

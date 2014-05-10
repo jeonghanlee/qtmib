@@ -30,13 +30,13 @@ echo "*****************************************"
 mv $INSTALL_DIR/share/doc/qtmib/RELNOTES $INSTALL_DIR/share/doc/qtmib/changelog.Debian
 gzip -9 $INSTALL_DIR/share/doc/qtmib/changelog.Debian
 rm $INSTALL_DIR/share/doc/qtmib/COPYING
-cp platform/ubuntu/copyright $INSTALL_DIR/share/doc/qtmib/.
+cp platform/deb/copyright $INSTALL_DIR/share/doc/qtmib/.
 mkdir -p $DEBIAN_CTRL_DIR
-sed "s/QTMIBVER/$2/g"  platform/ubuntu/control > $DEBIAN_CTRL_DIR/control
+sed "s/QTMIBVER/$2/g"  platform/deb/control > $DEBIAN_CTRL_DIR/control
 find ./debian -type d | xargs chmod 755
 dpkg-deb --build debian
 lintian debian.deb
-mv debian.deb qtmib_$2_1_amd64.ubuntu.deb
+mv debian.deb qtmib_$2_1_amd64.deb
 rm -fr debian
 rm -fr $CODE_DIR
 
