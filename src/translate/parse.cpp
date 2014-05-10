@@ -24,27 +24,31 @@
 
 int unknown_cnt = 0;
 
-static Token *parse_imports(Token *t) {
+static Token *parse_imports(Token *t, const char *fname) {
 	assert(t);
 	
 	// advance until SEMICOLUMN
 	while (t && t->type != Token::SEMICOLUMN)
 		t = t->next;
 	
-	if (!t)
+	if (!t) {
+		fprintf(stderr, "Error: IMPORTS should end with ; character, dropping file %s\n", fname);
 		return 0;
+	}
 	return t->next;
 }
 
-static Token *parse_macro(Token *t) {
+static Token *parse_macro(Token *t, const char *fname) {
 	assert(t);
 
 	// advance until END
 	while (t && t->type != Token::END)
 		t = t->next;
 	
-	if (!t)
+	if (!t) {
+		fprintf(stderr, "Error: MACRO should end with END, dropping file %s\n", fname);
 		return 0;
+	}
 	return t->next;
 }
 
@@ -297,7 +301,7 @@ static Token *parse_equal(Token *name, Token *t) {
 	
 }
 
-
+// poarsing object definition
 static Token *parse_def(Token *t) {
 	assert(t);
 
@@ -345,7 +349,7 @@ static Token *parse_def(Token *t) {
 	return parse_equal(name, t);
 }	
 
-void parse() {
+void parse(const char *fname) {
 	if (!head)
 		return;
 	
@@ -357,15 +361,17 @@ void parse() {
 			break;
 		t = t->next;	
 	}
-	if (!t)
+	if (!t) {
+		fprintf(stderr, "Error: cannot find BEGIN, dropping file %s\n", fname);
 		return;
+	}
 	t = t->next;
 	
 	while (t) {
 		if (t->type == Token::IMPORTS)
-			t = parse_imports(t);
+			t = parse_imports(t, fname);
 		else if (t->type == Token::MACRO)
-			t = parse_macro(t);
+			t = parse_macro(t, fname);
 		else
 			t = parse_def(t);
 	}

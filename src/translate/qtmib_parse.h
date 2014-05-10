@@ -20,7 +20,7 @@
 #ifndef QTMIB_PARSE_H
 #define QTMIB_PARSE_H
 
-void parse();
+void parse(const char *fname);
 extern const char *current_fname;
 extern bool debug;
 

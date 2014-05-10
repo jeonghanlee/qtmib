@@ -81,7 +81,7 @@ void process_file(const char *fname) {
 //	head->printall();
 	
 	// parse file
-	parse();
+	parse(fname);
 	
 	// clear memory
 	delete head;

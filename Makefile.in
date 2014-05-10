@@ -84,6 +84,8 @@ dist: distclean
 
 ubuntu: dist
 	./mkubuntu.sh $(NAME) $(VERSION)
+deb: dist
+	./mkubuntu.sh $(NAME) $(VERSION)
 
 	
 	

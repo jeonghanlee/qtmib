@@ -1,3 +1,11 @@
+qtmib (1.0) baseline; urgency=low
+
+  * compile time hardening
+  * Debian, Ubuntu, OpenSUSE and Fedora binary packages
+  * bug fixes
+
+ -- RCP100 Team <rcpteam@yahoo.com>  Sat, 10 May 2014 08:00:00 -0500
+
 qtmib (0.8.12) baseline; urgency=low
 
   * bug fixes
