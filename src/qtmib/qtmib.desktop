@@ -5,4 +5,4 @@ Exec=qtmib
 Icon=qtmib
 Terminal=false
 Type=Application
-Categories=Qt;Network;
+Categories=Qt;Network;Internet
