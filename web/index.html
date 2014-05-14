@@ -64,10 +64,11 @@ You can also install private MIBs by dropping them in <i>~/.config/qtmib/mibs</i
 
 <a name="news"></a>
           <h3>News</h3>
-<p>September 2013 - Version 0.8.12 released</p>
-<ul>
-<li>bug fixes, <a href="news.html">more...</a></li>
-</ul>
+<p>May 2013 - Version 1.0 released</p>
+<p>We’re excited to announce qtmib version 1.0, a stable, production-ready release
+that can be used for new deployments or to upgrade existing installations. The new version brings in a number
+of bug fixes and packaging support for Debian, Ubuntu, openSUSE and Fedora.
+<a href="news.html">more...</a></p>
 
 <br/>
 
@@ -75,43 +76,50 @@ You can also install private MIBs by dropping them in <i>~/.config/qtmib/mibs</i
 <h3>Download</h3>
           <ul>
           <li><a href="http://sourceforge.net/projects/qtmib/files/qtmib/">Source code</a></li>
-          <li><a href="http://sourceforge.net/projects/qtmib/files/qtmib.deb/">Ubuntu package for 64-bit computers</a></li>
+          <li><a href="http://sourceforge.net/projects/qtmib/files/qtmib.deb/">64-bit Debian/Ubuntu package</a></li>
+          <li><a href="http://sourceforge.net/projects/qtmib/files/qtmib.rpm/">64-bit openSUSE/Fedora package</a></li>
           </ul>
 <br/>
 <br/>
 
 <a name="installation"></a>
 <h3>Installation</h3>
-
-<p>For Ubuntu 12.04 and later use the .deb package provided:</p>
-
-<blockquote><pre>
-    $ sudo dpkg -i qmib_X.Y.Z_1.deb
-</pre></blockquote>
-
 <p>
-To install it from sources, download and unpack the source archive:
+Dependencies: QT4 libraries, <a href="http://www.net-snmp.org/">net-snmp</a>.
 </p>
 
+<p>
+To install it from sources, download and unpack the source archive, and compile and install the software:
+</p>
 <blockquote><pre>
     $ tar -xjvf qtmib-X.Y.Z.tar.bz2
     $ cd qtmib-X.Y.Z
-</pre></blockquote>
-
-<p>
-Dependencies: QT4 development libraries, <a href="http://www.net-snmp.org/">net-snmp</a>.
-</p>
-
-<p>
-Compile and install the software:
-</p>
-
-<blockquote><pre>
-    $ ./configure
-    $ make
-    $ sudo make install
+    $ ./configure && make && sudo make install
 </pre></blockquote>
 <br/>
+
+<p>For Debian and Ubuntu use the .deb package provided:</p>
+<blockquote><pre>
+    $ sudo apt-get install snmp libqtgui4
+    $ sudo dpkg -i qtmib_X.Y_Z_amd64.deb
+</pre></blockquote>
+<br/>
+
+<p>For openSUSE use the .rpm package provided:</p>
+<blockquote><pre>
+    $ zypper install net-snmp libqt4
+    $ rpm -i qtmib-X.Y-Z.x86_64.rpm
+</pre></blockquote>
+<br/>
+
+<p>For Fedora use the .rpm package provided:</p>
+<blockquote><pre>
+    $ yum install net-snmp-utils qt qt-x11
+    $ rpm -i qtmib-X.Y-Z.x86_64.rpm
+</pre></blockquote>
+
+
+
 <br/>
 
 <a name="support"></a>
