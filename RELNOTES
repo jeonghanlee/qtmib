@@ -1,6 +1,7 @@
 
 added lancope netapp avaya fortinet gsmpMIB picaPrivateMIB
 fixed MIB tree scrolling when searching
+fixed oid order in translation tool
 
 qtmib (1.0) baseline; urgency=low
 

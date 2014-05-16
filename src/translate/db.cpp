@@ -76,8 +76,19 @@ void dbClean() {
 			delete db[i];
 }
 
-void dbPrint() {
+void dbBuildTree() {
 	int i;
+	
+	// set level
+	for (i = 0; i < (HMASK + 1); i++) {
+		DbEntry *ptr = db[i];
+		while (ptr) {
+			stack_guard = 0;
+			ptr->setLevel(dbFind);
+			ptr = ptr->next;
+		}
+	}
+	
 	if (debug) {
 		for (i = 0; i < (HMASK + 1); i++) {
 			DbEntry *ptr = db[i];
@@ -90,29 +101,35 @@ void dbPrint() {
 				printf(" %d: %d ", i, cnt);
 				ptr = db[i];
 				while (ptr) {
-					printf("(%s,%s,%s) ", ptr->name, ptr->oid, ptr->base);
+					printf("(level %d, children %d, %s(%s), parent %s) ", ptr->level, ptr->chld_cnt, ptr->name, ptr->oid, ptr->base);
 					ptr = ptr->next;
 				}
 				printf("\n");
 			}
 		}
 	}
+}
 
-	for (i = 0; i < (HMASK + 1); i++) {
+void dbPrint(DbEntry *top) {
+	// print element
+	stack_guard = 0;
+	top->print(dbFind);
+	printf("\n");
+
+	// print children
+	for (int i = 0; i < top->chld_cnt; i++)
+		dbPrint(top->chld[i]);
+	
+#if 0
+	for (int i = 0; i < (HMASK + 1); i++) {
 		DbEntry *ptr = db[i];
 		while (ptr) {
-			stack_guard = 0;
-			if (!ptr->is_defined(dbFind)) {
-				printf("Warning: %s is not fully defined - ", ptr->name);
-			}
 			stack_guard = 0;
 			ptr->print(dbFind);
 			printf("\n");
 			ptr = ptr->next;
 		}
 	}
+#endif
 
-
-	
 }
-

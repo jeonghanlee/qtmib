@@ -22,6 +22,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 // the database is organized as a simple hash table 
 
@@ -32,8 +33,18 @@ struct DbEntry {
 	char *name;
 	char *base;
 	char *oid;
+	int oid_number;
+	
+	// tree
+	int level;
 	bool top;
-	DbEntry(const char *n, const char *b, const char *o): next(0), top(false) {
+	DbEntry **chld;
+	int chld_cnt;
+	
+	
+	DbEntry(const char *n, const char *b, const char *o): next(0), level(0), top(false),
+		chld(0), chld_cnt(0) {
+		
 		assert(n);
 		assert(b);
 		assert(o);
@@ -44,8 +55,12 @@ struct DbEntry {
 		strcpy(base, b);
 		oid = new char[strlen(o) + 1];
 		strcpy(oid, o);
+		oid_number = atoi(oid);
 	}
-	DbEntry(const char *n, const char *o): next(0), top(true) {
+	
+	DbEntry(const char *n, const char *o): next(0), level(1), top(true),
+		chld(0), chld_cnt(0) {
+		
 		assert(n);
 		assert(o);
 		
@@ -53,13 +68,58 @@ struct DbEntry {
 		strcpy(name, n);
 		oid = new char[strlen(o) + 1];
 		strcpy(oid, o);
+		oid_number = atoi(oid);
 	}
+	
 	~DbEntry() {
 		delete [] name;
 		delete [] base;
 		delete [] oid;
+		if (chld_cnt)
+			delete [] chld;
 		if (next)
 			delete next;
+	}
+	
+	int setLevel(fptr_t find) {
+		if (level)
+			return level;
+		
+		DbEntry *parent = find(base);
+		if (parent) {
+			level = parent->setLevel(find) + 1;
+			parent->setChild(this);
+		}
+		
+		return level;
+	}
+	
+	void setChild(DbEntry *child) {
+		if (chld == 0) {
+			chld = new DbEntry*[1];
+			chld[0] = child;
+			chld_cnt = 1;
+			return;
+		}
+		
+		DbEntry **tmp = chld;
+		chld = new DbEntry*[chld_cnt + 1];
+
+		// insert the child oredred by oid number
+		int i;
+		for (i = 0; i < chld_cnt; i++) {
+			if (child->oid_number < tmp[i]->oid_number)
+				break;
+		}
+
+		int position = i;
+		for (i = 0; i < position; i++)
+			chld[i] = tmp[i];
+		chld[i] = child;
+		i++;
+		for (; i <= chld_cnt; i++)
+			chld[i] = tmp[i - 1];		
+		chld_cnt++;
 	}
 	
 	void print(fptr_t find) {
@@ -89,6 +149,7 @@ struct DbEntry {
 
 void dbAdd(DbEntry *dbe);
 void dbClean();
-void dbPrint();
+void dbBuildTree();
+void dbPrint(DbEntry *top);
 
 #endif

@@ -114,7 +114,8 @@ int main(int argc, char **argv) {
 	
 	
 	// initialize database
-	dbAdd(new DbEntry("iso", "1"));
+	DbEntry *top = new DbEntry("iso", "1");
+	dbAdd(top);
 	dbAdd(new DbEntry("org", "iso", "3"));
 	dbAdd(new DbEntry("dod", "org", "6"));
 	dbAdd(new DbEntry("internet", "dod", "1"));
@@ -127,9 +128,12 @@ int main(int argc, char **argv) {
 	for (; i < argc; i++) {
 		process_file(argv[i]);
 	}
+
+	// build tree
+	dbBuildTree();
 	
 	// print database
-	dbPrint();
+	dbPrint(top);
 	
 	return 0;
 }

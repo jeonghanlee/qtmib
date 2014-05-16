@@ -250,9 +250,9 @@ void MainWindow::loadUserMibs() {
 		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 		QString cmd;
 		if (dbg)
-			cmd = QString("qtmib-translate --debug ~/.config/qtmib/mibs/* | sort -u");
+			cmd = QString("qtmib-translate --debug ~/.config/qtmib/mibs/*");
 		else
-			cmd = QString("qtmib-translate ~/.config/qtmib/mibs/* | sort -u");
+			cmd = QString("qtmib-translate ~/.config/qtmib/mibs/*");
 
 		if (dbg)
 			printf("loading local mibs: %s\n", cmd.toStdString().c_str());
