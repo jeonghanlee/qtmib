@@ -1,3 +1,6 @@
+
+added lancope netapp avaya fortinet gsmpMIB picaPrivateMIB
+
 qtmib (1.0) baseline; urgency=low
 
   * compile time hardening
