@@ -25,7 +25,7 @@
 SearchDialog::SearchDialog(): QDialog() {
 	// protocol version
 	QLabel *sLabel = new QLabel;
-	sLabel->setText(tr("Target"));
+	sLabel->setText(tr("Search"));
 	sBox_ = new QComboBox;
 	sBox_->setEditable(true);
 
@@ -38,14 +38,15 @@ SearchDialog::SearchDialog(): QDialog() {
 	QGridLayout *grid = new QGridLayout;
 	grid->addItem(new QSpacerItem(30, 30), 0, 0);
 	grid->addWidget(sLabel, 1, 1);
-	grid->addWidget(sBox_, 1, 3, 1, 2);
+	grid->addWidget(sBox_, 1, 3, 1, 3);
 
 	grid->addItem(new QSpacerItem(30, 30), 2, 1);
-	grid->addWidget(buttonBox, 3, 3);
+	grid->addWidget(buttonBox, 3, 4);
 	grid->addItem(new QSpacerItem(30, 30), 3, 1);
-	grid->setColumnMinimumWidth(2, 100);
+	grid->setColumnMinimumWidth(2, 30);
 	grid->setColumnMinimumWidth(4, 150);
-	grid->setColumnMinimumWidth(5, 30);
+	grid->setColumnMinimumWidth(5, 50);
+	grid->setColumnMinimumWidth(6, 30);
 	setLayout(grid);
 	setWindowTitle(tr("Search"));
 }

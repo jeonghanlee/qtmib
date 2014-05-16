@@ -28,7 +28,7 @@ extern bool dbg;
 QStringList qt_line_diff(QString str1, QString str2);
 QStandardItem *qtfind_child(QStandardItem *parent, QString name);
 class QTreeView;
-QString qtfind_entry(QStandardItem *item, QString entry, QTreeView *treeView);
+QString qtfind_entry(QStandardItem *item, QString entry, QTreeView *treeView, bool partial);
 
 
 

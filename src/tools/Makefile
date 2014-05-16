@@ -1,4 +1,4 @@
-all: qtmibdb qtmiblist qtmibadd
+all: qtmibdb qtmiblist qtmibadd qtmibprint qtmibdel qtmibinsert
 H_FILE_LIST       = $(wildcard *.[h])
 CPP_FILE_LIST       = $(wildcard *.c)
 BINOBJS =  $(foreach file, $(OBJS), $file)
@@ -17,4 +17,13 @@ qtmiblist: qtmiblist.o
 qtmibadd: qtmibadd.o
 	g++  $(LDFLAGS) -o $@ qtmibadd.o
 
-clean:; rm -f *.o qtmibdb qtmiblist qtmibadd
+qtmibinsert: qtmibinsert.o
+	g++  $(LDFLAGS) -o $@ qtmibinsert.o
+
+qtmibdel: qtmibdel.o
+	g++  $(LDFLAGS) -o $@ qtmibdel.o
+
+qtmibprint: qtmibprint.o
+	g++  $(LDFLAGS) -o $@ qtmibprint.o
+
+clean:; rm -f *.o qtmibdb qtmiblist qtmibadd qtmibdel qtmibprint qtmibinsert

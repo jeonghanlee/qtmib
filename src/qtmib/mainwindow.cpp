@@ -494,6 +494,7 @@ void MainWindow::updateActions() {
 		QString origname = mod->data(mindex).toString();
 
 		QString name = mod->data(mindex).toString();
+		
 		name.truncate(name.indexOf("("));
 
 		int index1 = origname.indexOf("(");
@@ -622,7 +623,9 @@ void MainWindow::handleSearch() {
 		
 	if (QDialog::Accepted == search_->exec()) {
 		QString entry = search_->getSearch();
-		QString oid = qtfind_entry(topitem_, entry, treeView_);
+		QString oid = qtfind_entry(topitem_, entry, treeView_, false);
+		if (oid == "String not found")
+			oid = qtfind_entry(topitem_, entry, treeView_, true);
 		statusBar()->showMessage(oid);
 			
 	}

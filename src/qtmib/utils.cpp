@@ -63,8 +63,7 @@ QStandardItem *qtfind_child(QStandardItem *parent, QString name) {
 }
 
 
-QString qtfind_entry(QStandardItem *item, QString entry, QTreeView *treeView) {
-
+QString qtfind_entry(QStandardItem *item, QString entry, QTreeView *treeView, bool partial) {
 	int rows = item->rowCount();
 	int columns = item->columnCount();
 	QString current = item->text();
@@ -75,11 +74,16 @@ QString qtfind_entry(QStandardItem *item, QString entry, QTreeView *treeView) {
 	current.truncate(index1);
 		
 //printf("%s\n", current.toStdString().c_str());
-	if (current == entry) {
+	bool found = false;
+	if (partial && current.startsWith(entry, Qt::CaseInsensitive))
+		found = true;
+	else if (current == entry)
+		found = true;
+	if (found) {
 		treeView->setExpanded(item->index(), true);
+		treeView->scrollTo(item->index(), QAbstractItemView::PositionAtTop);
 		return QString(".") + item->text();
 	}
-
 
 	int i;
 	int j;
@@ -87,7 +91,7 @@ QString qtfind_entry(QStandardItem *item, QString entry, QTreeView *treeView) {
 		for (j = 0; j < columns; j++) {
 			QStandardItem *child = item->child(i, j);
 			if (child) {
-				QString rv = qtfind_entry(child, entry, treeView);
+				QString rv = qtfind_entry(child, entry, treeView, partial);
 				if (rv != "String not found") {
 					treeView->setExpanded(item->index(), true);
 					rv = QString(".") + item->text() + rv;

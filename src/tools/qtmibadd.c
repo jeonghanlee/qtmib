@@ -18,7 +18,7 @@ static inline int itemcnt(const char *str) {
 
 int main(int argc, char **argv) {
 	if (argc != 4) {
-		fprintf(stderr, "Usage: qtmibadd mibtree-file new-mib-file mib-name-before\n");
+		fprintf(stderr, "Usage: qtmibadd mibtree-file mib-name-before new-mib-file \n");
 		return 1;
 	}
 	char *mib_before = argv[2];
