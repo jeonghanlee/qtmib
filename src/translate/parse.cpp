@@ -266,8 +266,8 @@ static Token *parse_equal(Token *name, Token *t) {
 	    	    t->next->next->next->next->type == Token::NUMBER &&
 	    	    t->next->next->next->next->next->type == Token::RIGHTCB) {
 			Token *oid2 =  t->next->next->next->next;
-			char oid1_name[20];
-			sprintf(oid1_name, "unknown#%d", ++unknown_cnt);
+			char oid1_name[strlen(base->name) + 20];
+			sprintf(oid1_name, "%s#%s", base->name, oid1->name);//++unknown_cnt);
 			DbEntry *pdb = new DbEntry(name->name, oid1_name, oid2->name);
 			dbAdd(pdb);
 			pdb = new DbEntry(oid1_name, base->name, oid1->name);
