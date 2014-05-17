@@ -3898,12 +3898,15 @@ cd src/qtmib && $QMAKE && cd ../..
 cd src/discover && $QMAKE && cd ../..
 cd src/report && $QMAKE && cd ../..
 
-# build chgcfags.sh file
-echo "#!/bin/bash" > chgcflags.sh
-echo "cd src/qtmib && $QMAKE && cd ../.." > chgcflags.sh
-echo "cd src/discover && $QMAKE && cd ../.." >> chgcflags.sh
-echo "cd src/report && $QMAKE && cd ../.." >> chgcflags.sh
-chmod +x chgcflags.sh
+# build sanitizer.sh file
+echo "#!/bin/bash" >sanitizer.sh
+echo "export CFLAGS=-fsanitize=address" >> sanitizer.sh
+echo "export CXXFLAGS=-fsanitize=address" >> sanitizer.sh
+echo "export LDFLAGS=-lasan" >> sanitizer.sh
+echo "cd src/qtmib && $QMAKE && cd ../.." >> sanitizer.sh
+echo "cd src/discover && $QMAKE && cd ../.." >> sanitizer.sh
+echo "cd src/report && $QMAKE && cd ../.." >> sanitizer.sh
+chmod +x sanitizer.sh
 
 # testing net-snmp
 NETSNMP=`which snmpget`

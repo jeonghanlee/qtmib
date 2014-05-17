@@ -10,6 +10,6 @@ LDFLAGS += -Wl,-z,relro -Wl,-z,now
 	g++ $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
 ../../build/qtmib-translate: $(OBJS)
-	g++ $(LDFLAGS) $(LIBS) -o $@ $(OBJS)
+	g++ $(LIBS) -o $@ $(OBJS) $(LDFLAGS) 
 
 clean:; rm -f *.o ../../build/qtmib-translate
