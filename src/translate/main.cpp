@@ -24,7 +24,9 @@
 #include "../../qtmib_config.h"
 #include <stdio.h>
 #include <string.h>
-
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 const char *current_fname = 0;
 bool debug = false;
 
@@ -43,6 +45,18 @@ static void usage(const char *prog) {
 }
 
 void process_file(const char *fname) {
+
+	// do nothing if the file is a directory
+	struct stat s;
+	if (stat(fname, &s) < 0) {
+		fprintf(stderr, "Warning: cannot open file %s\n", fname);
+		return;
+	}
+	if (!S_ISREG(s.st_mode)) {
+		fprintf(stderr, "Warning: the file %s is not a MIB file\n", fname);
+		return;
+	}
+	
 	if (debug)
 		printf("Information: processing file %s\n", fname);
 	current_fname = fname;
@@ -57,10 +71,11 @@ void process_file(const char *fname) {
 	// read file
 	fseek(fp, 0, SEEK_END);
 	long len = ftell(fp);
-	if (len == 0) {
+	if (len < 0) {
 		fprintf(stderr, "Error: the file %s is empty\n", fname);
 		return;
 	}
+
 	char *fcontent = new char[len + 1];	
 	rewind(fp);	
 	size_t rv = fread(fcontent, 1, len, fp);
@@ -90,6 +105,14 @@ void process_file(const char *fname) {
 }
 
 int main(int argc, char **argv) {
+#if 0
+{
+fprintf(stderr, "argc %d\n", argc);
+int i;
+for (i = 0; i < argc; i++)
+	fprintf(stderr, "%s\n", argv[i]);
+}
+#endif
 	if (argc < 2) {
 		usage(argv[0]);
 		return 1;

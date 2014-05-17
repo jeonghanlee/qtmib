@@ -17,13 +17,12 @@ static inline int itemcnt(const char *str) {
 }
 
 int main(int argc, char **argv) {
-	if (argc != 4) {
+	if (argc < 4) {
 		fprintf(stderr, "Usage: qtmibadd mibtree-file mib-name-before new-mib-file \n");
 		return 1;
 	}
 	char *mib_before = argv[2];
 	char *tree_file = argv[1];
-	char *new_mib_file = argv[3];
 	char *tmp_file = "tmpfile";
 	char *tmp_file_out = "tmpfile.out";
 
@@ -47,13 +46,24 @@ int main(int argc, char **argv) {
 	//**************************************************************
 	// run mib translateion
 	//**************************************************************
-	char *cmd;
-	if (asprintf(&cmd, "qtmib-translate %s | sort -u > %s", new_mib_file, tmp_file) == -1) {
-		fprintf(stderr, "Error: cannot allocate memory\n");
-		return 1;	
+	{
+		int i;
+		int len = 0;
+		for (i = 3; i < argc; i++)
+			len += strlen(argv[i]) + 1;
+			
+		char cmd[1024 + len];
+		
+		strcpy(cmd, "qtmib-translate ");
+		
+		for (i = 3; i < argc; i++) {
+			strcat(cmd, argv[i]);
+			strcat(cmd, " ");
+		}
+		strcat(cmd,  " > ");
+		strcat(cmd, tmp_file);
+		system(cmd);
 	}
-	system(cmd);
-	free(cmd);
 	
 	//**************************************************************
 	// add the new mibs

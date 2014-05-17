@@ -105,7 +105,7 @@ struct DbEntry {
 		DbEntry **tmp = chld;
 		chld = new DbEntry*[chld_cnt + 1];
 
-		// insert the child oredred by oid number
+		// insert the child ordered by oid number
 		int i;
 		for (i = 0; i < chld_cnt; i++) {
 			if (child->oid_number < tmp[i]->oid_number)
