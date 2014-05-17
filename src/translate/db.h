@@ -120,6 +120,7 @@ struct DbEntry {
 		for (; i <= chld_cnt; i++)
 			chld[i] = tmp[i - 1];		
 		chld_cnt++;
+		delete [] tmp;
 	}
 	
 	void print(fptr_t find) {
