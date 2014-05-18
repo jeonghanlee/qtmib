@@ -93,7 +93,7 @@ void DevDb::print() {
 	}
 }
 
-void DevDb::walk(void (*f)(DevStorage *dev, TransactionThread *th), TransactionThread *th) {
+int DevDb::walk(void (*f)(DevStorage *dev, TransactionThread *th), TransactionThread *th) {
 	QList<DevStorage *> &mylist = DevDb::get().list_;
 	int cnt = mylist.count();
 	for (int i  = 0; i < cnt; i++) {
@@ -107,5 +107,6 @@ void DevDb::walk(void (*f)(DevStorage *dev, TransactionThread *th), TransactionT
 			}
 		}
 	}
+	return cnt;
 }
 

@@ -142,13 +142,16 @@ void TransactionThread::checkDevice(DevStorage *dev, TransactionThread *th) {
 
 #include <QMessageBox>
 void TransactionThread::run() {
+	int cnt = 0; 
 	sock_ = rx_open(29456);
 	if (sock_ == 0) // couldn't open port, try anotyher one
 		sock_ = rx_open(10007);
 	if (sock_ == 0)
 		return;
-		
+
+int timecnt = 0;		
 	forever {
+timecnt++;
 		msleep(200);
 
 		// test exit flag	
@@ -160,13 +163,13 @@ void TransactionThread::run() {
 		if (addcnt == 0)
 ;//			printf("sleep\n");
 		else {
-			for (int i = 0; i < addcnt; i++) {
+			for (int i = 0; i < 1 /*addcnt */; i++) {
 				DevStorage *dev = queue_add_.at(0);
 //				printf("sleep; add ip %s\n", dev->ip_.toStdString().c_str());
 				
 				uint32_t range_start = dev->range_start_;
 				uint32_t range_end = dev->range_start_;
-				for (int j = 0; j < 5; j++) {
+				for (int j = 0; j < 10; j++) {
 					if (dev->range_start_ > dev->range_end_)
 						break;
 
@@ -205,7 +208,15 @@ void TransactionThread::run() {
 		}
 		
 		// retrieve data
-		DevDb::walk(TransactionThread::checkDevice, this);
+		int cntnew = DevDb::walk(TransactionThread::checkDevice, this);
+		if (cntnew > cnt) {
+			cnt = cntnew;
+			if (dbg)
+				printf("Maximum %d IP address checks active\n", cnt);
+		}
+		
+if ((timecnt % 10) == 0)
+printf("%d IP address checks active\n", cnt);
 		
 		// test exit flag	
 		if (ending_)

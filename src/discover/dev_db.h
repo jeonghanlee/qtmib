@@ -33,7 +33,7 @@ public:
 	static DevStorage *find(QString ip);
 	static DevStorage *find(uint32_t ip);
 	static void remove(QString ip);
-	static void walk(void (*f)(DevStorage *dev, TransactionThread *th), TransactionThread *th);
+	static int walk(void (*f)(DevStorage *dev, TransactionThread *th), TransactionThread *th);
 	static void print();
 
 private:
