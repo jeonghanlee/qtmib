@@ -28,7 +28,7 @@ char *Report::snmpwalk(QString oid) {
 	QString cmd = QString("snmpwalk") + " -m \"\" ";
 	cmd += "-" + version_ + " ";
 	cmd += "-c " + community_ + " ";
-	cmd += "-t 1 -r 1 ";
+	cmd += "-t " + timeout_ + " -r " + retries_ + " ";
 	cmd += ip_ + ":" + port_ + " ";
 	cmd += oid + " 2>&1";
 	if (dbg)

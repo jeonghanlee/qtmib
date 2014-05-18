@@ -26,8 +26,8 @@
 class Report {
 
 public:
-	Report(QString version, QString community, QString port, QString ip):
-		version_(version), community_(community), port_(port), ip_(ip) {}
+	Report(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		version_(version), community_(community), port_(port), ip_(ip), timeout_(timeout), retries_(retries) {}
 	virtual QString get() = 0;
 		
 protected:
@@ -45,75 +45,77 @@ protected:
 	QString community_;
 	QString port_;
 	QString ip_;
+	QString timeout_;
+	QString retries_;
 };
 
 class SystemReport: public Report {
 public:
-	SystemReport(QString version, QString community, QString port, QString ip):
-		Report(version, community, port, ip) {}
+	SystemReport(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Report(version, community, port, ip, timeout, retries) {}
 	QString get();
 };
 
 class HrDeviceReport: public Report {
 public:
-	HrDeviceReport(QString version, QString community, QString port, QString ip):
-		Report(version, community, port, ip) {}
+	HrDeviceReport(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Report(version, community, port, ip, timeout, retries) {}
 	QString get();
 };
 
 class HrStorageReport: public Report {
 public:
-	HrStorageReport(QString version, QString community, QString port, QString ip):
-		Report(version, community, port, ip) {}
+	HrStorageReport(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Report(version, community, port, ip, timeout, retries) {}
 	QString get();
 };
 
 class HrSoftwareReport: public Report {
 public:
-	HrSoftwareReport(QString version, QString community, QString port, QString ip):
-		Report(version, community, port, ip) {}
+	HrSoftwareReport(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Report(version, community, port, ip, timeout, retries) {}
 	QString get();
 };
 
 class HrProcessReport: public Report {
 public:
-	HrProcessReport(QString version, QString community, QString port, QString ip):
-		Report(version, community, port, ip) {}
+	HrProcessReport(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Report(version, community, port, ip, timeout, retries) {}
 	QString get();
 };
 
 class InterfaceReport: public Report {
 public:
-	InterfaceReport(QString version, QString community, QString port, QString ip):
-		Report(version, community, port, ip) {}
+	InterfaceReport(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Report(version, community, port, ip, timeout, retries) {}
 	QString get();
 };
 
 class IfipReport: public Report {
 public:
-	IfipReport(QString version, QString community, QString port, QString ip):
-		Report(version, community, port, ip) {}
+	IfipReport(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Report(version, community, port, ip, timeout, retries) {}
 	QString get();
 };
 
 class RouteReport: public Report {
 public:
-	RouteReport(QString version, QString community, QString port, QString ip):
-		Report(version, community, port, ip) {}
+	RouteReport(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Report(version, community, port, ip, timeout, retries) {}
 	QString get();
 };
 
 class UdpConnectionReport: public Report {
 public:
-	UdpConnectionReport(QString version, QString community, QString port, QString ip):
-		Report(version, community, port, ip) {}
+	UdpConnectionReport(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Report(version, community, port, ip, timeout, retries) {}
 	QString get();
 };
 
 class TcpConnectionReport: public Report {
 public:
-	TcpConnectionReport(QString version, QString community, QString port, QString ip):
-		Report(version, community, port, ip) {}
+	TcpConnectionReport(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Report(version, community, port, ip, timeout, retries) {}
 	QString get();
 };
 

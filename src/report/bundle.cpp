@@ -28,9 +28,9 @@ void Bundle::build(QTextEdit *view) {
 }
 
 QString SystemBundle::run() {
-	SystemReport sysrep(version_, community_, port_, ip_);
-	HrDeviceReport hrdevrep(version_, community_, port_, ip_);
-	HrStorageReport hrstoragerep(version_, community_, port_, ip_);
+	SystemReport sysrep(version_, community_, port_, ip_, timeout_, retries_);
+	HrDeviceReport hrdevrep(version_, community_, port_, ip_, timeout_, retries_);
+	HrStorageReport hrstoragerep(version_, community_, port_, ip_, timeout_, retries_);
 
 	QString rv = "<br/><center><h1>System Report</h1></center><br/><br/>\n";
 	
@@ -46,8 +46,8 @@ QString SystemBundle::run() {
 }
 
 QString SoftwareBundle::run() {
-	SystemReport sysrep(version_, community_, port_, ip_);
-	HrSoftwareReport hrsoftrep(version_, community_, port_, ip_);
+	SystemReport sysrep(version_, community_, port_, ip_, timeout_, retries_);
+	HrSoftwareReport hrsoftrep(version_, community_, port_, ip_, timeout_, retries_);
 
 	QString rv = "<br/><center><h1>Software Report</h1></center><br/><br/>\n";
 	
@@ -62,8 +62,8 @@ QString SoftwareBundle::run() {
 }
 
 QString ProcessBundle::run() {
-	SystemReport sysrep(version_, community_, port_, ip_);
-	HrProcessReport hrprocrep(version_, community_, port_, ip_);
+	SystemReport sysrep(version_, community_, port_, ip_, timeout_, retries_);
+	HrProcessReport hrprocrep(version_, community_, port_, ip_, timeout_, retries_);
 
 	QString rv = "<br/><center><h1>Process Report</h1></center><br/><br/>\n";
 	
@@ -78,9 +78,9 @@ QString ProcessBundle::run() {
 }
 
 QString InterfaceBundle::run() {
-	SystemReport sysrep(version_, community_, port_, ip_);
-	InterfaceReport ifrep(version_, community_, port_, ip_);
-	IfipReport ifip(version_, community_, port_, ip_);
+	SystemReport sysrep(version_, community_, port_, ip_, timeout_, retries_);
+	InterfaceReport ifrep(version_, community_, port_, ip_, timeout_, retries_);
+	IfipReport ifip(version_, community_, port_, ip_, timeout_, retries_);
 
 	QString rv = "<br/><center><h1>Interface Report</h1></center><br/><br/>\n";
 	
@@ -100,8 +100,8 @@ QString InterfaceBundle::run() {
 }
 
 QString RouteBundle::run() {
-	SystemReport sysrep(version_, community_, port_, ip_);
-	RouteReport routerep(version_, community_, port_, ip_);
+	SystemReport sysrep(version_, community_, port_, ip_, timeout_, retries_);
+	RouteReport routerep(version_, community_, port_, ip_, timeout_, retries_);
 
 	QString rv = "<br/><center><h1>Route Report</h1></center><br/><br/>\n";
 	
@@ -120,9 +120,9 @@ QString RouteBundle::run() {
 }
 
 QString ConnectionBundle::run() {
-	SystemReport sysrep(version_, community_, port_, ip_);
-	TcpConnectionReport tcprep(version_, community_, port_, ip_);
-	UdpConnectionReport udprep(version_, community_, port_, ip_);
+	SystemReport sysrep(version_, community_, port_, ip_, timeout_, retries_);
+	TcpConnectionReport tcprep(version_, community_, port_, ip_, timeout_, retries_);
+	UdpConnectionReport udprep(version_, community_, port_, ip_, timeout_, retries_);
 
 	QString rv = "<br/><center><h1>Connection Report</h1></center><br/><br/>\n";
 	

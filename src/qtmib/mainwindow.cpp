@@ -367,6 +367,8 @@ QString MainWindow::getHost() {
 	if (pref_) {
 		host = "--community " + pref_->getCommunity() + " ";
 		host += "--port " + pref_->getPort() + " ";
+		host += "--timeout " + pref_->getTimeout() + " ";
+		host += "--retries " + pref_->getRetries() + " ";
 	}
 	host += "--ip " + actionIp_->text();
 	return host;

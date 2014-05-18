@@ -27,15 +27,17 @@ class QTextEdit;
 // report bundles
 class Bundle {
 public:
-	Bundle(QString version, QString community, QString port, QString ip):
-		version_(version), community_(community), port_(port), ip_(ip) {}
+	Bundle(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		version_(version), community_(community), port_(port), ip_(ip), timeout_(timeout), retries_(retries) {}
 	virtual ~Bundle() {}
 	
-	void setHost(QString version, QString community, QString port, QString ip) {
+	void setHost(QString version, QString community, QString port, QString ip, QString timeout, QString retries) {
 		version_ = version;
 		community_ = community;
 		port_ = port;
 		ip_ = ip;
+		timeout_ = timeout;
+		retries_ = retries;
 	}
 	QString getVersion() {
 		return version_;
@@ -43,11 +45,32 @@ public:
 	QString getCommunity() {
 		return community_;
 	}
+	void setCommunity(QString community) {
+		community_ = community;
+	}
 	QString getPort() {
 		return port_;
 	}
+	void setPort(QString port) {
+		port_ = port;
+	}
 	QString getIp() {
 		return ip_;
+	}
+	void setIp(QString ip) {
+		ip_ = ip;
+	}
+	QString getTimeout() {
+		return timeout_;
+	}
+	void setTimeout(QString timeout) {
+		timeout_ = timeout;
+	}
+	QString getRetries() {
+		return retries_;
+	}
+	void setRetries(QString retries) {
+		retries_ = retries;
 	}
 	
 	// template pattern
@@ -61,12 +84,14 @@ protected:
 	QString community_;
 	QString port_;
 	QString ip_;
+	QString timeout_;
+	QString retries_;
 };
 
 class SystemBundle: public Bundle {
 public:
-	SystemBundle(QString version, QString community, QString port, QString ip):
-		Bundle(version, community, port, ip) {}
+	SystemBundle(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Bundle(version, community, port, ip, timeout, retries) {}
 	~SystemBundle() {}
 private:
 	QString run();
@@ -74,8 +99,8 @@ private:
 
 class SoftwareBundle: public Bundle {
 public:
-	SoftwareBundle(QString version, QString community, QString port, QString ip):
-		Bundle(version, community, port, ip) {}
+	SoftwareBundle(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Bundle(version, community, port, ip, timeout, retries) {}
 	~SoftwareBundle() {}
 private:
 	QString run();
@@ -83,8 +108,8 @@ private:
 
 class ProcessBundle: public Bundle {
 public:
-	ProcessBundle(QString version, QString community, QString port, QString ip):
-		Bundle(version, community, port, ip) {}
+	ProcessBundle(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Bundle(version, community, port, ip, timeout, retries) {}
 	~ProcessBundle() {}
 private:
 	QString run();
@@ -92,16 +117,16 @@ private:
 
 class InterfaceBundle: public Bundle {
 public:
-	InterfaceBundle(QString version, QString community, QString port, QString ip):
-		Bundle(version, community, port, ip) {}
+	InterfaceBundle(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Bundle(version, community, port, ip, timeout, retries) {}
 	~InterfaceBundle() {}
 	QString run();
 };
 
 class RouteBundle: public Bundle {
 public:
-	RouteBundle(QString version, QString community, QString port, QString ip):
-		Bundle(version, community, port, ip) {}
+	RouteBundle(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Bundle(version, community, port, ip, timeout, retries) {}
 	~RouteBundle() {}
 private:
 	QString run();
@@ -109,8 +134,8 @@ private:
 
 class ConnectionBundle: public Bundle {
 public:
-	ConnectionBundle(QString version, QString community, QString port, QString ip):
-		Bundle(version, community, port, ip) {}
+	ConnectionBundle(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
+		Bundle(version, community, port, ip, timeout, retries) {}
 	~ConnectionBundle() {}
 private:
 	QString run();

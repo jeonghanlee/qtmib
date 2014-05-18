@@ -45,9 +45,11 @@ static void help() {
 	printf("\t--ip address: host ip address (default 127.0.0.1)\n");
 	printf("\t--port port: host port number (default 161)\n");
 	printf("\t--process: list all running processes\n");
+	printf("\t--retries retries: SNMP request retries\n");
 	printf("\t--route: print routing table\n");
 	printf("\t--software: list all installed software packages\n");
 	printf("\t--system: generate a system report (default)\n");
+	printf("\t--timeout: SNMP request timeout\n");
 	printf("\t-v, --version: version information\n");
 	printf("\n");
 }
@@ -57,6 +59,8 @@ int main(int argc, char *argv[]) {
 	const char *ip = "127.0.0.1";
 	const char *port = "161";
 	const char *community = "public";
+	const char *timeout = "1";
+	const char *retries = "5";
 	
 	// parse arguments
 	int i;
@@ -73,22 +77,22 @@ int main(int argc, char *argv[]) {
 			dbg = true;
 		}
 		else if (strcmp(argv[i], "--system") == 0) {
-			bundle = new SystemBundle("v2c", "public", "161", "127.0.0.1");
+			bundle = new SystemBundle("v2c", "public", "161", "127.0.0.1", "1", "5");
 		}
 		else if (strcmp(argv[i], "--connection") == 0) {
-			bundle = new ConnectionBundle("v2c", "public", "161", "127.0.0.1");
+			bundle = new ConnectionBundle("v2c", "public", "161", "127.0.0.1", "1", "5");
 		}
 		else if (strcmp(argv[i], "--interface") == 0) {
-			bundle = new InterfaceBundle("v2c", "public", "161", "127.0.0.1");
+			bundle = new InterfaceBundle("v2c", "public", "161", "127.0.0.1", "1", "5");
 		}
 		else if (strcmp(argv[i], "--process") == 0) {
-			bundle = new ProcessBundle("v2c", "public", "161", "127.0.0.1");
+			bundle = new ProcessBundle("v2c", "public", "161", "127.0.0.1", "1", "5");
 		}
 		else if (strcmp(argv[i], "--software") == 0) {
-			bundle = new SoftwareBundle("v2c", "public", "161", "127.0.0.1");
+			bundle = new SoftwareBundle("v2c", "public", "161", "127.0.0.1", "1", "5");
 		}
 		else if (strcmp(argv[i], "--route") == 0) {
-			bundle = new RouteBundle("v2c", "public", "161", "127.0.0.1");
+			bundle = new RouteBundle("v2c", "public", "161", "127.0.0.1", "1", "5");
 		}
 		else if (strcmp(argv[i], "--ip") == 0) {
 			i++;
@@ -131,6 +135,24 @@ int main(int argc, char *argv[]) {
 			}
 			community = argv[i];
 		}
+		else if (strcmp(argv[i], "--timeout") == 0) {
+			i++;
+			if (argc <= i) {
+				fprintf(stderr, "Error: Timeout not specified\n\n");
+				help();
+				return 1;
+			}
+			timeout = argv[i];
+		}
+		else if (strcmp(argv[i], "--retries") == 0) {
+			i++;
+			if (argc <= i) {
+				fprintf(stderr, "Error: Retries not specified\n\n");
+				help();
+				return 1;
+			}
+			retries = argv[i];
+		}
 		else {
 			fprintf(stderr, "Error: unknown program argument\n\n");
 			help();
@@ -139,12 +161,12 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (!bundle)
-		bundle = new SystemBundle("v2c", "public", "161", "127.0.0.1");
-	bundle->setHost("v2c", community, port, ip);
+		bundle = new SystemBundle("v2c", "public", "161", "127.0.0.1", "1", "5");
+	bundle->setHost("v2c", community, port, ip, timeout, retries);
 	
 	QApplication app(argc, argv);
 	MainWindow mainWin(bundle);
-	mainWin.setWindowTitle(QString(ip));
+	mainWin.setWindowTitle(QString("qtmib-report"));
 	mainWin.resize(600, 400);
 	mainWin.show();
 	return app.exec();

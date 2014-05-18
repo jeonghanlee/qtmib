@@ -1,9 +1,12 @@
 
 added MIBS: lancope, netapp, avaya, fortinet, gsmpMIB, picaPrivateMIB
 fixed MIB tree scrolling when searching
-fixed oid order in translation tool
-fixed unnamed mib entries handling in translation tool
-fixed translation-tool crash if directories present under ~/.config/qtmib/mibs
+fixed oid order in qtmib-translation tool
+fixed unnamed mib entries handling in qtmib-translation tool
+fixed qtmib-translation tool crash if directories present under ~/.config/qtmib/mibs
+added Preferences dialog box and IP address field to qtmib-report
+added support for timeout and retries in qtmib-report tool
+make Preferences persistent in qtmib
 
 qtmib (1.0) baseline; urgency=low
 

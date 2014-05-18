@@ -17,54 +17,48 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
 
-#include <QMainWindow>
-class Bundle;
-class QAction;
+#ifndef PREF_DIALOG_H
+#define PREF_DIALOG_H
+
+#include <QWidget>
+#include <QDialog>
+#include <QComboBox>
+
+class QCheckBox;
 class QLabel;
-class QMenu;
-class QTableWidget;
-class QLineEdit;
-class QComboBox;
-class QTextEdit;
-class PrefDialog;
+class QErrorMessage;
 
-class MainWindow : public QMainWindow
-{
+class PrefDialog: public QDialog {
 Q_OBJECT
 
-	public:
-	MainWindow(Bundle *bundle);
+public:
+	PrefDialog(QString community, QString port, QString timeout, QString retries);
+	QString getVersion();
+	QString getCommunity();
+	QString getPort();
+	QString getTimeout();
+	QString getRetries();
 
-protected:
-	void closeEvent(QCloseEvent *event);
-
-private slots:
-	void about();
-	void preferences();
-	void runReport();
-	void sysr();
-	void procr();
-	void softr();
-	void intfr();
-	void router();
-	void connection();
-	void handleAction();
+public slots:
+	void accept();
+	int exec();
 
 private:
-	void createMenus();
+	void store_combo_text(QComboBox *box);	
 	
-	QMenu *fileMenu;
-	QAction *prefAction;
-	QAction *exitAction;
-	QAction *aboutAction;
-	QComboBox *report_;
-	QLineEdit *actionIp_;
-	
-	QTextEdit *resultView_;
-	Bundle *bundle_;
-	PrefDialog *pref_;
+private:
+	QComboBox *pBox_;	// protocol version
+	QComboBox *cBox_;	// community
+	QComboBox *portBox_;	// port number
+	QComboBox *timeoutBox_;	// timeout
+	QComboBox *retriesBox_;	// retries
+
+	QString protocol_;
+	QString community_;
+	QString port_;
+	QString timeout_;
+	QString retries_;
 };
+
 #endif

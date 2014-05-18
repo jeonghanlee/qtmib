@@ -28,8 +28,9 @@
 #include "qtmib_report.h"
 #include "exec_prog.h"
 #include "bundle.h"
+#include "pref_dialog.h"
 
-MainWindow::MainWindow(Bundle *bundle): bundle_(bundle) {
+MainWindow::MainWindow(Bundle *bundle): resultView_(0), bundle_(bundle), pref_(0) {
 	createMenus();
 
 	// result view
@@ -37,6 +38,11 @@ MainWindow::MainWindow(Bundle *bundle): bundle_(bundle) {
 	resultView_->setReadOnly(true);
 
 	// querry
+	QLabel *actionIpLabel = new QLabel;
+	actionIpLabel->setText(tr("IP Address"));
+	actionIp_ = new QLineEdit;
+	actionIp_->setText(bundle_->getIp());
+	
 	QLabel *reportLabel = new QLabel;
 	reportLabel->setText(tr("Report"));
 	report_ = new QComboBox;
@@ -53,11 +59,15 @@ MainWindow::MainWindow(Bundle *bundle): bundle_(bundle) {
 
 	QGroupBox *group1Box = new QGroupBox(tr("Query"));
 	QGridLayout *group1BoxLayout = new QGridLayout;
-	group1BoxLayout->addWidget(reportLabel, 0, 0);
-	group1BoxLayout->addWidget(report_, 0, 2);
-	group1BoxLayout->addWidget(actionButton, 0, 4);
+	group1BoxLayout->addWidget(actionIpLabel, 0, 0);
+	group1BoxLayout->addWidget(actionIp_, 0, 2);
+	group1BoxLayout->addWidget(reportLabel, 0, 4);
+	group1BoxLayout->addWidget(report_, 0, 6);
+	group1BoxLayout->addWidget(actionButton, 0, 8);
 	group1BoxLayout->setColumnMinimumWidth(1, 10);
 	group1BoxLayout->setColumnMinimumWidth(3, 10);
+	group1BoxLayout->setColumnMinimumWidth(5, 10);
+	group1BoxLayout->setColumnMinimumWidth(7, 10);
 	group1BoxLayout->setColumnStretch(2, 2);
 	group1Box->setLayout(group1BoxLayout);
 
@@ -80,6 +90,20 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 	event->accept();
 }
 
+void MainWindow::preferences() {
+	if (!pref_)
+		pref_ = new PrefDialog(bundle_->getCommunity(), bundle_->getPort(),
+				bundle_->getTimeout(), bundle_->getRetries());
+		
+	if (QDialog::Accepted == pref_->exec()) {
+		bundle_->setCommunity(pref_->getCommunity());
+		bundle_->setPort(pref_->getPort());
+		bundle_->setTimeout(pref_->getTimeout());
+		bundle_->setRetries(pref_->getRetries());
+//printf("%s\n", pref_->getCommunity().toStdString().c_str());
+//printf("%s\n", pref_->getPort().toStdString().c_str());
+	}
+}
 
 void MainWindow::about() {
 	QString msg = "<table cellpadding=\"10\"><tr><td><img src=\":/resources/qtmib-128.png\"></td>";
@@ -119,6 +143,11 @@ void MainWindow::createMenus() {
 
 
 	// File menu
+	prefAction = new QAction(tr("&Preferences"), this);
+	prefAction->setStatusTip(tr("SNMP protocol preferences"));
+	connect(prefAction, SIGNAL(triggered()), this, SLOT(preferences()));
+
+
 	aboutAction = new QAction(tr("&About"), this);
 	aboutAction->setStatusTip(tr("Show the application's About box"));
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
@@ -136,12 +165,17 @@ void MainWindow::createMenus() {
 	reportMenu->addAction(connectionAction);
 	reportMenu->addAction(procrAction);
 	reportMenu->addAction(softrAction);
+	fileMenu->addAction(prefAction);
 	fileMenu->addAction(aboutAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(exitAction);
 }
 
 void MainWindow::handleAction() {
+	// save IP address
+	bundle_->setIp(actionIp_->text());
+
+	// build report class
 	QString report = report_->currentText();
 //printf("%s\n", report.toStdString().c_str());
 	if (report == "System")
@@ -163,7 +197,9 @@ void MainWindow::sysr() {
 					bundle_->getVersion(),
 					bundle_->getCommunity(),
 					bundle_->getPort(),
-					bundle_->getIp());
+					bundle_->getIp(),
+					bundle_->getTimeout(),
+					bundle_->getRetries());
 		
 	delete bundle_;
 	bundle_ = bundle;
@@ -175,7 +211,9 @@ void MainWindow::procr() {
 					bundle_->getVersion(),
 					bundle_->getCommunity(),
 					bundle_->getPort(),
-					bundle_->getIp());
+					bundle_->getIp(),
+					bundle_->getTimeout(),
+					bundle_->getRetries());
 		
 	delete bundle_;
 	bundle_ = bundle;
@@ -187,7 +225,9 @@ void MainWindow::softr() {
 					bundle_->getVersion(),
 					bundle_->getCommunity(),
 					bundle_->getPort(),
-					bundle_->getIp());
+					bundle_->getIp(),
+					bundle_->getTimeout(),
+					bundle_->getRetries());
 		
 	delete bundle_;
 	bundle_ = bundle;
@@ -199,7 +239,9 @@ void MainWindow::intfr() {
 					bundle_->getVersion(),
 					bundle_->getCommunity(),
 					bundle_->getPort(),
-					bundle_->getIp());
+					bundle_->getIp(),
+					bundle_->getTimeout(),
+					bundle_->getRetries());
 		
 	delete bundle_;
 	bundle_ = bundle;
@@ -211,7 +253,9 @@ void MainWindow::router() {
 					bundle_->getVersion(),
 					bundle_->getCommunity(),
 					bundle_->getPort(),
-					bundle_->getIp());
+					bundle_->getIp(),
+					bundle_->getTimeout(),
+					bundle_->getRetries());
 		
 	delete bundle_;
 	bundle_ = bundle;
@@ -223,7 +267,9 @@ void MainWindow::connection() {
 					bundle_->getVersion(),
 					bundle_->getCommunity(),
 					bundle_->getPort(),
-					bundle_->getIp());
+					bundle_->getIp(),
+					bundle_->getTimeout(),
+					bundle_->getRetries());
 		
 	delete bundle_;
 	bundle_ = bundle;

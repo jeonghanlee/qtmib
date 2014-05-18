@@ -22,43 +22,45 @@
 #include <QButtonGroup>
 #include "pref_dialog.h"
 
-PrefDialog::PrefDialog(): QDialog(), protocol_("v2c"), community_("public"),
-	port_("161"), timeout_("1"), retries_("5") {
+PrefDialog::PrefDialog(QString community, QString port, QString timeout, QString retries):
+	QDialog(), protocol_("v2c"), community_(community),
+	port_(port), timeout_(timeout), retries_(retries) {
+	
 	// protocol version
 	QLabel *pLabel = new QLabel;
 	pLabel->setText(tr("Protocol Version"));
 	pBox_ = new QComboBox;
-	pBox_->addItem("v1");
+//	pBox_->addItem("v1");
 	pBox_->addItem("v2c");
-	pBox_->setCurrentIndex(1);
+	pBox_->setCurrentIndex(0);
 	pBox_->setEditable(false);
 
 	// community
 	QLabel *cLabel = new QLabel;
 	cLabel->setText(tr("Read Community"));
 	cBox_ = new QComboBox;
-	cBox_->addItem("public");
+	cBox_->addItem(community_);
 	cBox_->setEditable(true);
 	
 	// port number
 	QLabel *portLabel = new QLabel;
 	portLabel->setText(tr("UDP Port Number"));
 	portBox_ = new QComboBox;
-	portBox_->addItem("161");
+	portBox_->addItem(port_);
 	portBox_->setEditable(true);
 
 	// timeout
 	QLabel *timeoutLabel = new QLabel;
 	timeoutLabel->setText(tr("Timeout (seconds)"));
 	timeoutBox_ = new QComboBox;
-	timeoutBox_->addItem("1");
+	timeoutBox_->addItem(timeout_);
 	timeoutBox_->setEditable(true);
 
 	// retries
 	QLabel *retriesLabel = new QLabel;
 	retriesLabel->setText(tr("Retries"));
 	retriesBox_ = new QComboBox;
-	retriesBox_->addItem("5");
+	retriesBox_->addItem(retries_);
 	retriesBox_->setEditable(true);
 
 	// OK
