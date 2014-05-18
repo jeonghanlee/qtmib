@@ -6,7 +6,8 @@ fixed unnamed mib entries handling in qtmib-translation tool
 fixed qtmib-translation tool crash if directories present under ~/.config/qtmib/mibs
 added Preferences dialog box and IP address field to qtmib-report
 added support for timeout and retries in qtmib-report tool
-make Preferences persistent in qtmib
+make preferences persistent in qtmib
+implemented error recovery in qtmib-discover in case the network socket cannot be opened
 
 qtmib (1.0) baseline; urgency=low
 

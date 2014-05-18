@@ -60,6 +60,8 @@ static QString extract_string(QString line) {
 }
 
 void TransactionThread::checkDevice(DevStorage *dev, TransactionThread *th) {
+	time_t t = time(NULL);
+	
 	// test exit flag	
 	if (th->ending_)
 		return;
@@ -70,6 +72,8 @@ void TransactionThread::checkDevice(DevStorage *dev, TransactionThread *th) {
 		if (dev->version_ == "v1")
 			type = 0;
 			
+		if (dbg)		
+			printf("%u: send request to %s\n", (unsigned) t, dev->ip_.toStdString().c_str());
 		tx_packet(th->sock_, dev->range_start_,
 			port, type, dev->community_.toStdString().c_str());
 	}
@@ -89,7 +93,7 @@ void TransactionThread::checkDevice(DevStorage *dev, TransactionThread *th) {
 			cmd += ".1.3.6.1.2.1.1 2>&1";
 	
 		if (dbg)
-			printf("\n%s\n", cmd.toStdString().c_str());
+			printf("%u: %s\n", (unsigned) t, cmd.toStdString().c_str());
 			
 		// execute command
 		char *rv = exec_prog(cmd.toStdString().c_str());
@@ -125,18 +129,25 @@ void TransactionThread::checkDevice(DevStorage *dev, TransactionThread *th) {
 
 //	if (dbg)		
 //		printf("%s %d\n", dev->ip_.toStdString().c_str(), dev->timeout_);
-	if (dev->timeout_ == 40)
+	if (dev->timeout_ == 40) {
+		if (dbg)
+			printf("%u: removing %s\n", (unsigned) t, dev->ip_.toStdString().c_str());
 		dev->remove_ = 1;
+	}
 	dev->timeout_++;
 }
 
 
 
 
-
+#include <QMessageBox>
 void TransactionThread::run() {
 	sock_ = rx_open(29456);
-
+	if (sock_ == 0) // couldn't open port, try anotyher one
+		sock_ = rx_open(10007);
+	if (sock_ == 0)
+		return;
+		
 	forever {
 		msleep(200);
 

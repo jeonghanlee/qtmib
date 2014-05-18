@@ -245,7 +245,11 @@ void MainWindow::handleButton() {
 	dev->version_ = pBox_->currentText();
 	dev->community_ = cBox_->text();
 	dev->port_ = portBox_->text();
-	thread.addTransaction(dev);
+	
+	if (!thread.isRunning())	
+		QMessageBox::warning(this, tr("Network Discovery"), QString("Cannot open network socket<br/><br/>\n"));
+	else
+		thread.addTransaction(dev);
 }
 
 
