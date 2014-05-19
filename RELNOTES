@@ -21,7 +21,7 @@ make preferences persistent in qtmib
 fixed unnamed mib entries handling in qtmib-translation tool
 speed-up network scaning in qtmib-discover tool
 added uptime in qtmib-discover table
-added clear table in qtmib-discover
+added clear and update table in qtmib-discover
 added Preference dialog box in qtmib-discover
 
 Fixes:
@@ -31,6 +31,7 @@ fixed qtmib-translation tool crash if directories present under ~/.config/qtmib/
 implemented error recovery in qtmib-discover in case the network socket cannot be opened
 implemented error recovery in qtmib-discover when UDP transmit fails
 use random port in qtmib-discover, in case multiple discover programs are run in parallel
+fixed lost malloc memory in qtmib-discover
 
 
 qtmib (1.0) baseline; urgency=low
