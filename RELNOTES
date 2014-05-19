@@ -21,6 +21,8 @@ make preferences persistent in qtmib
 fixed unnamed mib entries handling in qtmib-translation tool
 speed-up network scaning in qtmib-discover tool
 added uptime in qtmib-discover table
+added clear table in qtmib-discover
+added Preference dialog box in qtmib-discover
 
 Fixes:
 fixed MIB tree scrolling when searching

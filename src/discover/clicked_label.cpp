@@ -17,53 +17,20 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
 
-#include <QMainWindow>
+#include "clicked_label.h"
 
-#include "transactionthread.h"
+ClickedLabel::ClickedLabel( const QString & text, QWidget * parent )
+:QLabel(parent) {
+	(void) text;
+}
 
-class QAction;
-class QLabel;
-class QMenu;
-class QTableWidget;
-class QLineEdit;
-class QComboBox;
-class PrefDialog;
 
-class MainWindow : public QMainWindow
-{
-Q_OBJECT
+void ClickedLabel::slotClicked() {
+}
 
-	public:
-	MainWindow();
 
-protected:
-	void closeEvent(QCloseEvent *event);
-
-private slots:
-	void about();
-	void preferences();
-	void transactionDone(const QString &message);
-	void displayResult(const QString &message);
-	void handleButton();
-	void handleClear();
-
-private:
-	void createMenus();
-	void addTransaction(QString type);
-	void addInterfaces(QComboBox *net);
-
-	TransactionThread thread;
-
-	QMenu *fileMenu;
-	QTableWidget *result_;
-	QComboBox *network_;
-	PrefDialog *pref_;
-
-	QAction *prefAction;
-	QAction *exitAction;
-	QAction *aboutAction;
-};
-#endif
+void ClickedLabel::mousePressEvent ( QMouseEvent * event ) {
+	(void) event;
+	emit clicked();
+}

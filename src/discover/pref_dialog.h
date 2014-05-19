@@ -17,53 +17,48 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
 
-#include <QMainWindow>
+#ifndef PREF_DIALOG_H
+#define PREF_DIALOG_H
 
-#include "transactionthread.h"
+#include <QWidget>
+#include <QDialog>
+#include <QComboBox>
 
-class QAction;
+class QCheckBox;
 class QLabel;
-class QMenu;
-class QTableWidget;
-class QLineEdit;
-class QComboBox;
-class PrefDialog;
+class QErrorMessage;
 
-class MainWindow : public QMainWindow
-{
+class PrefDialog: public QDialog {
 Q_OBJECT
 
-	public:
-	MainWindow();
+public:
+	PrefDialog(QString community, QString port, QString timeout, QString retries);
+	QString getVersion();
+	QString getCommunity();
+	QString getPort();
+	QString getTimeout();
+	QString getRetries();
 
-protected:
-	void closeEvent(QCloseEvent *event);
-
-private slots:
-	void about();
-	void preferences();
-	void transactionDone(const QString &message);
-	void displayResult(const QString &message);
-	void handleButton();
-	void handleClear();
+public slots:
+	void accept();
+	int exec();
 
 private:
-	void createMenus();
-	void addTransaction(QString type);
-	void addInterfaces(QComboBox *net);
+	void store_combo_text(QComboBox *box);	
+	
+private:
+	QComboBox *pBox_;	// protocol version
+	QComboBox *cBox_;	// community
+	QComboBox *portBox_;	// port number
+	QComboBox *timeoutBox_;	// timeout
+	QComboBox *retriesBox_;	// retries
 
-	TransactionThread thread;
-
-	QMenu *fileMenu;
-	QTableWidget *result_;
-	QComboBox *network_;
-	PrefDialog *pref_;
-
-	QAction *prefAction;
-	QAction *exitAction;
-	QAction *aboutAction;
+	QString protocol_;
+	QString community_;
+	QString port_;
+	QString timeout_;
+	QString retries_;
 };
+
 #endif

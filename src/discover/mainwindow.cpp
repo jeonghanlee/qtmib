@@ -28,8 +28,10 @@
 #include "dev_storage.h"
 #include "../../qtmib_config.h"
 #include "qtmib_discover.h"
+#include "pref_dialog.h"
+#include "clicked_label.h"
 
-MainWindow::MainWindow() {
+MainWindow::MainWindow(): pref_(0) {
 	createMenus();
 
 	//*************************************************
@@ -42,27 +44,6 @@ MainWindow::MainWindow() {
 	addInterfaces(network_);
 	network_->setEditable(true);
 
-	// protocol version
-	QLabel *pLabel = new QLabel;
-	pLabel->setText(tr("Protocol"));
-	pBox_ = new QComboBox;
-	pBox_->addItem("v1");
-	pBox_->addItem("v2c");
-	pBox_->setCurrentIndex(1);
-	pBox_->setEditable(false);
-
-	// community
-	QLabel *cLabel = new QLabel;
-	cLabel->setText(tr("Community"));
-	cBox_ = new QLineEdit;
-	cBox_->setText("public");
-	
-	// port number
-	QLabel *portLabel = new QLabel;
-	portLabel->setText(tr("Port Number"));
-	portBox_ = new QLineEdit;
-	portBox_->setText("161");
-
 	QPushButton *okButton = new QPushButton("Go");
 	connect(okButton, SIGNAL(released()),this, SLOT(handleButton()));
 
@@ -70,19 +51,16 @@ MainWindow::MainWindow() {
 	QGridLayout *group1BoxLayout = new QGridLayout;
 	group1BoxLayout->addWidget(networkLabel, 0, 0);
 	group1BoxLayout->addWidget(network_, 0, 2);
-	group1BoxLayout->addWidget(pLabel, 1, 0);
-	group1BoxLayout->addWidget(pBox_, 1, 2);
-	group1BoxLayout->addWidget(cLabel, 2, 0);
-	group1BoxLayout->addWidget(cBox_, 2, 2);
-	group1BoxLayout->addWidget(portLabel, 3, 0);
-	group1BoxLayout->addWidget(portBox_, 3, 2);
 	group1BoxLayout->addWidget(okButton, 0, 4);
+	QWidget *w = new QWidget(this);
+	group1BoxLayout->addWidget(w, 0, 6);
 	group1BoxLayout->setColumnMinimumWidth(1, 10);
 	group1BoxLayout->setColumnMinimumWidth(3, 10);
+	group1BoxLayout->setColumnMinimumWidth(5, 10);
+	group1BoxLayout->setColumnMinimumWidth(6, 1);
+	group1BoxLayout->setColumnStretch(5, 2);
+	group1BoxLayout->setColumnStretch(6, 10);
 	group1Box->setLayout(group1BoxLayout);
-
-//	QGridLayout *layout = new QGridLayout;
-//	layout->addWidget(group1Box, 0, 0);
 
 	//*************************************************
 	// result
@@ -99,10 +77,27 @@ MainWindow::MainWindow() {
 //	result_->setReadOnly(true);
 
 	//*************************************************
+	// result actions
+	//*************************************************
+	ClickedLabel *clearButton = new ClickedLabel("<font color=\"blue\">Clear</font>", this);
+	clearButton->setText("<font color=\"blue\">Clear</font>");
+	connect(clearButton, SIGNAL(clicked()), this, SLOT(handleClear()));
+	QGridLayout *labelActionLayout = new QGridLayout;
+	labelActionLayout->addWidget(clearButton, 0, 1);
+	QWidget *w2 = new QWidget(this);
+	labelActionLayout->addWidget(w2, 0, 2);
+	group1BoxLayout->setColumnMinimumWidth(2, 20);
+	labelActionLayout->setColumnStretch(0, 20);
+//	labelActionLayout->setColumnStretch(1, 2);
+
+
+
+	//*************************************************
 	// main layout
 	//*************************************************
 	QVBoxLayout *mLayout = new QVBoxLayout;
 	mLayout->addWidget(group1Box);
+	mLayout->addLayout(labelActionLayout);
 	mLayout->addWidget(result_);
 	QWidget *mWidget = new QWidget;
 	mWidget->setLayout(mLayout);
@@ -115,8 +110,29 @@ MainWindow::MainWindow() {
 	connect(&thread, SIGNAL(displayResult(const QString &)),
 		this, SLOT(displayResult(const QString &)));
 
+	pref_ = new PrefDialog("public", "161", "1", "5");
 }
 
+void MainWindow::preferences() {
+	if (QDialog::Accepted == pref_->exec()) {
+	}
+}
+
+void MainWindow::handleClear() {
+	int rows = result_->rowCount();
+	if (rows == 0)
+		return;
+	
+	 for (int i = rows - 1; i >= 0; i--) {
+		for (int j = 0; j < 5; j++) {
+			QTableWidgetItem *item = result_->item(i, j);
+			result_->removeCellWidget(i, j);
+			delete item;
+		}
+		// delete row
+		result_->removeRow(i);
+	 }
+}
 
 void MainWindow::addInterfaces(QComboBox *net) {
 	bool added = false;
@@ -186,12 +202,17 @@ void MainWindow::createMenus() {
 	aboutAction->setStatusTip(tr("Show the application's About box"));
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
+	prefAction = new QAction(tr("&Preferences"), this);
+	prefAction->setStatusTip(tr("SNMP protocol preferences"));
+	connect(prefAction, SIGNAL(triggered()), this, SLOT(preferences()));
+
 	exitAction = new QAction(tr("E&xit"), this);
 	exitAction->setShortcut(tr("Ctrl+Q"));
 	exitAction->setStatusTip(tr("Exit the application"));
 	connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
 
 	fileMenu = menuBar()->addMenu(tr("&File"));
+	fileMenu->addAction(prefAction);
 	fileMenu->addAction(aboutAction);
 	fileMenu->addSeparator();
 	fileMenu->addAction(exitAction);
@@ -220,14 +241,9 @@ void MainWindow::handleButton() {
 	}
 
 	// check port number
-	int port = atoi(portBox_->text().toStdString().c_str());
+	int port = atoi(pref_->getPort().toStdString().c_str());
 	qs = "A port number between 1 and 65535 is expected.<br/><br/>";
 	if (port <= 0 || port > 65535) {
-		QMessageBox::warning(this, tr("Port Number"), qs);
-		return;
-	}
-	sprintf(cidr, "%d", port);
-	if (portBox_->text().toStdString().c_str() != QString(cidr)) {
 		QMessageBox::warning(this, tr("Port Number"), qs);
 		return;
 	}
@@ -243,9 +259,9 @@ void MainWindow::handleButton() {
 		dev->range_end_ = (ip | ~mask) - 1;
 	}
 
-	dev->version_ = pBox_->currentText();
-	dev->community_ = cBox_->text();
-	dev->port_ = portBox_->text();
+	dev->version_ = pref_->getVersion(); 
+	dev->community_ = pref_->getCommunity();
+	dev->port_ = pref_->getPort();
 	
 	if (!thread.isRunning())	
 		QMessageBox::warning(this, tr("Network Discovery"), QString("Cannot open network socket<br/><br/>\n"));
@@ -313,7 +329,7 @@ void MainWindow::displayResult(const QString &msg) {
 	if (op == "add") {
 		if (found != -1) {
 			// delete existing item
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < 5; i++) {
 				QTableWidgetItem *item = result_->item(found, i);
 				result_->removeCellWidget(found, i);
 				delete item;
