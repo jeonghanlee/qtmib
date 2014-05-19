@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 RCP100 Team (rcpteam@yahoo.com)
+ * Copyright (C) 2013-2014 RCP100 Team (rcpteam@yahoo.com)
  *
  * This file is part of qtmib project
  *
@@ -113,7 +113,7 @@ void MainWindow::about() {
 		"a front-end for net-snmp tools, and it allows the user to query any SNMP-enabled "
 		"device. It supports SNMPv1 and SNMPv2c. qtmib is released "
 		"under GPL v2 license.<br/><br/>");
-	msg += "Copyright (C) 2013 RCP100 Team (rcpteam@yahoo.com)<br/><br/>";
+	msg += "Copyright (C) 2013-2014 RCP100 Team (rcpteam@yahoo.com)<br/><br/>";
 	msg += QString(PACKAGE_URL) + "</td></tr></table><br/><br/>";
 
 	QMessageBox::about(this, tr("About"), msg);

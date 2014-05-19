@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 RCP100 Team (rcpteam@yahoo.com)
+ * Copyright (C) 2013-2014 RCP100 Team (rcpteam@yahoo.com)
  *
  * This file is part of qtmib project
  *
