@@ -40,7 +40,9 @@ TransactionThread::~TransactionThread() {
 
 void TransactionThread::addTransaction(DevStorage *dev) {
 	QMutexLocker locker(&mutex);
-	queue_add_.append(dev);
+	// allocate a new storage to be used in the new thread 
+	DevStorage *newdev = new DevStorage(dev);
+	queue_add_.append(newdev);
 	if (dbg)
 		printf("transaction started\n");
 }
@@ -193,6 +195,7 @@ void TransactionThread::run() {
 					break;
 
 				DevStorage *newdev = new DevStorage(dev);
+				newdev->range_end_ = newdev->range_start_;
 				// add dev to device database
 				DevDb::add(newdev);
 				dev->range_start_++;
@@ -206,6 +209,7 @@ void TransactionThread::run() {
 				sprintf(msg, "Finishing...");
 				if (dbg)
 					printf("range removed\n");
+				delete dev;
 			}
 			
 			else 

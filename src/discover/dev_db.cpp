@@ -21,6 +21,7 @@
 #include "dev_db.h"
 #include "dev_storage.h"
 
+int DevStorage::instances_ = 0;
 DevDb::DevDb() {}
 
 DevDb &DevDb::get() {

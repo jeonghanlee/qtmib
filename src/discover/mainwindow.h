@@ -49,6 +49,7 @@ private slots:
 	void displayResult(const QString &message);
 	void handleButton();
 	void handleClear();
+	void handleUpdate();
 
 private:
 	void createMenus();

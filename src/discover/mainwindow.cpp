@@ -79,14 +79,21 @@ MainWindow::MainWindow(): pref_(0) {
 	//*************************************************
 	// result actions
 	//*************************************************
+	ClickedLabel *updateButton = new ClickedLabel("<font color=\"blue\">Update</font>", this);
+	updateButton->setText("<font color=\"blue\">Update |</font>");
+	connect(updateButton, SIGNAL(clicked()), this, SLOT(handleUpdate()));
+	
 	ClickedLabel *clearButton = new ClickedLabel("<font color=\"blue\">Clear</font>", this);
 	clearButton->setText("<font color=\"blue\">Clear</font>");
 	connect(clearButton, SIGNAL(clicked()), this, SLOT(handleClear()));
+	
+	
 	QGridLayout *labelActionLayout = new QGridLayout;
-	labelActionLayout->addWidget(clearButton, 0, 1);
+	labelActionLayout->addWidget(updateButton, 0, 1);
+	labelActionLayout->addWidget(clearButton, 0, 2);
 	QWidget *w2 = new QWidget(this);
-	labelActionLayout->addWidget(w2, 0, 2);
-	group1BoxLayout->setColumnMinimumWidth(2, 20);
+	labelActionLayout->addWidget(w2, 0, 3);
+	group1BoxLayout->setColumnMinimumWidth(3, 20);
 	labelActionLayout->setColumnStretch(0, 20);
 //	labelActionLayout->setColumnStretch(1, 2);
 
@@ -115,6 +122,32 @@ MainWindow::MainWindow(): pref_(0) {
 
 void MainWindow::preferences() {
 	if (QDialog::Accepted == pref_->exec()) {
+	}
+}
+
+void MainWindow::handleUpdate() {
+	int rows = result_->rowCount();
+	for (int i = 0; i < rows; i++) {
+		QTableWidgetItem *item = result_->item(i, 0);
+		uint32_t  ip;
+		if (atoip(item->text().toStdString().c_str(), &ip)) {
+			QMessageBox::warning(this, tr("IP address"), "Invalid IP address");
+			return;
+		}
+		
+		DevStorage *dev = new DevStorage();
+		dev->range_start_ = ip;
+		dev->range_end_ = ip;
+		dev->version_ = pref_->getVersion(); 
+		dev->community_ = pref_->getCommunity();
+		dev->port_ = pref_->getPort();
+
+		if (!thread.isRunning())	
+			QMessageBox::warning(this, tr("Network Discovery"), QString("Cannot open network socket<br/><br/>\n"));
+		else
+			thread.addTransaction(dev);
+		
+		delete dev;
 	}
 }
 
@@ -267,6 +300,7 @@ void MainWindow::handleButton() {
 		QMessageBox::warning(this, tr("Network Discovery"), QString("Cannot open network socket<br/><br/>\n"));
 	else
 		thread.addTransaction(dev);
+	delete dev;
 }
 
 
