@@ -139,19 +139,22 @@ void TransactionThread::checkDevice(DevStorage *dev, TransactionThread *th) {
 
 
 
-
 #include <QMessageBox>
 void TransactionThread::run() {
-	int cnt = 0; 
-	sock_ = rx_open(29456);
-	if (sock_ == 0) // couldn't open port, try anotyher one
-		sock_ = rx_open(10007);
+	int probes = 0;
+	
+	// pick up a random port above 1024
+	srand(time(NULL));
+	uint16_t port = (rand() % 30000) + 10000;  // between 10,000 and 40,000
+	sock_ = rx_open(port);
+	if (sock_ == 0) { // couldn't open port, try anotyher one
+		port = (rand() % 30000) + 10000;  // between 10,000 and 40,000
+		sock_ = rx_open(port);
+	}
 	if (sock_ == 0)
 		return;
 
-int timecnt = 0;		
 	forever {
-timecnt++;
 		msleep(200);
 
 		// test exit flag	
@@ -163,38 +166,35 @@ timecnt++;
 		if (addcnt == 0)
 ;//			printf("sleep\n");
 		else {
-			for (int i = 0; i < 1 /*addcnt */; i++) {
-				DevStorage *dev = queue_add_.at(0);
-//				printf("sleep; add ip %s\n", dev->ip_.toStdString().c_str());
-				
-				uint32_t range_start = dev->range_start_;
-				uint32_t range_end = dev->range_start_;
-				for (int j = 0; j < 10; j++) {
-					if (dev->range_start_ > dev->range_end_)
-						break;
+			DevStorage *dev = queue_add_.at(0);
+			
+			uint32_t range_start = dev->range_start_;
+			uint32_t range_end = dev->range_start_;
+			for (int j = 0; j < 10; j++) {
+				if (dev->range_start_ > dev->range_end_)
+					break;
 
-					DevStorage *newdev = new DevStorage(dev);
-					// add dev to device database
-					DevDb::add(newdev);
-					dev->range_start_++;
-					range_end++;
-				}
-				
-				char msg[100];
-				if (dev->range_start_ > dev->range_end_) {
-					// remove dev from input queue
-					queue_add_.removeFirst();
-					sprintf(msg, "Finishing...");
-					if (dbg)
-						printf("range removed\n");
-				}
-				
-				else 
-					sprintf(msg, "Checking range %d.%d.%d.%d to %d.%d.%d.%d",
-						RCP_PRINT_IP(range_start), RCP_PRINT_IP(range_end));
-
-				emit transactionDone(QString(msg));
+				DevStorage *newdev = new DevStorage(dev);
+				// add dev to device database
+				DevDb::add(newdev);
+				dev->range_start_++;
+				range_end++;
 			}
+			
+			char msg[100];
+			if (dev->range_start_ > dev->range_end_) {
+				// remove dev from input queue
+				queue_add_.removeFirst();
+				sprintf(msg, "Finishing...");
+				if (dbg)
+					printf("range removed\n");
+			}
+			
+			else 
+				sprintf(msg, "Checking range %d.%d.%d.%d to %d.%d.%d.%d",
+					RCP_PRINT_IP(range_start), RCP_PRINT_IP(range_end));
+
+			emit transactionDone(QString(msg));
 		}
 		mutex.unlock();
 		
@@ -208,15 +208,12 @@ timecnt++;
 		}
 		
 		// retrieve data
-		int cntnew = DevDb::walk(TransactionThread::checkDevice, this);
-		if (cntnew > cnt) {
-			cnt = cntnew;
+		int current_probes = DevDb::walk(TransactionThread::checkDevice, this);
+		if (current_probes > probes) {
+			probes = current_probes;
 			if (dbg)
-				printf("Maximum %d IP address checks active\n", cnt);
+				printf("Maximum %d IP probes active\n", probes);
 		}
-		
-if ((timecnt % 10) == 0)
-printf("%d IP address checks active\n", cnt);
 		
 		// test exit flag	
 		if (ending_)

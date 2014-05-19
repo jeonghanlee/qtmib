@@ -25,6 +25,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
+#include <errno.h>
 
 int rx_open(uint16_t port) {
 	int sock;
@@ -57,6 +58,18 @@ int rx_open(uint16_t port) {
 		return 0;
 	}
 
+#if 0 // we need to be root to run this!
+	// increase rx and tx buffer sizes to 1MB
+	int sock_buf_size = 1024 * 1024;
+	if (setsockopt(sock, SOL_SOCKET, SO_RCVBUFFORCE, (char *)&sock_buf_size, sizeof(sock_buf_size))) {
+	        close(sock);
+	        return 0;
+	}
+	if (setsockopt(sock, SOL_SOCKET, SO_SNDBUFFORCE, (char *)&sock_buf_size, sizeof(sock_buf_size))) {
+	        close(sock);
+	        return 0;
+	}
+#endif
 	return sock;
 }		
 
@@ -111,7 +124,13 @@ void tx_packet(int sock, uint32_t ip, int port, int type, const char *community)
 	int txlen = sendto(sock, pkt, len, 0,
 		(struct sockaddr *)&addr, sizeof(struct sockaddr_in));
 	if (txlen == -1) {
-		perror("socket tx error\n");
+		perror("socket tx error");
+		printf("errno %d\n", errno);
+		if (errno == EAGAIN || errno == EWOULDBLOCK) {
+			sleep(1); // slowing down
+			sendto(sock, pkt, len, 0,
+				(struct sockaddr *)&addr, sizeof(struct sockaddr_in));
+		}
 		return;
 	}
 }
