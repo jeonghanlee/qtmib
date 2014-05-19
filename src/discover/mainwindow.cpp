@@ -87,9 +87,10 @@ MainWindow::MainWindow() {
 	//*************************************************
 	// result
 	//*************************************************
-	result_ = new QTableWidget(0, 4);
+	result_ = new QTableWidget(0, 5);
 	QStringList header;
 	header.append("IP Address");
+	header.append("sysUpTime");
 	header.append("sysContact");
 	header.append("sysName");
 	header.append("sysLocation");
@@ -267,6 +268,7 @@ void MainWindow::displayResult(const QString &msg) {
 	QString sysContact;
 	QString sysName;
 	QString sysLocation;
+	QString sysUpTime;
 	int cnt = 0;
 	foreach (QString word, lst) {
 		switch (cnt) {
@@ -281,12 +283,15 @@ void MainWindow::displayResult(const QString &msg) {
 				ip = word;
 				break;
 			case 2:
-				sysContact = word;
+				sysUpTime = word;
 				break;
 			case 3:
-				sysName = word;
+				sysContact = word;
 				break;
 			case 4:
+				sysName = word;
+				break;
+			case 5:
 				sysLocation = word;
 				break;
 		}
@@ -323,16 +328,17 @@ void MainWindow::displayResult(const QString &msg) {
 		}
 	
 		result_->setItem(found, 0, new QTableWidgetItem(ip));		
-		result_->setItem(found, 1, new QTableWidgetItem(sysContact));		
-		result_->setItem(found, 2, new QTableWidgetItem(sysName));		
-		result_->setItem(found, 3, new QTableWidgetItem(sysLocation));		
+		result_->setItem(found, 1, new QTableWidgetItem(sysUpTime));		
+		result_->setItem(found, 2, new QTableWidgetItem(sysContact));		
+		result_->setItem(found, 3, new QTableWidgetItem(sysName));		
+		result_->setItem(found, 4, new QTableWidgetItem(sysLocation));		
 	}
 	else if (op == "del") {
 		if (found == -1)
 			return;
 		
 		// delete existing items
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 5; i++) {
 			QTableWidgetItem *item = result_->item(found, i);
 			result_->removeCellWidget(found, i);
 			delete item;

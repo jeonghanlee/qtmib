@@ -9,7 +9,6 @@ http://www.dvbmon.com/Products/AdministratorHandbook_LPV7/LoriotProDoc_EN/H8-Mai
 > agentx             705/tcp     # AgentX
 > snmp-tcp-port     1993/tcp     # cisco SNMP TCP port
 > snmp-tcp-port     1993/udp     # cisco SNMP TCP port
-add uptime in qtmib-discover  - format: 56 days, 00:36:28.00
 http://packetstormsecurity.com/files/download/31079/snmpenum.zip
 
 
@@ -21,6 +20,7 @@ added support for timeout and retries in qtmib-report tool
 make preferences persistent in qtmib
 fixed unnamed mib entries handling in qtmib-translation tool
 speed-up network scaning in qtmib-discover tool
+added uptime in qtmib-discover table
 
 Fixes:
 fixed MIB tree scrolling when searching
@@ -28,7 +28,7 @@ fixed oid order in qtmib-translation tool
 fixed qtmib-translation tool crash if directories present under ~/.config/qtmib/mibs
 implemented error recovery in qtmib-discover in case the network socket cannot be opened
 implemented error recovery in qtmib-discover when UDP transmit fails
-random port in qtmib-discover, in case multiple discover programs are run in parallel
+use random port in qtmib-discover, in case multiple discover programs are run in parallel
 
 
 qtmib (1.0) baseline; urgency=low

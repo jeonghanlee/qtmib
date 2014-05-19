@@ -49,11 +49,25 @@ static QString extract_string(QString line) {
 	int index = line.indexOf(" = STRING: \"");
 	if (index != -1) {
 		index += 12;
-		QString left = line.mid(index);
-		index = left.indexOf("\"");
+		QString right = line.mid(index);
+		index = right.indexOf("\"");
 		if (index != -1)
-			left.truncate(index); 
-		return left;
+			right.truncate(index); 
+		return right;
+	}
+	
+	return QString(" ");
+}
+
+static QString extract_timeticks(QString line) {
+	int index = line.indexOf(" = Timeticks: ");
+	if (index != -1) {
+		index += 14;
+		QString right = line.mid(index);
+		index = right.indexOf(")");
+		if (index != -1)
+			right = right.mid(index + 2); 
+		return right;
 	}
 	
 	return QString(" ");
@@ -115,6 +129,10 @@ void TransactionThread::checkDevice(DevStorage *dev, TransactionThread *th) {
 				}
 				else if (line.startsWith("iso.3.6.1.2.1.1.6.0")) {
 					out += extract_string(line) + "\t";
+					found = true;
+				}
+				else if (line.startsWith("iso.3.6.1.2.1.1.3.0")) {
+					out += extract_timeticks(line) + "\t";
 					found = true;
 				}
 					
