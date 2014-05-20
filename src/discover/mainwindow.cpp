@@ -30,6 +30,7 @@
 #include "qtmib_discover.h"
 #include "pref_dialog.h"
 #include "clicked_label.h"
+#define MAX_COLUMNS 6
 
 MainWindow::MainWindow(): pref_(0) {
 	createMenus();
@@ -65,13 +66,14 @@ MainWindow::MainWindow(): pref_(0) {
 	//*************************************************
 	// result
 	//*************************************************
-	result_ = new QTableWidget(0, 5);
+	result_ = new QTableWidget(0, MAX_COLUMNS);
 	QStringList header;
 	header.append("IP Address");
 	header.append("sysUpTime");
 	header.append("sysContact");
 	header.append("sysName");
 	header.append("sysLocation");
+	header.append("Response\nTime");
 	result_->setHorizontalHeaderLabels(header);
 	result_->verticalHeader()->setVisible(true);
 //	result_->setReadOnly(true);
@@ -118,6 +120,39 @@ MainWindow::MainWindow(): pref_(0) {
 		this, SLOT(displayResult(const QString &)));
 
 	pref_ = new PrefDialog("public", "161", "1", "5");
+	QTimer::singleShot(60000, this, SLOT(responseTime()));
+
+}
+
+void MainWindow::sendResponseTimeRequest(uint32_t ip) {
+	DevStorage *dev = new DevStorage();
+	dev->range_start_ = ip;
+	dev->range_end_ = ip;
+	dev->version_ = pref_->getVersion(); 
+	dev->community_ = pref_->getCommunity();
+	dev->port_ = pref_->getPort();
+	thread.addTransactionResponse(dev);
+	delete dev;
+}
+
+void MainWindow::triggerResponseTime() {
+	int rows = result_->rowCount();
+	for (int i = 0; i < rows; i++) {
+		QTableWidgetItem *item = result_->item(i, 0);
+		uint32_t  ip;
+		if (atoip(item->text().toStdString().c_str(), &ip)) {
+			QMessageBox::warning(this, tr("IP address"), "Invalid IP address");
+			return;
+		}
+		result_->setItem(i, 5, new QTableWidgetItem(""));
+		result_->removeCellWidget(i, 5);
+		sendResponseTimeRequest(ip);
+	}
+}
+
+void MainWindow::responseTime() {
+	triggerResponseTime();
+	QTimer::singleShot(60000, this, SLOT(responseTime()));
 }
 
 void MainWindow::preferences() {
@@ -149,6 +184,7 @@ void MainWindow::handleUpdate() {
 		
 		delete dev;
 	}
+	triggerResponseTime();
 }
 
 void MainWindow::handleClear() {
@@ -157,7 +193,7 @@ void MainWindow::handleClear() {
 		return;
 	
 	 for (int i = rows - 1; i >= 0; i--) {
-		for (int j = 0; j < 5; j++) {
+		for (int j = 0; j < MAX_COLUMNS; j++) {
 			QTableWidgetItem *item = result_->item(i, j);
 			result_->removeCellWidget(i, j);
 			delete item;
@@ -196,7 +232,7 @@ void MainWindow::addInterfaces(QComboBox *net) {
 			struct sockaddr_in *si = (struct sockaddr_in *) ifa->ifa_netmask;
 			uint32_t mask = ntohl(si->sin_addr.s_addr);
 			si = (struct sockaddr_in *) ifa->ifa_addr;
-			uint32_t ip = ntohl(si->sin_addr.s_addr);
+			uint32_t ip = ntohl(si->sin_addr.s_addr) & mask;
 			char cidr[30];
 			sprintf(cidr, "%d.%d.%d.%d/%d", RCP_PRINT_IP(ip), mask2bits(mask));
 			net->addItem(QString(cidr));
@@ -322,7 +358,7 @@ void MainWindow::displayResult(const QString &msg) {
 	int cnt = 0;
 	foreach (QString word, lst) {
 		switch (cnt) {
-			case 0:
+			case 0: // add, del, response
 				op = word;
 				ip = "";
 				sysName = "";
@@ -332,7 +368,7 @@ void MainWindow::displayResult(const QString &msg) {
 			case 1:
 				ip = word;
 				break;
-			case 2:
+			case 2: // sysUpTime or respTime
 				sysUpTime = word;
 				break;
 			case 3:
@@ -363,7 +399,7 @@ void MainWindow::displayResult(const QString &msg) {
 	if (op == "add") {
 		if (found != -1) {
 			// delete existing item
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < MAX_COLUMNS; i++) {
 				QTableWidgetItem *item = result_->item(found, i);
 				result_->removeCellWidget(found, i);
 				delete item;
@@ -381,14 +417,24 @@ void MainWindow::displayResult(const QString &msg) {
 		result_->setItem(found, 1, new QTableWidgetItem(sysUpTime));		
 		result_->setItem(found, 2, new QTableWidgetItem(sysContact));		
 		result_->setItem(found, 3, new QTableWidgetItem(sysName));		
-		result_->setItem(found, 4, new QTableWidgetItem(sysLocation));		
+		result_->setItem(found, 4, new QTableWidgetItem(sysLocation));
+		uint32_t myip;
+		if (atoip(ip.toStdString().c_str(), &myip) == 0)
+			sendResponseTimeRequest(myip);
+	}
+	if (op == "response") {
+		if (found == -1)
+			return;
+		result_->setItem(found, 5, new QTableWidgetItem(sysUpTime));		
+		if (sysUpTime == " timeout ")
+			result_->item(found, 5)->setBackgroundColor(QColor(Qt::red));
 	}
 	else if (op == "del") {
 		if (found == -1)
 			return;
 		
 		// delete existing items
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < MAX_COLUMNS; i++) {
 			QTableWidgetItem *item = result_->item(found, i);
 			result_->removeCellWidget(found, i);
 			delete item;

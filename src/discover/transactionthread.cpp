@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 RCP100 Team (rcpteam@yahoo.com)
+ * Copyright (C) 2013-2014 RCP100 Team (rcpteam@yahoo.com)
  *
  * This file is part of qtmib project
  *
@@ -18,7 +18,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 #include <QtGui>
+#include <QElapsedTimer>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <sys/types.h>
 #include <unistd.h>
+
 #include "transactionthread.h"
 #include "dev_storage.h"
 #include "dev_db.h"
@@ -42,9 +48,18 @@ void TransactionThread::addTransaction(DevStorage *dev) {
 	QMutexLocker locker(&mutex);
 	// allocate a new storage to be used in the new thread 
 	DevStorage *newdev = new DevStorage(dev);
-	queue_add_.append(newdev);
+	queue_range_.append(newdev);
 	if (dbg)
 		printf("transaction started\n");
+}
+
+void TransactionThread::addTransactionResponse(DevStorage *dev) {
+	QMutexLocker locker(&mutex);
+	// allocate a new storage to be used in the new thread 
+	DevStorage *newdev = new DevStorage(dev);
+	queue_response_.append(newdev);
+	if (dbg)
+		printf("response transaction started\n");
 }
 
 static QString extract_string(QString line) {
@@ -73,6 +88,64 @@ static QString extract_timeticks(QString line) {
 	}
 	
 	return QString(" ");
+}
+
+void TransactionThread::checkDeviceResponse(DevStorage *dev, TransactionThread *th) {
+	time_t t = time(NULL);
+	if (dbg)		
+		printf("%u: send request to %s\n", (unsigned) t, dev->ip_.toStdString().c_str());
+
+	int port = atoi(dev->port_.toStdString().c_str());
+	int type = 1;
+	if (dev->version_ == "v1")
+		type = 0;
+	
+	// start timer and send reques
+	QElapsedTimer timer;
+	timer.start();
+    	tx_packet(th->sock_, dev->range_start_,
+		port, type, dev->community_.toStdString().c_str());
+	
+	// wait for the response	
+	fd_set rfds;
+	struct timeval tv;
+	int retval;
+	FD_ZERO(&rfds);
+	FD_SET(th->sock_, &rfds);
+	tv.tv_sec = 2; // maximum 2 seconds wait
+	tv.tv_usec = 0;
+	retval = select(th->sock_ + 1, &rfds, NULL, NULL, &tv);
+	if (retval == -1) {
+		perror("select");
+		return;
+	}
+	
+	bool sent = false;
+	if (retval == 0) {
+		if (dbg)
+			printf("timeout\n");
+	}
+	else {
+		// print response time
+		uint32_t ip = rx_packet(th->sock_);
+		if (ip == dev->range_start_) {
+			int long long elapsed = timer.elapsed();
+			if (dbg)
+				printf("elapsed time %lld ms\n", elapsed);
+			QString out = "response\t" + dev->ip_ + "\t ";
+			if (elapsed == 0)
+				out += " < 1 ms";
+			else
+				out += QString::number(elapsed) + " ms";
+			emit th->displayResult(out);
+			sent = true;
+		}
+	}
+	
+	if (!sent) {
+		QString out = "response\t" + dev->ip_ + "\t timeout ";
+		emit th->displayResult(out);
+	}
 }
 
 void TransactionThread::checkDevice(DevStorage *dev, TransactionThread *th) {
@@ -182,11 +255,20 @@ void TransactionThread::run() {
 			break;
 
 		mutex.lock();
-		int addcnt = queue_add_.count();
-		if (addcnt == 0)
-;//			printf("sleep\n");
+		int addcnt = queue_range_.count();
+		if (addcnt == 0) {
+			int respcnt = queue_response_.count();
+			if (respcnt && DevDb::isEmpty()) {
+				DevStorage *dev = queue_response_.at(0);
+				checkDeviceResponse(dev, this);
+				if (dbg)
+					printf("delete reponse transaction\n");
+				queue_response_.removeFirst();
+				delete dev;
+			}
+		}
 		else {
-			DevStorage *dev = queue_add_.at(0);
+			DevStorage *dev = queue_range_.at(0);
 			
 			uint32_t range_start = dev->range_start_;
 			uint32_t range_end = dev->range_start_;
@@ -205,7 +287,7 @@ void TransactionThread::run() {
 			char msg[100];
 			if (dev->range_start_ > dev->range_end_) {
 				// remove dev from input queue
-				queue_add_.removeFirst();
+				queue_range_.removeFirst();
 				sprintf(msg, "Finishing...");
 				if (dbg)
 					printf("range removed\n");

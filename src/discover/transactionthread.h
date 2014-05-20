@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 RCP100 Team (rcpteam@yahoo.com)
+ * Copyright (C) 2013-2014 RCP100 Team (rcpteam@yahoo.com)
  *
  * This file is part of qtmib project
  *
@@ -39,7 +39,9 @@ public:
 	~TransactionThread();
 
 	void addTransaction(DevStorage *dev);
+	void addTransactionResponse(DevStorage *dev);
 	static void checkDevice(DevStorage *dev, TransactionThread *th);
+	static void checkDeviceResponse(DevStorage *dev, TransactionThread *th);
 signals:
 	void transactionDone(const QString &message);
 	void displayResult(const QString &message);
@@ -54,6 +56,7 @@ private:
 	int sock_;
 
 	// input queues
-	QList<DevStorage *> queue_add_;
+	QList<DevStorage *> queue_range_;
+	QList<DevStorage *> queue_response_;
 };
 #endif

@@ -35,6 +35,7 @@ public:
 	static void remove(QString ip);
 	static int walk(void (*f)(DevStorage *dev, TransactionThread *th), TransactionThread *th);
 	static void print();
+	static int isEmpty();
 
 private:
 	static DevDb &get();

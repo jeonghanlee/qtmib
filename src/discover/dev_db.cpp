@@ -111,3 +111,10 @@ int DevDb::walk(void (*f)(DevStorage *dev, TransactionThread *th), TransactionTh
 	return cnt;
 }
 
+int DevDb::isEmpty() {
+	QList<DevStorage *> &mylist = DevDb::get().list_;
+	int cnt = mylist.count();
+	if (cnt == 0)
+		return 1;
+	return 0;
+}

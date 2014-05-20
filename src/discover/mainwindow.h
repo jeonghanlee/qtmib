@@ -20,6 +20,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <stdint.h>
 #include <QMainWindow>
 
 #include "transactionthread.h"
@@ -50,12 +51,15 @@ private slots:
 	void handleButton();
 	void handleClear();
 	void handleUpdate();
+	void responseTime();
 
 private:
 	void createMenus();
 	void addTransaction(QString type);
 	void addInterfaces(QComboBox *net);
-
+	void triggerResponseTime();
+	void sendResponseTimeRequest(uint32_t ip);
+	
 	TransactionThread thread;
 
 	QMenu *fileMenu;
