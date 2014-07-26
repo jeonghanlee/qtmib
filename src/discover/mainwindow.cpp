@@ -212,7 +212,7 @@ void MainWindow::addInterfaces(QComboBox *net) {
 		return;
 	}
 		
-	struct ifaddrs *ifa = ifaddr;
+	struct ifaddrs *ifa;
 	for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
 		if (ifa->ifa_addr != NULL && ifa->ifa_netmask != NULL && ifa->ifa_name != NULL) {
 			if (strcmp(ifa->ifa_name, "lo") == 0)

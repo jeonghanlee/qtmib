@@ -73,6 +73,7 @@ void process_file(const char *fname) {
 	long len = ftell(fp);
 	if (len < 0) {
 		fprintf(stderr, "Error: the file %s is empty\n", fname);
+		fclose(fp);
 		return;
 	}
 
@@ -84,6 +85,7 @@ void process_file(const char *fname) {
 	
 	if (rv != len) {
 		fprintf(stderr, "Error: cannot read file %s\n", fname);
+		delete [] fcontent;
 		return;
 	}
 	
