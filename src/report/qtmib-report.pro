@@ -8,7 +8,7 @@ HEADERS       = mainwindow.h \
                 report.h \
                 bundle.h \
                 qtmib_ip.h \
-                pref_dialog.h
+                ../common/pref_dialog.h
 SOURCES       = mainwindow.cpp \
                 exec_prog.c \
                 main.cpp \
@@ -21,6 +21,6 @@ SOURCES       = mainwindow.cpp \
                 report_tcpconnection.cpp \
                 report_udpconnection.cpp \
                 bundle.cpp \
-                pref_dialog.cpp
+                ../common/pref_dialog.cpp
 RESOURCES = qtmib-report.qrc
 TARGET=../../build/qtmib-report

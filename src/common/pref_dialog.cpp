@@ -21,10 +21,23 @@
 #include <QtGui>
 #include <QButtonGroup>
 #include "pref_dialog.h"
-#include "qtmib.h"
+extern int dbg;
+
+PrefDialog::PrefDialog(QString community, QString port, QString timeout, QString retries):
+	QDialog(), protocol_("v2c"), community_(community),
+	port_(port), timeout_(timeout), retries_(retries) {
+	
+	write_file_storage();
+	gui();
+}
 
 PrefDialog::PrefDialog(): QDialog(), protocol_("v2c"), community_("public"),
 	port_("161"), timeout_("1"), retries_("5") {
+	gui();
+	
+}
+
+void PrefDialog::gui() {	
 	// protocol version
 	QLabel *pLabel = new QLabel;
 	pLabel->setText(tr("Protocol Version"));
@@ -95,7 +108,7 @@ PrefDialog::PrefDialog(): QDialog(), protocol_("v2c"), community_("public"),
 
 
 int PrefDialog::read_file_storage() {
-	QString conf = QDir::homePath() + "/.config/qtmib/config-qtmib";
+	QString conf = QDir::homePath() + "/.config/qtmib/preferences";
 	const char *fname = conf.toStdString().c_str();
 	if (dbg)
 		printf("opening config file %s\n", conf.toStdString().c_str());
@@ -197,7 +210,7 @@ int PrefDialog::read_file_storage() {
 }
 
 int PrefDialog::write_file_storage() {
-	QString conf = QDir::homePath() + "/.config/qtmib/config-qtmib";
+	QString conf = QDir::homePath() + "/.config/qtmib/preferences";
 	const char *fname = conf.toStdString().c_str();
 	FILE *fp = fopen(fname, "w");
 	

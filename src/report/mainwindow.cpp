@@ -28,7 +28,7 @@
 #include "qtmib_report.h"
 #include "exec_prog.h"
 #include "bundle.h"
-#include "pref_dialog.h"
+#include "../common/pref_dialog.h"
 
 MainWindow::MainWindow(Bundle *bundle): resultView_(0), bundle_(bundle), pref_(0) {
 	createMenus();

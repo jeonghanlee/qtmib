@@ -10,7 +10,7 @@ HEADERS       = mainwindow.h \
                 qtmib_ip.h \
                 qtmib_socket.h \
                 qtmib_discover.h \
-                pref_dialog.h \
+                ../common/pref_dialog.h \
                 clicked_label.h
 SOURCES       = mainwindow.cpp \
                 main.cpp \
@@ -18,7 +18,7 @@ SOURCES       = mainwindow.cpp \
                 dev_db.cpp \
                 exec_prog.c \
                 qtmib_socket.c \
-                pref_dialog.cpp \
+                ../common/pref_dialog.cpp \
                 clicked_label.cpp
 RESOURCES = qtmib-discover.qrc
 TARGET=../../build/qtmib-discover

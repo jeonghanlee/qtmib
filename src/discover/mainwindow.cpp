@@ -28,7 +28,7 @@
 #include "dev_storage.h"
 #include "../../qtmib_config.h"
 #include "qtmib_discover.h"
-#include "pref_dialog.h"
+#include "../common/pref_dialog.h"
 #include "clicked_label.h"
 #define MAX_COLUMNS 6
 
@@ -119,7 +119,7 @@ MainWindow::MainWindow(): pref_(0) {
 	connect(&thread, SIGNAL(displayResult(const QString &)),
 		this, SLOT(displayResult(const QString &)));
 
-	pref_ = new PrefDialog("public", "161", "1", "5");
+	pref_ = new PrefDialog();
 	QTimer::singleShot(60000, this, SLOT(responseTime()));
 
 }
