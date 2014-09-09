@@ -46,6 +46,8 @@ public slots:
 
 private:
 	void store_combo_text(QComboBox *box);	
+	int read_file_storage();
+	int write_file_storage();
 	
 private:
 	QComboBox *pBox_;	// protocol version

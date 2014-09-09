@@ -551,6 +551,17 @@ void MainWindow::handleAction() {
 	else
 		return;
 	
+	
+	// load current preferences
+	if (!pref_) {
+		pref_ = new PrefDialog();
+		QString str = "SNMP version: " + pref_->getVersion() + "\n";
+		if (pref_->getCommunity() == "public")
+			str += "Community: public\n";
+		connectionView_->setPlainText(str);
+	}
+	
+	
 	// version
 	QString version = "v2c";
 	if (pref_)

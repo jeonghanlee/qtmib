@@ -1,0 +1,13 @@
+http://www.wtcs.org/snmp4tpc/getif.htm
+.1.3.6.1.2.1.4.22 - build an arp table report
+http://www.dvbmon.com/Products/AdministratorHandbook_LPV7/LoriotProDoc_EN/H8-Main_Process/H8-B2_Discover_Process_EN.htm
+> smux               199/tcp     # SNMP Unix Multiplexer
+> smux               199/udp     # SNMP Unix Multiplexer
+> synoptics-relay    391/tcp     # SynOptics SNMP Relay Port
+> synoptics-relay    391/udp     # SynOptics SNMP Relay Port
+> agentx             705/tcp     # AgentX
+> snmp-tcp-port     1993/tcp     # cisco SNMP TCP port
+> snmp-tcp-port     1993/udp     # cisco SNMP TCP port
+http://packetstormsecurity.com/files/download/31079/snmpenum.zip
+
+

@@ -21,6 +21,7 @@
 #include <QtGui>
 #include <QButtonGroup>
 #include "pref_dialog.h"
+#include "qtmib.h"
 
 PrefDialog::PrefDialog(): QDialog(), protocol_("v2c"), community_("public"),
 	port_("161"), timeout_("1"), retries_("5") {
@@ -88,7 +89,136 @@ PrefDialog::PrefDialog(): QDialog(), protocol_("v2c"), community_("public"),
 	grid->setColumnMinimumWidth(5, 30);
 	setLayout(grid);
 	setWindowTitle(tr("Preferences"));
+	
+	read_file_storage();
 }
+
+
+int PrefDialog::read_file_storage() {
+	QString conf = QDir::homePath() + "/.config/qtmib/config-qtmib";
+	const char *fname = conf.toStdString().c_str();
+	if (dbg)
+		printf("opening config file %s\n", conf.toStdString().c_str());
+	FILE *fp = fopen(fname, "r");
+	if (!fp)
+		return 0;	// no config file found, leave the defaults in place
+	else {
+		char buf[1024];
+		int line = 0;
+		while (fgets(buf, sizeof(buf), fp)) {
+			line ++;
+			
+			// skeep blanks, empty lines
+			char *ptr = buf;
+			while (*ptr == ' ' || *ptr == '\t')
+				ptr++;
+			if (*ptr == '\n' || *ptr == '\0')
+				continue;
+			
+			// remove \n
+			char *ptr2 = strchr(ptr, '\n');
+			if (ptr2 == NULL) {
+				if (dbg)
+					printf("Error %d: missing \\n on line %d in %s\n", __LINE__, line, fname);
+				continue;
+			}
+			*ptr2 = '\0';
+			
+			// no blanks check
+			int errflag = 0;
+			ptr2 = ptr;
+			while (*ptr2 != '\0') {
+				if (*ptr2 == ' ' || *ptr2 == '\t') {
+					errflag = 1;
+					break;
+				}
+				ptr2++;
+			}
+			if (errflag) {
+				if (dbg)
+					printf("Error %d: invalid line %d in %s\n", __LINE__, line, fname);
+				continue;
+			}
+			
+			// extract the two words
+			ptr2 = ptr;
+			while (*ptr2 != ':')
+				ptr2++;
+			if (*ptr2 != ':') {
+				if (dbg)
+					printf("Error %d: invalid line %d in %s\n", __LINE__, line, fname);
+				continue;
+			}
+			*ptr2 = '\0';
+			ptr2++;
+
+			if (strcmp(ptr, "protocol") == 0) {
+				if (strcmp(ptr2, "v1") == 0) {
+					pBox_->setCurrentIndex(0);
+					protocol_ = "v1";
+				}
+			}
+			else if (strcmp(ptr, "community") == 0) {
+				if (strcmp(ptr2, "public") != 0) {
+					cBox_->addItem(ptr2);
+					cBox_->setCurrentIndex(1);
+					community_ = QString(ptr2);
+				}
+			}
+			else if (strcmp(ptr, "port") == 0) {
+				if (strcmp(ptr2, "161") != 0) {
+					portBox_->addItem(ptr2);
+					portBox_->setCurrentIndex(1);
+					port_ = QString(ptr2);
+				}
+			}
+			else if (strcmp(ptr, "timeout") == 0) {
+				if (strcmp(ptr2, "1") != 0) {
+					timeoutBox_->addItem(ptr2);
+					timeoutBox_->setCurrentIndex(1);
+					timeout_ = QString(ptr2);
+				}
+			}
+			else if (strcmp(ptr, "retries") == 0) {
+				if (strcmp(ptr2, "5") != 0) {
+					retriesBox_->addItem(ptr2);
+					retriesBox_->setCurrentIndex(1);
+					retries_ = QString(ptr2);
+				}
+			}
+			else {
+				if (dbg)
+					printf("Error %d: invalid line %d in %s\n", __LINE__, line, fname);
+			}
+		}		
+		fclose(fp);	
+	}
+	return 0;
+}
+
+int PrefDialog::write_file_storage() {
+	QString conf = QDir::homePath() + "/.config/qtmib/config-qtmib";
+	const char *fname = conf.toStdString().c_str();
+	FILE *fp = fopen(fname, "w");
+	
+	if (dbg)
+		printf("saving config file %s\n", conf.toStdString().c_str());
+	
+	if (!fp) {
+		if (dbg)
+			printf("Error: cannot open config file\n");
+		return 1;
+	}
+	fprintf(fp, "protocol:%s\n", protocol_.toStdString().c_str());
+	fprintf(fp, "community:%s\n", community_.toStdString().c_str());
+	fprintf(fp, "port:%s\n", port_.toStdString().c_str());
+	fprintf(fp, "timeout:%s\n", timeout_.toStdString().c_str());
+	fprintf(fp, "retries:%s\n", retries_.toStdString().c_str());
+	fclose(fp);
+	
+	return 0;
+}
+
 
 int PrefDialog::exec() {
 	// set defaults
@@ -137,6 +267,8 @@ void PrefDialog::accept() {
 	// retries
 	retries_ = retriesBox_->currentText();
 	store_combo_text(retriesBox_);
+	
+	write_file_storage();
 	
 	return QDialog::accept();
 }
