@@ -26,7 +26,7 @@
 #include "mainwindow.h"
 #include "qtmib.h"
 #include "clicked_label.h"
-#include "pref_dialog.h"
+#include "../common/pref_dialog.h"
 #include "search_dialog.h"
 #include "oid_translator.h"
 #include "exec_prog.h"
