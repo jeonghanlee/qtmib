@@ -29,7 +29,7 @@
 #include "../common/pref_dialog.h"
 #include "search_dialog.h"
 #include "oid_translator.h"
-#include "exec_prog.h"
+#include "../common/exec_prog.h"
 #include "../../qtmib_config.h"
 #include "../../qtmib_prefix.h"
 

@@ -28,7 +28,7 @@
 #include "transactionthread.h"
 #include "dev_storage.h"
 #include "dev_db.h"
-#include "exec_prog.h"
+#include "../common/exec_prog.h"
 #include "qtmib_socket.h"
 #include "qtmib_discover.h"
 

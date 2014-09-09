@@ -26,7 +26,7 @@
 #include "mainwindow.h"
 #include "../../qtmib_config.h"
 #include "qtmib_report.h"
-#include "exec_prog.h"
+#include "../common/exec_prog.h"
 #include "bundle.h"
 #include "../common/pref_dialog.h"
 

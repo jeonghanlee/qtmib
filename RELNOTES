@@ -5,6 +5,7 @@ added support for timeout and retries in qtmib-report tool
 make preferences persistent in qtmib
 fixed unnamed mib entries handling in qtmib-translation tool
 speed-up network scaning in qtmib-discover tool
+speed-up large mib walks
 added uptime in qtmib-discover table
 added response time in qtmib-discover table
 added clear and update table in qtmib-discover
@@ -19,6 +20,7 @@ implemented error recovery in qtmib-discover when UDP transmit fails
 use random port in qtmib-discover, in case multiple discover programs are run in parallel
 fixed lost malloc memory in qtmib-discover
 fix interface network address in qtmib-discover dropbox
+pass down --debug option from qtmib to qtmib-report
 
 
 qtmib (1.0) baseline; urgency=low

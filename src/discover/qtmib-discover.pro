@@ -6,7 +6,7 @@ HEADERS       = mainwindow.h \
                 transactionthread.h \
                 dev_storage.h \
                 dev_db.h \
-                exec_prog.h \
+                ../common/exec_prog.h \
                 qtmib_ip.h \
                 qtmib_socket.h \
                 qtmib_discover.h \
@@ -16,7 +16,7 @@ SOURCES       = mainwindow.cpp \
                 main.cpp \
                 transactionthread.cpp \
                 dev_db.cpp \
-                exec_prog.c \
+                ../common/exec_prog.c \
                 qtmib_socket.c \
                 ../common/pref_dialog.cpp \
                 clicked_label.cpp

@@ -21,9 +21,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "exec_prog.h"
+extern int dbg;
 
-#define OUTPUT_CHUNK 4096	// allocate memory in 4k chunks
+
+#define OUTPUT_CHUNK (1024 * 1024)	// allocate memory in chunks
 
 static char *reallocate_chunk(char *mem) {
 	if (mem == NULL) {
@@ -34,6 +37,9 @@ static char *reallocate_chunk(char *mem) {
 		return newmem;
 	}
 
+	if (dbg)
+		printf("allocate memory chunk\n");
+		
 	int newsize = strlen(mem) + OUTPUT_CHUNK + 1;
 	char *newmem = (char *) malloc(newsize);
 	if (newmem == NULL) {
@@ -47,6 +53,8 @@ static char *reallocate_chunk(char *mem) {
 }
 
 char *exec_prog(const char *prog) {
+	time_t start = time(NULL);
+
 	FILE *fp;
 	// open the program trough a pipe
 	fp = popen(prog, "r");
@@ -80,5 +88,10 @@ char *exec_prog(const char *prog) {
 	}
 
 	pclose(fp);
+	
+	time_t end = time(NULL);
+	if (dbg)
+		printf("exec %u seconds\n", (unsigned) (end - start));
+
 	return rv;
 }

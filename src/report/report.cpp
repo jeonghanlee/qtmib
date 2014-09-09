@@ -21,7 +21,7 @@
 #include <QStringList>
 #include <stdio.h>
 #include "report.h"
-#include "exec_prog.h"
+#include "../common/exec_prog.h"
 #include "qtmib_report.h"
 
 char *Report::snmpwalk(QString oid) {
