@@ -26,6 +26,7 @@
 static char *ifmib_storage = 0;
 
 QString RouteReport::get() {
+	message("Loading MIBs ...");
 	char *rv1 = snmpwalk(".1.3.6.1.2.1.2.2");
 	if (!rv1)
 		return "";
@@ -36,6 +37,7 @@ QString RouteReport::get() {
 		return "";
 
 	// kindex and name
+	message("Extracting addresses ...");
 	QString out = "";
 	QStringList kindex;
 	QStringList name;
@@ -84,8 +86,13 @@ QString RouteReport::get() {
 		return "Error: cannot parse .1.3.6.1.2.1.4.21 MIB<br/>\n";
 
 	// extract kindex
+	QString msg = "Extracting kindex ..";
 	QStringList addr_kindex;
 	for (int i = 0; i < addr_cnt; i++) {
+		if ((i % 500) == 0) {
+			msg += ".";
+			message(msg);
+		}
 		QString oid = "iso.3.6.1.2.1.4.21.1.2." + addr_index[i];
 //printf("#%s#\n", oid.toStdString().c_str());
 		char *ptr = strstr(rv2, oid.toStdString().c_str());
@@ -107,10 +114,15 @@ QString RouteReport::get() {
 		return "Error: cannot parse .1.3.6.1.2.1.4.21 MIB<br/>\n";
 
 	// extract mask
+	msg = "Extracting mask ..";
 	QStringList addr_mask;
 	char *rvstart = strstr(rv2, "iso.3.6.1.2.1.4.21.1.11.");
 	if (rvstart) {
 		for (int i = 0; i < addr_cnt; i++) {
+			if ((i % 500) == 0) {
+				msg += ".";
+				message(msg);
+			}
 			QString oid = "iso.3.6.1.2.1.4.21.1.11." + addr_index[i];
 			char *ptr = strstr(rvstart, oid.toStdString().c_str());
 			if (ptr == NULL)
@@ -131,10 +143,15 @@ QString RouteReport::get() {
 		return "Error: cannot parse .1.3.6.1.2.1.4.21 MIB<br/>\n";
 
 	// extract next hop
+	msg = "Extracting next hop ..";
 	QStringList next_hop;
 	rvstart = strstr(rv2, "iso.3.6.1.2.1.4.21.1.7.");
 	if (rvstart) {
 		for (int i = 0; i < addr_cnt; i++) {
+			if ((i % 500) == 0) {
+				msg += ".";
+				message(msg);
+			}
 			QString oid = "iso.3.6.1.2.1.4.21.1.7." + addr_index[i];
 			char *ptr = strstr(rvstart, oid.toStdString().c_str());
 			if (ptr == NULL)
@@ -156,10 +173,15 @@ QString RouteReport::get() {
 
 
 	// extract route type
+	msg = "Extracting route type ..";
 	QStringList addr_type;
 	rvstart = strstr(rv2, "iso.3.6.1.2.1.4.21.1.8.");
 	if (rvstart) {
 		for (int i = 0; i < addr_cnt; i++) {
+			if ((i % 500) == 0) {
+				msg += ".";
+				message(msg);
+			}
 			QString oid = "iso.3.6.1.2.1.4.21.1.8." + addr_index[i];
 			char *ptr = strstr(rvstart, oid.toStdString().c_str());
 			if (ptr == NULL)
@@ -180,10 +202,15 @@ QString RouteReport::get() {
 		return "Error: cannot parse .1.3.6.1.2.1.4.21 MIB<br/>\n";
 
 	// extract metric
+	msg = "Extracting metric ..";
 	QStringList addr_metric;
 	rvstart = strstr(rv2, "iso.3.6.1.2.1.4.21.1.3.");
 	if (rvstart) {
 		for (int i = 0; i < addr_cnt; i++) {
+			if ((i % 500) == 0) {
+				msg += ".";
+				message(msg);
+			}
 			QString oid = "iso.3.6.1.2.1.4.21.1.3." + addr_index[i];
 			char *ptr = strstr(rvstart, oid.toStdString().c_str());
 			if (ptr == NULL)
@@ -204,6 +231,7 @@ QString RouteReport::get() {
 		return "Error: cannot parse .1.3.6.1.2.1.4.21 MIB<br/>\n";
 
 	// print table
+	message("Generating route table ...");
 	out += "<b>Routing Table:</b><br/><br/>";
 	out += "<table border=\"1\" cellpadding=\"10\"><tr><td>Address</td><td>Mask</td><td>Type</td><td>Metric</td><td>Next Hop</td><td>Interface</td></tr>\n";
 	
@@ -247,8 +275,8 @@ QString RouteReport::get() {
 	out += "</table><br/><br/><br/>\n";
 
 
-//	if (dbg)
-//		printf("#%s#\n", out.toStdString().c_str());
+	if (dbg)
+		printf("#%s#\n", out.toStdString().c_str());
 	return out;
 }
 

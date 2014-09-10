@@ -278,7 +278,7 @@ void MainWindow::connection() {
 
 void MainWindow::runReport() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	bundle_->build(resultView_);
+	bundle_->build(resultView_, this);
 	statusBar()->showMessage(tr("Ready"), 5000);
 	QApplication::restoreOverrideCursor();
 }

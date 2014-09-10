@@ -22,13 +22,14 @@
 #define BUNDLE_H
 #include <QString>
 class QTextEdit;
+class MainWindow;
 
 
 // report bundles
 class Bundle {
 public:
 	Bundle(QString version, QString community, QString port, QString ip, QString timeout, QString retries):
-		version_(version), community_(community), port_(port), ip_(ip), timeout_(timeout), retries_(retries) {}
+		version_(version), community_(community), port_(port), ip_(ip), timeout_(timeout), retries_(retries), mw_(0) {}
 	virtual ~Bundle() {}
 	
 	void setHost(QString version, QString community, QString port, QString ip, QString timeout, QString retries) {
@@ -74,7 +75,7 @@ public:
 	}
 	
 	// template pattern
-	void build(QTextEdit *view);
+	void build(QTextEdit *view, MainWindow *mw);
 	
 private:
 	virtual QString run() = 0;
@@ -86,6 +87,7 @@ protected:
 	QString ip_;
 	QString timeout_;
 	QString retries_;
+	MainWindow *mw_;
 };
 
 class SystemBundle: public Bundle {

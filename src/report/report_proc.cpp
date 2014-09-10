@@ -24,6 +24,7 @@
 #include "qtmib_report.h"
 
 QString HrProcessReport::get() {
+	message("Loading MIBs ...");
 	char *rv = snmpwalk(".1.3.6.1.2.1.25.4.2");
 	if (!rv)
 		return "";
@@ -34,6 +35,7 @@ QString HrProcessReport::get() {
 	QString out = "<table border=\"1\" cellpadding=\"10\">\n";
 
 	// pid and name
+	message("Processing data ...");
 	QString input = rv;
 	QStringList lines = input.split( "\n", QString::SkipEmptyParts );
 	int cnt = 0;

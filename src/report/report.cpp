@@ -24,6 +24,18 @@
 #include "../common/exec_prog.h"
 #include "qtmib_report.h"
 
+#include <QCoreApplication>
+#include <QStatusBar>
+#include "mainwindow.h"
+
+void Report::message(QString str) {
+	if (mw_) {
+		mw_->statusBar()->showMessage(str);
+		QCoreApplication::processEvents();
+	}
+}
+	
+	
 char *Report::snmpwalk(QString oid) {
 	QString cmd = QString("snmpwalk") + " -m \"\" ";
 	cmd += "-" + version_ + " ";

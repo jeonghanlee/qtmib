@@ -26,6 +26,7 @@
 static char *ifmib_storage = 0;
 
 QString IfipReport::get() {
+	message("Loading MIBs ...");
 	char *rv1 = snmpwalk(".1.3.6.1.2.1.2.2");
 	if (!rv1)
 		return "";
@@ -36,6 +37,7 @@ QString IfipReport::get() {
 		return "";
 
 	// kindex and name
+	message("Extracting data ...");
 	QString out = "";
 	QStringList kindex;
 	QStringList name;

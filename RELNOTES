@@ -3,13 +3,13 @@ added MIBS: lancope, netapp, avaya, fortinet, gsmpMIB, picaPrivateMIB
 added Preferences dialog box and IP address field to qtmib-report
 added support for timeout and retries in qtmib-report tool
 make preferences persistent in qtmib
-fixed unnamed mib entries handling in qtmib-translation tool
 speed-up network scaning in qtmib-discover tool
 speed-up large mib walks
 added uptime in qtmib-discover table
 added response time in qtmib-discover table
 added clear and update table in qtmib-discover
 added Preference dialog box in qtmib-discover
+added progress indicator for report generation
 
 Fixes:
 fixed MIB tree scrolling while searching
@@ -21,6 +21,7 @@ use random port in qtmib-discover, in case multiple discover programs are run in
 fixed lost malloc memory in qtmib-discover
 fix interface network address in qtmib-discover dropbox
 pass down --debug option from qtmib to qtmib-report
+fixed unnamed mib entries handling in qtmib-translation tool
 
 
 qtmib (1.0) baseline; urgency=low

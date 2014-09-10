@@ -24,11 +24,13 @@
 #include "qtmib_report.h"
 
 QString TcpConnectionReport::get() {
+	message("Loading MIBs ...");
 	char *rv1 = snmpwalk(".1.3.6.1.2.1.6.13");
 	if (!rv1)
 		return "";
 
 	// index and ip
+	message("Extracting data ...");
 	QString out = "";
 	QStringList index;
 	QStringList status;
