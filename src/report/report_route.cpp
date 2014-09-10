@@ -61,7 +61,6 @@ QString RouteReport::get() {
 	if (cnt != kindex.count() || cnt != name.count())
 		return "Error: cannot parse .1.3.6.1.2.1.2.2 MIB<br/>\n";
 
-
 	// addresses
 	int addr_cnt = 0;
 	QStringList addr_index;
@@ -109,87 +108,99 @@ QString RouteReport::get() {
 
 	// extract mask
 	QStringList addr_mask;
-	for (int i = 0; i < addr_cnt; i++) {
-		QString oid = "iso.3.6.1.2.1.4.21.1.11." + addr_index[i];
-		char *ptr = strstr(rv2, oid.toStdString().c_str());
-		if (ptr == NULL)
-			addr_mask += " ";
-		else {
-			QString line = ptr;
-			int index = line.indexOf("\n");
-			if (index != -1) {
-				line.truncate(index);
-				addr_mask += extract_ipaddress(line);
-			}
-			else
+	char *rvstart = strstr(rv2, "iso.3.6.1.2.1.4.21.1.11.");
+	if (rvstart) {
+		for (int i = 0; i < addr_cnt; i++) {
+			QString oid = "iso.3.6.1.2.1.4.21.1.11." + addr_index[i];
+			char *ptr = strstr(rvstart, oid.toStdString().c_str());
+			if (ptr == NULL)
 				addr_mask += " ";
+			else {
+				QString line = ptr;
+				int index = line.indexOf("\n");
+				if (index != -1) {
+					line.truncate(index);
+					addr_mask += extract_ipaddress(line);
+				}
+				else
+					addr_mask += " ";
+			}
 		}
 	}
-	if (addr_cnt != addr_mask.count())
+	else if (rvstart == NULL || addr_cnt != addr_mask.count())
 		return "Error: cannot parse .1.3.6.1.2.1.4.21 MIB<br/>\n";
 
 	// extract next hop
 	QStringList next_hop;
-	for (int i = 0; i < addr_cnt; i++) {
-		QString oid = "iso.3.6.1.2.1.4.21.1.7." + addr_index[i];
-		char *ptr = strstr(rv2, oid.toStdString().c_str());
-		if (ptr == NULL)
-			next_hop += " ";
-		else {
-			QString line = ptr;
-			int index = line.indexOf("\n");
-			if (index != -1) {
-				line.truncate(index);
-				next_hop += extract_ipaddress(line);
-			}
-			else
+	rvstart = strstr(rv2, "iso.3.6.1.2.1.4.21.1.7.");
+	if (rvstart) {
+		for (int i = 0; i < addr_cnt; i++) {
+			QString oid = "iso.3.6.1.2.1.4.21.1.7." + addr_index[i];
+			char *ptr = strstr(rvstart, oid.toStdString().c_str());
+			if (ptr == NULL)
 				next_hop += " ";
+			else {
+				QString line = ptr;
+				int index = line.indexOf("\n");
+				if (index != -1) {
+					line.truncate(index);
+					next_hop += extract_ipaddress(line);
+				}
+				else
+					next_hop += " ";
+			}
 		}
 	}
-	if (addr_cnt != next_hop.count())
+	else if (rvstart == NULL || addr_cnt != next_hop.count())
 		return "Error: cannot parse .1.3.6.1.2.1.4.21 MIB<br/>\n";
 
 
 	// extract route type
 	QStringList addr_type;
-	for (int i = 0; i < addr_cnt; i++) {
-		QString oid = "iso.3.6.1.2.1.4.21.1.8." + addr_index[i];
-		char *ptr = strstr(rv2, oid.toStdString().c_str());
-		if (ptr == NULL)
-			addr_type += " ";
-		else {
-			QString line = ptr;
-			int index = line.indexOf("\n");
-			if (index != -1) {
-				line.truncate(index);
-				addr_type += extract_integer(line);
-			}
-			else
+	rvstart = strstr(rv2, "iso.3.6.1.2.1.4.21.1.8.");
+	if (rvstart) {
+		for (int i = 0; i < addr_cnt; i++) {
+			QString oid = "iso.3.6.1.2.1.4.21.1.8." + addr_index[i];
+			char *ptr = strstr(rvstart, oid.toStdString().c_str());
+			if (ptr == NULL)
 				addr_type += " ";
+			else {
+				QString line = ptr;
+				int index = line.indexOf("\n");
+				if (index != -1) {
+					line.truncate(index);
+					addr_type += extract_integer(line);
+				}
+				else
+					addr_type += " ";
+			}
 		}
 	}
-	if (addr_cnt != addr_type.count())
+	else if (rvstart == NULL || addr_cnt != addr_type.count())
 		return "Error: cannot parse .1.3.6.1.2.1.4.21 MIB<br/>\n";
 
 	// extract metric
 	QStringList addr_metric;
-	for (int i = 0; i < addr_cnt; i++) {
-		QString oid = "iso.3.6.1.2.1.4.21.1.3." + addr_index[i];
-		char *ptr = strstr(rv2, oid.toStdString().c_str());
-		if (ptr == NULL)
-			addr_metric += " ";
-		else {
-			QString line = ptr;
-			int index = line.indexOf("\n");
-			if (index != -1) {
-				line.truncate(index);
-				addr_metric += extract_integer(line);
-			}
-			else
+	rvstart = strstr(rv2, "iso.3.6.1.2.1.4.21.1.3.");
+	if (rvstart) {
+		for (int i = 0; i < addr_cnt; i++) {
+			QString oid = "iso.3.6.1.2.1.4.21.1.3." + addr_index[i];
+			char *ptr = strstr(rvstart, oid.toStdString().c_str());
+			if (ptr == NULL)
 				addr_metric += " ";
+			else {
+				QString line = ptr;
+				int index = line.indexOf("\n");
+				if (index != -1) {
+					line.truncate(index);
+					addr_metric += extract_integer(line);
+				}
+				else
+					addr_metric += " ";
+			}
 		}
 	}
-	if (addr_cnt != addr_metric.count())
+	else if (rvstart == NULL || addr_cnt != addr_metric.count())
 		return "Error: cannot parse .1.3.6.1.2.1.4.21 MIB<br/>\n";
 
 	// print table
@@ -235,8 +246,9 @@ QString RouteReport::get() {
 	}
 	out += "</table><br/><br/><br/>\n";
 
-	if (dbg)
-		printf("#%s#\n", out.toStdString().c_str());
+
+//	if (dbg)
+//		printf("#%s#\n", out.toStdString().c_str());
 	return out;
 }
 
