@@ -71,6 +71,7 @@ int main(int argc, char **argv) {
 	FILE *fp2 = fopen(tmp_file, "r");
 	if (fp2 == NULL) {
 		fprintf(stderr, "Error: cannot open %s\n", tmp_file);
+		fclose(fp1);
 		return 1;
 	}
 	int line = 0;
@@ -100,6 +101,8 @@ int main(int argc, char **argv) {
 		char *last = strrchr(buf2, '.');
 		if (!last) {
 			fprintf(stderr, "Error: corrupted line %d in %s\n", line, tmp_file);
+			fclose(fp1);
+			fclose(fp2);
 			return 1;
 		}
 		last++;

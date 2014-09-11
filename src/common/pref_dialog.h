@@ -58,12 +58,12 @@ private:
 	QComboBox *timeoutBox_;	// timeout
 	QComboBox *retriesBox_;	// retries
 
+	QString prefname_;
 	QString protocol_;
 	QString community_;
 	QString port_;
 	QString timeout_;
 	QString retries_;
-	QString prefname_;
 };
 
 #endif

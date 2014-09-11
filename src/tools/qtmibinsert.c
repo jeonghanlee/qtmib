@@ -50,6 +50,7 @@ int main(int argc, char **argv) {
 	FILE *fp2 = fopen(new_mib_file, "r");
 	if (fp2 == NULL) {
 		fprintf(stderr, "Error: cannot open %s\n", new_mib_file);
+		fclose(fp1);
 		return 1;
 	}
 	
