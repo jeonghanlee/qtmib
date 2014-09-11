@@ -23,15 +23,15 @@
 #include "pref_dialog.h"
 extern int dbg;
 
-PrefDialog::PrefDialog(QString community, QString port, QString timeout, QString retries):
-	QDialog(), protocol_("v2c"), community_(community),
+PrefDialog::PrefDialog(QString prefname, QString community, QString port, QString timeout, QString retries):
+	QDialog(), prefname_(prefname), protocol_("v2c"), community_(community),
 	port_(port), timeout_(timeout), retries_(retries) {
 	
 	write_file_storage();
 	gui();
 }
 
-PrefDialog::PrefDialog(): QDialog(), protocol_("v2c"), community_("public"),
+PrefDialog::PrefDialog(QString prefname): QDialog(),prefname_(prefname), protocol_("v2c"), community_("public"),
 	port_("161"), timeout_("1"), retries_("5") {
 	gui();
 	
@@ -104,11 +104,12 @@ void PrefDialog::gui() {
 	setWindowTitle(tr("Preferences"));
 	
 	read_file_storage();
+	accept();
 }
 
 
 int PrefDialog::read_file_storage() {
-	QString conf = QDir::homePath() + "/.config/qtmib/preferences";
+	QString conf = QDir::homePath() + prefname_;
 	const char *fname = conf.toStdString().c_str();
 	if (dbg)
 		printf("opening config file %s\n", conf.toStdString().c_str());
@@ -210,7 +211,7 @@ int PrefDialog::read_file_storage() {
 }
 
 int PrefDialog::write_file_storage() {
-	QString conf = QDir::homePath() + "/.config/qtmib/preferences";
+	QString conf = QDir::homePath() + prefname_; //"/.config/qtmib/preferences";
 	const char *fname = conf.toStdString().c_str();
 	FILE *fp = fopen(fname, "w");
 	
@@ -234,14 +235,6 @@ int PrefDialog::write_file_storage() {
 
 
 int PrefDialog::exec() {
-	// set defaults
-#if 0
-	pBox_->setCurrentIndex(1);
-	cBox_->setCurrentIndex(0);
-	portBox_->setCurrentIndex(0);
-	timeoutBox_->setCurrentIndex(0);
-	retriesBox_->setCurrentIndex(0);
-#endif
 	return QDialog::exec();
 }
 

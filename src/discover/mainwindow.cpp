@@ -119,7 +119,7 @@ MainWindow::MainWindow(): pref_(0) {
 	connect(&thread, SIGNAL(displayResult(const QString &)),
 		this, SLOT(displayResult(const QString &)));
 
-	pref_ = new PrefDialog();
+	pref_ = new PrefDialog("/.config/qtmib/preferences-discover");
 	QTimer::singleShot(60000, this, SLOT(responseTime()));
 
 }

@@ -33,13 +33,14 @@ class PrefDialog: public QDialog {
 Q_OBJECT
 
 public:
-	PrefDialog();
-	PrefDialog(QString community, QString port, QString timeout, QString retries);
+	PrefDialog(QString prefname);
+	PrefDialog(QString prefname, QString community, QString port, QString timeout, QString retries);
 	QString getVersion();
 	QString getCommunity();
 	QString getPort();
 	QString getTimeout();
 	QString getRetries();
+	int write_file_storage();
 
 public slots:
 	void accept();
@@ -49,7 +50,6 @@ private:
 	void gui();
 	void store_combo_text(QComboBox *box);	
 	int read_file_storage();
-	int write_file_storage();
 	
 private:
 	QComboBox *pBox_;	// protocol version
@@ -63,8 +63,7 @@ private:
 	QString port_;
 	QString timeout_;
 	QString retries_;
-	
-	int nov1_;
+	QString prefname_;
 };
 
 #endif

@@ -66,6 +66,7 @@ private slots:
 	void connection();
 
 private:
+	void updatePrefWindow();
 	QString getHost();
 	void checkEnvironment();
 	void createMenu();

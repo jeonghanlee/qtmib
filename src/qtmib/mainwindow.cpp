@@ -166,6 +166,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), pref_(0), search_(
 	statusBar();
 	QTimer::singleShot(200, this, SLOT(loadUserMibs()));
 	statusBar()->showMessage("Loading user MIBs");
+	
+	// create the preference dialog
+	pref_ = new PrefDialog("/.config/qtmib/preferences");
+	if (pref_)
+		updatePrefWindow();
+		
 }
 
 void MainWindow::checkEnvironment() {
@@ -466,18 +472,27 @@ void MainWindow::discovery() {
 			tr("<br/><b>qtmib-discover</b> module not found.<br/><br/>"));
 }
 
-void MainWindow::preferences() {
+void MainWindow::updatePrefWindow() {
 	if (!pref_)
-		pref_ = new PrefDialog();
+		return;
 		
-	if (QDialog::Accepted == pref_->exec()) {
-		QString str = "SNMP version: " + pref_->getVersion() + "\n";
-		if (pref_->getCommunity() == "public")
-			str += "Community: public\n";
-		connectionView_->setPlainText(str);
-	}
-
+	QString str = "Version: " + pref_->getVersion() + "\n";
+	if (pref_->getCommunity() == "public")
+		str += "Community: public\n";
+	str += "UDP Port: " + pref_->getPort() + "    ";
+	str += "Timeout: " + pref_->getTimeout() + "    ";
+	str += "Retries: " + pref_->getRetries() + "\n";
+	connectionView_->setPlainText(str);
 }
+
+void MainWindow::preferences() {
+	if (pref_) {
+		if (QDialog::Accepted == pref_->exec()) {
+			updatePrefWindow();
+		}
+	}
+}
+
 void MainWindow::updateActions2(const QModelIndex& index) {
 	(void) index;
 	updateActions();
@@ -550,17 +565,6 @@ void MainWindow::handleAction() {
 		act = "snmpwalk";
 	else
 		return;
-	
-	
-	// load current preferences
-	if (!pref_) {
-		pref_ = new PrefDialog();
-		QString str = "SNMP version: " + pref_->getVersion() + "\n";
-		if (pref_->getCommunity() == "public")
-			str += "Community: public\n";
-		connectionView_->setPlainText(str);
-	}
-	
 	
 	// version
 	QString version = "v2c";

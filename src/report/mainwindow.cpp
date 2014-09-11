@@ -92,7 +92,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
 void MainWindow::preferences() {
 	if (!pref_)
-		pref_ = new PrefDialog(bundle_->getCommunity(), bundle_->getPort(),
+		pref_ = new PrefDialog("/.config/qtmib/preferences-report", bundle_->getCommunity(), bundle_->getPort(),
 				bundle_->getTimeout(), bundle_->getRetries());
 		
 	if (QDialog::Accepted == pref_->exec()) {
