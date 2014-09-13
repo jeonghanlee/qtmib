@@ -18,6 +18,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include <sys/stat.h>
 #include <QtGui>
 #include <QButtonGroup>
 #include "pref_dialog.h"
@@ -229,6 +230,9 @@ int PrefDialog::write_file_storage() {
 	fprintf(fp, "timeout:%s\n", timeout_.toStdString().c_str());
 	fprintf(fp, "retries:%s\n", retries_.toStdString().c_str());
 	fclose(fp);
+	
+	int rv = chmod(fname, S_IRUSR | S_IWUSR);
+printf("rv %d\n", rv);	
 	
 	return 0;
 }
