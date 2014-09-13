@@ -19,6 +19,7 @@
 */
 
 #include <sys/stat.h>
+#include <errno.h>
 #include <QtGui>
 #include <QButtonGroup>
 #include "pref_dialog.h"
@@ -111,10 +112,9 @@ void PrefDialog::gui() {
 
 int PrefDialog::read_file_storage() {
 	QString conf = QDir::homePath() + prefname_;
-	const char *fname = conf.toStdString().c_str();
 	if (dbg)
 		printf("opening config file %s\n", conf.toStdString().c_str());
-	FILE *fp = fopen(fname, "r");
+	FILE *fp = fopen(conf.toStdString().c_str(), "r");
 	if (!fp)
 		return 0;	// no config file found, leave the defaults in place
 	else {
@@ -134,7 +134,7 @@ int PrefDialog::read_file_storage() {
 			char *ptr2 = strchr(ptr, '\n');
 			if (ptr2 == NULL) {
 				if (dbg)
-					printf("Error %d: missing \\n on line %d in %s\n", __LINE__, line, fname);
+					printf("Error %d: missing \\n on line %d in %s\n", __LINE__, line, conf.toStdString().c_str());
 				continue;
 			}
 			*ptr2 = '\0';
@@ -151,7 +151,7 @@ int PrefDialog::read_file_storage() {
 			}
 			if (errflag) {
 				if (dbg)
-					printf("Error %d: invalid line %d in %s\n", __LINE__, line, fname);
+					printf("Error %d: invalid line %d in %s\n", __LINE__, line, conf.toStdString().c_str());
 				continue;
 			}
 			
@@ -161,7 +161,7 @@ int PrefDialog::read_file_storage() {
 				ptr2++;
 			if (*ptr2 != ':') {
 				if (dbg)
-					printf("Error %d: invalid line %d in %s\n", __LINE__, line, fname);
+					printf("Error %d: invalid line %d in %s\n", __LINE__, line, conf.toStdString().c_str());
 				continue;
 			}
 			*ptr2 = '\0';
@@ -203,7 +203,7 @@ int PrefDialog::read_file_storage() {
 			}
 			else {
 				if (dbg)
-					printf("Error %d: invalid line %d in %s\n", __LINE__, line, fname);
+					printf("Error %d: invalid line %d in %s\n", __LINE__, line, conf.toStdString().c_str());
 			}
 		}		
 		fclose(fp);	
@@ -213,8 +213,7 @@ int PrefDialog::read_file_storage() {
 
 int PrefDialog::write_file_storage() {
 	QString conf = QDir::homePath() + prefname_; //"/.config/qtmib/preferences";
-	const char *fname = conf.toStdString().c_str();
-	FILE *fp = fopen(fname, "w");
+	FILE *fp = fopen(conf.toStdString().c_str(), "w");
 	
 	if (dbg)
 		printf("saving config file %s\n", conf.toStdString().c_str());
@@ -231,8 +230,10 @@ int PrefDialog::write_file_storage() {
 	fprintf(fp, "retries:%s\n", retries_.toStdString().c_str());
 	fclose(fp);
 	
-	int rv = chmod(fname, S_IRUSR | S_IWUSR);
-printf("rv %d\n", rv);	
+	int rv = chmod(conf.toStdString().c_str(), S_IRUSR | S_IWUSR);
+	if (dbg && rv) {
+		printf("Error: cannot change preferences file mode, errno %d\n", errno);
+	}
 	
 	return 0;
 }

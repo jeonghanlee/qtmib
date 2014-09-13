@@ -125,9 +125,9 @@ void tx_packet(int sock, uint32_t ip, int port, int type, const char *community)
 		(struct sockaddr *)&addr, sizeof(struct sockaddr_in));
 	if (txlen == -1) {
 		perror("socket tx error");
-		printf("errno %d\n", errno);
 		if (errno == EAGAIN || errno == EWOULDBLOCK) {
 			sleep(1); // slowing down
+			fprintf(stderr, "retrying socket tx\n");
 			sendto(sock, pkt, len, 0,
 				(struct sockaddr *)&addr, sizeof(struct sockaddr_in));
 		}

@@ -1,27 +1,29 @@
-New:
-added MIBS: lancope, netapp, avaya, fortinet, gsmpMIB, picaPrivateMIB
-added Preferences dialog box and IP address field to qtmib-report
-added support for timeout and retries in qtmib-report tool
-make preferences persistent in qtmib
-speed-up network scaning in qtmib-discover tool
-speed-up large mib walks
-added uptime in qtmib-discover table
-added response time in qtmib-discover table
-added clear and update table in qtmib-discover
-added Preference dialog box in qtmib-discover
-added progress indicator for report generation
+qtmib (1.1) baseline; urgency=low
 
-Fixes:
-fixed MIB tree scrolling while searching
-fixed oid order in qtmib-translation tool
-fixed qtmib-translation tool crash if directories present under ~/.config/qtmib/mibs
-implemented error recovery in qtmib-discover in case the network socket cannot be opened
-implemented error recovery in qtmib-discover when UDP transmit fails
-use random port in qtmib-discover, in case multiple discover programs are run in parallel
-fixed lost malloc memory in qtmib-discover
-fix interface network address in qtmib-discover dropbox
-pass down --debug option from qtmib to qtmib-report
-fixed unnamed mib entries handling in qtmib-translation tool
+  * added MIBS: lancope, netapp, avaya, fortinet, gsmpMIB, picaPrivateMIB
+  * added Preferences dialog box and IP address field to qtmib-report
+  * added support for timeout and retries in qtmib-report tool
+  * make preferences persistent in all qtmib tools
+  * speed-up network scanning in qtmib-discover tool
+  * speed-up large mib walks
+  * added uptime in qtmib-discover table
+  * added response time in qtmib-discover table
+  * added clear and update table in qtmib-discover
+  * added Preference dialog box in qtmib-discover
+  * added progress indicator for report generation
+  * added host monitoring capabilities in discover tool
+  * fixed MIB tree scrolling while searching
+  * fixed oid order in qtmib-translation tool
+  * fixed qtmib-translation tool crash if directories present under ~/.config/qtmib/mibs
+  * implemented error recovery in qtmib-discover in case the network socket cannot be opened
+  * implemented error recovery in qtmib-discover when UDP transmit fails
+  * use random port in qtmib-discover, in case multiple discover programs are run in parallel
+  * fixed lost malloc memory in qtmib-discover
+  * fix interface network address in qtmib-discover dropbox
+  * pass down --debug option from qtmib to qtmib-report
+  * fixed unnamed mib entries handling in qtmib-translation tool
+
+ -- RCP100 Team <rcpteam@yahoo.com>  Mon, 15 September 2014 08:00:00 -0500
 
 
 qtmib (1.0) baseline; urgency=low
