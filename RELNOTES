@@ -14,10 +14,9 @@ qtmib (1.1) baseline; urgency=low
   * added host monitoring capabilities in discover tool
   * fixed MIB tree scrolling while searching
   * fixed oid order in qtmib-translation tool
-  * fixed qtmib-translation tool crash if directories present under ~/.config/qtmib/mibs
-  * implemented error recovery in qtmib-discover in case the network socket cannot be opened
-  * implemented error recovery in qtmib-discover when UDP transmit fails
-  * use random port in qtmib-discover, in case multiple discover programs are run in parallel
+  * fixed qtmib-translation tool crash
+  * implemented network socket error recovery in qtmib-discover
+  * use random port in qtmib-discover
   * fixed lost malloc memory in qtmib-discover
   * fix interface network address in qtmib-discover dropbox
   * pass down --debug option from qtmib to qtmib-report
