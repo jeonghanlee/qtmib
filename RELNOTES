@@ -22,7 +22,7 @@ qtmib (1.1) baseline; urgency=low
   * pass down --debug option from qtmib to qtmib-report
   * fixed unnamed mib entries handling in qtmib-translation tool
 
- -- RCP100 Team <rcpteam@yahoo.com>  Mon, 15 September 2014 08:00:00 -0500
+ -- RCP100 Team <rcpteam@yahoo.com>  Fri, 26 September 2014 08:00:00 -0500
 
 
 qtmib (1.0) baseline; urgency=low
