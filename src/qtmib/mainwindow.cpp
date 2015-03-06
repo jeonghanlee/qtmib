@@ -19,6 +19,7 @@
 */
 
 #include <QtGui>
+#include <QDir>
 #include <QStatusBar>
 #include <QHBoxLayout>
 #include <QSplitter>
@@ -251,7 +252,7 @@ void MainWindow::loadUserMibs() {
 	QString mibsdir = QDir::homePath();
 	mibsdir += "/.config/qtmib/mibs";
 	QDir dir(mibsdir);
-	QStringList filelist = dir.entryList(QDir::Files | QDir::NoDot | QDir::NoDotDot);
+	QStringList filelist = dir.entryList(QDir::Files | QDir::NoDotAndDotDot);
 	if (filelist.count() != 0) {
 		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 		QString cmd;

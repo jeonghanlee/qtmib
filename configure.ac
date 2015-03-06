@@ -1,5 +1,5 @@
 AC_PREREQ([2.68])
-AC_INIT(qtmib, 1.1, rcpteam@yahoo.com, , http://qtmib.sourceforge.net)
+AC_INIT(qtmib, 1.1.1, rcpteam@yahoo.com, , http://qtmib.sourceforge.net)
 AC_CONFIG_SRCDIR([src/qtmib/main.cpp])
 #AC_CONFIG_HEADERS([config.h])
 
@@ -15,19 +15,29 @@ AC_CHECK_LIB([pthread], [main], [], AC_MSG_ERROR([*** POSIX thread support not i
 AC_CHECK_HEADER(pthread.h,,AC_MSG_ERROR([*** POSIX thread support not installed - please install first ***]))
 
 # checking qt4 library
-AC_CHECK_LIB([QtCore], [main], [], AC_MSG_ERROR([*** QtCore library not installed - please install QT4 first ***]))
-AC_CHECK_LIB([QtGui], [main], [], AC_MSG_ERROR([*** QtCore library not installed - please install QT4 first ***]))
+# Gentoo 64bit
+if test -f /usr/lib64/qt4/libQtCore.so
+then
+	echo "Found qt4 library in /usr/lib64/qt4 directory"
+# Gentoo 32bit
+elif test -f /usr/lib/qt4/libQtCore.so
+then
+	echo "Found qt4 library in /usr/lib/qt4 directory"
+else
+	AC_CHECK_LIB([QtCore], [main], [], AC_MSG_ERROR([*** QtCore library not installed - please install QT4 first ***]))
+	AC_CHECK_LIB([QtGui], [main], [], AC_MSG_ERROR([*** QtCore library not installed - please install QT4 first ***]))
+fi
 
 # testing qmake
 QMAKE=`which qmake`
-if test "$QMAKE" == ""
+if test -z "$QMAKE"
 then
 	# fix for Fedora
 	if test -f /usr/lib64/qt4/bin/qmake; then
 		QMAKE=/usr/lib64/qt4/bin/qmake
 	fi
 	
-	if test "$QMAKE" == ""
+	if test -z "$QMAKE"
 	then
 		AC_MSG_ERROR([qmake is missing, please install QT4 development packages.])
 	fi
@@ -51,7 +61,7 @@ chmod +x sanitizer.sh
 
 # testing net-snmp
 NETSNMP=`which snmpget`
-if test "$NETSNMP" == ""
+if test -z "$NETSNMP"
 then
 	AC_MSG_WARN([net-snmp is requred for running qtmib, please install it (http://www.net-snmp.org/).])
 else

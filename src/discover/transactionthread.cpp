@@ -18,7 +18,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 #include <QtGui>
+#if QT_VERSION >= 0x040700
 #include <QElapsedTimer>
+#else
+#include <QTime>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
@@ -101,7 +105,11 @@ void TransactionThread::checkDeviceResponse(DevStorage *dev, TransactionThread *
 		type = 0;
 	
 	// start timer and send reques
+#if QT_VERSION >= 0x040700
 	QElapsedTimer timer;
+#else
+	QTime timer;
+#endif
 	timer.start();
     	tx_packet(th->sock_, dev->range_start_,
 		port, type, dev->community_.toStdString().c_str());

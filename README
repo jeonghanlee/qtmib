@@ -38,4 +38,8 @@ Support:
 http://qtmib.sourceforge.net
 https://sourceforge.net/p/qtmib/discussion
 https://sourceforge.net/p/qtmib/tickets
-	
+
+Authors:
+	RCP100 Team (rcpteam@yahoo.com)
+	Glen Mabey - Qt 6.4 support
+	Chris Mayo - various software configuration features and fixes 
